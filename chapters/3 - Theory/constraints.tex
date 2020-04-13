@@ -1,0 +1,32 @@
+\section{Snake robot constraint formulation}\label{seq:constraints}
+
+Figure \ref{} illustrates the used model of the snake robot and its environment. \hl{A figure and some more explanation of the figure.}
+
+When looking at this model, it is evident that the snake robot will experience constraints if it tries to move its links in the directions of the obstacles. One way of expressing this constraint is limiting the velocity of the link in contact. The position of contact on link $i$ was in \ref{subseq:constr_inst} denoted as $(x_{c,i}, y_{c,i})$. Following, the corresponding velocity $\mathbf{v}_{c,i}$ can be written $(\dot{x}_{c,i}, \dot{y}_{c,i})$.
+
+It is not the general velocity of this point that is constrained, but rather the velocity normal to the link. This follows from the assumption of the contact being a point contact. The normal velocity can be found with the use of the angle $\theta_i$ of link $i$ with respect to the base frame. From basic trigonometric laws, the normal velocity is found to be
+
+\begin{equation}\label{eq:norm_vel}
+    v_{nc,i} = -sin(\theta_i) \dot{x}_{c,i} + cos(\theta_i) \dot{y}_{c,i}.
+\end{equation}
+\\
+Since there can only be one contact per link and the contact can only take place at one side of the link at the time, the link can still move away from the obstacle with a velocity normal to the link. Holden et al. \cite{holden2014optimal} introduce a variable $\gamma_i$ that holds information about which side of the link the obstacle is positioned. The variable can take the values ${-1, 0, 1}$, where $\gamma_i=1$ for obstacles to the right of the link and vice versa. For links not in contact with any obstacles $\gamma_i=0$.
+
+The allowed normal direction of movement for link $i$ can now be expressed as
+
+\begin{equation}\label{eq:norm_vel2}
+    \gamma_i v_{nc,i} \geq 0.
+\end{equation}
+\\
+It might be desired to stay in touch with the obstacle for propulsion purposes. Because of this, it is reasonable to simplify the constraint equation to not let the contact point on the link move in any normal direction to the link at that point. The constraint can thus now be expressed as
+
+\begin{equation}\label{eq:norm_vel3}
+    \gamma_i v_{nc,i} = \gamma_i(-sin(\theta_i) \dot{x}_{c,i} + cos(\theta_i) \dot{y}_{c,i}) = 0
+\end{equation}
+\\
+Moreover, the side of the contact is insignificant if the velocity is limited in both directions. (\ref{eq:norm_vel3}) is further simplified to
+
+\begin{equation}\label{eq:norm_vel4}
+    v_{nc,i} = -sin(\theta_i) \dot{x}_{c,i} + cos(\theta_i) \dot{y}_{c,i} = 0.
+\end{equation}
+\\

@@ -1,0 +1,96 @@
+%\RequirePackage[l2tabu,orthodox]{nag}
+
+% TODO: decide if one-sided/two-sided
+%\documentclass[headsepline,footsepline,footinclude=false,fontsize=11pt,paper=a4,listof=totoc,bibliography=totoc,BCOR=12mm,DIV=12]{scrbook} % two-sided % original source stated: BCOR=12mm,DIV=12
+\documentclass[10pt,b5paper,twoside,openright, headsepline, footsepline, footinclude=false,oneside,fontsize=11pt,paper=b5,listof=totoc,bibliography=totoc,DIV=12]{book} % one-sided
+% TODO: change citation style in settings
+\input{settings}
+
+% TODO: change thesis information
+\newcommand*{\getUniversity}{Norwegian University of Science and Technology}
+\newcommand*{\getFaculty}{Department of Engineering Cybernetics}
+\newcommand*{\getTitle}{Hybrid Obstacle Aided Locomotion (HOAL) in Snake Robots}
+\newcommand*{\getAuthor}{Atussa Koushan}
+\newcommand*{\getDoctype}{Master's thesis}
+\newcommand*{\getSupervisor}{Øyvind Stavdahl}
+%\newcommand*{\getAdvisor}{Advisor}
+\newcommand*{\getSubmissionDate}{June 1, 2020}
+%\newcommand*{\getSubmissionLocation}{Munich}
+
+%--------- Code Highlighting Style
+\usepackage[utf8]{inputenc}
+
+\usepackage{listings}
+\usepackage{color}
+ 
+
+%---------
+
+\makenomenclature
+
+\begin{document}
+
+% TODO: decide on used language
+%\selectlanguage{ngerman}
+\selectlanguage{english}
+
+% Set page numbering to avoid "destination with the same identifier has been already used" warning for cover page.
+% (see https://en.wikibooks.org/wiki/LaTeX/Hyperlinks#Problems_with_Links_and_Pages).
+\pagenumbering{alph}
+
+
+\frontmatter{}
+
+\input{pages/title}
+%\input{pages/disclaimer}
+%\input{pages/acknowledgements} % TODO: if you don't have anyone to thank for or don't wish to publish it, comment this line out.
+%\afterpage{\null\newpage}
+\includepdf{pages/oppgtekst_master.pdf}
+%\afterpage{\null\newpage}
+\input{pages/abstract}
+\input{pages/sammendrag.tex}
+\input{pages/preface}
+\input{pages/nomenclature.tex}
+
+
+\microtypesetup{protrusion=false}
+\tableofcontents{}
+
+%\printacronyms[include-classes=abbrev,name=List of Abbreviations, heading=chapter] %\clearpage
+\cleardoublepage\phantomsection\addcontentsline{toc}{chapter}{\nomname} % Add lof to toc
+\printnomenclature[2cm]\clearpage
+\cleardoublepage\phantomsection\addcontentsline{toc}{chapter}{\listtablename} % Add lot to toc
+\listoftables\clearpage
+\cleardoublepage\phantomsection\addcontentsline{toc}{chapter}{\listfigurename} % Add lof to toc
+\listoffigures\clearpage
+
+
+
+
+\microtypesetup{protrusion=true}
+
+
+\mainmatter{}
+
+
+
+
+% Chapters
+\input{chapters/01_introduction.tex}
+\input{chapters/3 - Theory/03_Theory.tex}
+\input{chapters/4 - Simulator/04_Simulator}
+\input{chapters/06_results.tex}
+\input{chapters/07_discussion.tex}
+\input{chapters/08_conclusion.tex}
+
+
+%\appendix{}
+%\input{pages/appendix}
+
+
+\printglossaries
+
+\addcontentsline{toc}{chapter}{Bibliography}
+\printbibliography
+
+\end{document}

@@ -1,0 +1,114 @@
+\section{Snake robot dynamics} \label{sec:dyn}
+
+The snake robot has $n-1$ joint actuators that all can apply torques to their corresponding joints. The dynamics describe how the robot moves in response to these actuator forces. For simplicity, it is assumed that the actuators do not have dynamics of their own and, hence, arbitrary torques can be commanded at the joints of the robot \cite{murray2017mathematical}.
+
+The dynamics of the snake robot will be expressed using the joint space equations of motion formulation
+
+\begin{equation}
+    \mathbf{M(q)\ddot{q} + C(q, \dot{q}) + g(q)} = \boldsymbol{\tau}.
+\end{equation}
+\\
+Because the movement is restricted to the 2D plane, the gravitational term $\mathbf{g(q)}$ can be neglected and the equations of motion can be rewritten to
+
+\begin{equation}\label{eq:eom}
+    \mathbf{M(q)\ddot{q} + C(q, \dot{q})} = \boldsymbol{\tau},
+\end{equation}
+\\
+where $\mathbf{M(q)}$ and $\mathbf{C(q,\dot{q})}$ is the mass matrix and Coriolis matrix respectively.
+$\boldsymbol{\tau}$ is the vector of generalized torques corresponding to the generalized coordinates (\ref{eq:q}). Furthermore, the elements corresponding to the virtual coordinates will be zero at all times.
+
+Solving (\ref{eq:eom}) with respect to $\mathbf{\ddot{q}}$ yields
+
+\begin{equation}\label{eq:eom_qdd}
+    \mathbf{\ddot{q}} = \mathbf{M^{-1}(q)}( \boldsymbol{\tau} - \mathbf{C(q, \dot{q})}).
+\end{equation}
+\\
+Several methods exist for finding the equations of motion for a robot. The Euler-Lagrange method \cite{lynch2017modern}, which  is chosen here, is based on the difference in kinetic energy ($K$) and potential energy ($P$) of the system, also known as the Lagrangian
+
+\begin{equation}
+    L = K - P.
+\end{equation}
+\\
+The equations of motion can now be expressed as a second order partial differential equation
+
+\begin{equation} \label{eq:Lagrange}
+    \frac{d}{d t} \frac{\partial L}{\partial \mathbf{\dot{q}}} - \frac{\partial L}{\partial \mathbf{q}} = \boldsymbol{\tau}.
+\end{equation}
+\\
+Again, simplifications can be made from the restricted movement in the world and thus the potential energy $P$ can be neglected. The Lagrangian is therefore simply equal to the kinetic energy, which is the sum of the kinetic energy for every link \cite{rezapour2014path}. Furthermore, the kinetic energy for one link $i$ is divided into two parts, $K_{translational}$ and $K_{rotational}$.
+The kinetic energy can now be express as
+
+\begin{equation}\label{eq:kinen}
+    K = \sum_{i=1}^{n} (K_{translational,i} + K_{rotational,i}),
+\end{equation}
+\\
+where the translational and rotational kinetic energy is given in (\ref{eq:k_trans}) and (\ref{eq:k_rot}) respectively.
+
+\begin{equation} \label{eq:k_trans}
+    K_{translational,i} = \frac{1}{2} m (\dot{x}_i^2 + \dot{y}_i^2)
+\end{equation}
+\\
+Here $m$ is the link mass, and $(\dot{x}_i, \dot{y}_i)$ make out the velocity of the center of the link found by differentiating (\ref{eq:pos}) with respect to time. 
+
+\begin{equation} \label{eq:k_rot}
+    K_{rotational,i} = \frac{1}{2}I\dot{\phi_i}^2
+\end{equation}
+\\
+$\dot{\phi}_i$ is the joint velocity of link $i$. Furthermore, every link has the same moment of inertia, namely $I = (1/12)ml^2$. This is the moment of inertia of a rod, corresponding to the moment of inertia of a cylinder with zero radius \cite{lynch2017modern}.
+
+
+%------------------------------------------------------------------------------------------------
+
+\subsection{Constrained dynamics}\label{subseq:constr_dyn}
+
+The generalized torques from the right side of (\ref{eq:eom}) can be split into two parts whenever there is contact between the robot and the environment, namely a component resulting from the control inputs (motor torques), $\boldsymbol{\tau_{m}}$, and a component resulting from the external forces acting on the robot, $\boldsymbol{\tau_{c}}$ \cite{rezapour2014path}. The generalized torques can thus be written
+
+\begin{equation}
+    \boldsymbol{\tau} = \boldsymbol{\tau_{m}} + \boldsymbol{\tau_{c}}.
+\end{equation}
+\\
+According to Holden et al. \cite{holden2014optimal}, the force from an obstacle acting on a link is two-fold: one normal to the link and one tangent to the link. The force tangent to the link is due to friction and will therefore be neglected in this project. The remaining normal force is preventing the link from moving into the obstacle when the robot itself is applying a force to the obstacle. The external force in the frame of link $i$ acting on link $i$ is denoted $\mathbf{f}^i_{c,i}$ and can be written as
+
+\begin{equation}
+    \mathbf{f}^i_{c,i}=
+    \begin{bmatrix}
+        0 \\
+        f^i_{c,i,y}
+    \end{bmatrix}.
+\end{equation}
+\\
+The following derivations are inspired by \cite{rezapour2014path}. The force $\mathbf{f}^i_c$ can be expressed in the base frame by using the rotation matrix from (\ref{eq:trans_rot}):
+
+\begin{equation}
+    \mathbf{f}^b_{c,i} = \mathbf{R}_z(\alpha_i) \mathbf{f}^i_{c,i},
+\end{equation}
+\\
+where $\alpha_i$ is the angle of link $i$ related to the base frame $b$. It can be found by 
+
+\begin{equation}
+    \alpha_i = \sum_{k=1}^{i} \phi_k.
+\end{equation}
+\\
+The contact Jacobian (\ref{eq:Jac_constr}) can be used to find the generalized external torque as a result of the external forces:
+
+\begin{equation}\label{eq:tauforcerel}
+    \boldsymbol{\tau_c} = \sum_{i=1}^{n} \mathbf{J}^T_{c,i} \mathbf{f}^b_{c,i}.
+\end{equation}
+
+\subsection{Momentum}\label{subseq:momentum}
+
+The calculation of the momentum of the robot is presented as it is used in the experiment in \ref{subseq:case3} in validation of the mathematical model employed in the project.
+
+Momentum is the product of the velocity and mass of an object
+
+\begin{equation}
+    \mathbf{p} = m \mathbf{v}.
+\end{equation}
+\\
+For a snake robot with multiple links, which can be seen as a system of objects, the total momentum is the sum of the momentum for each link
+
+\begin{equation}\label{eq:momentum}
+    \mathbf{p} = \sum_{i=1}^{n}\mathbf{p}_i = \sum_{i=1}^{n}m\mathbf{v}_i.
+\end{equation}
+\\
+An important property of the momentum of a closed system, is that it is conserved despite collisions within the system. This means that if the snake robot collides with an obstacle, the momentum of the snake robot and obstacle should be unchanged. In this project, the obstacles neither have any mass nor velocity and hence no momentum. Thus, the only momentum in the employed model is that of the snake robot.

@@ -1,0 +1,376 @@
+\section{Hybrid position/force control (HPFC)}
+
+\subsection{"Normal HPFC"} \label{subseq:HPFC}
+
+
+\subsection{Dynamic HPFC}
+
+The solution of West and Asada \cite{west1985method} does not take the manipulator dynamics into account. Nevertheless, in a real system, the dynamics play a significant role in the resulting behavior of the robot. For this reason, Yoshikawa \cite{yoshikawa1987dynamic} designed the dynamic hybrid control method which incorporates the constraints into the manipulator dynamics. More specifically, the solution of \cite{west1985method} filters the commanded joint torques and angles to conform to the constraints. These filters are, as described in \ref{subseq:HPFC}, based on the kinematic Jacobian of the system. The essence of the solution of \cite{yoshikawa1987dynamic} however, is that the robot dynamics and constraint equations are combined before the commanded torques and angles are calculated. 
+
+This section aims at describing the improved method, and the content is based the paper of \cite{yoshikawa1987dynamic}. The symbolic conventions used are for simplicity the same as in the paper. The next section will explain further how the theory and these symbols apply to the snake robot case and the snake robot specific theory presented earlier in this chapter \hl{ref this}.
+
+It is worth noting that the solution of Yoshikawa is designed for a robot manipulator with a static base where the only constraint present is targeted at the manipulator end effector. For this reason, special effort has been put into finding a suitable formulation of the snake robot constraints. Additionally, the difference between the coordinate spaces introduced in the paper are easy to confuse and special attention has been directed at thoroughly defining these spaces for the snake robot so that the following calculations can be both as clear and logical as possible.
+
+\subsubsection{Description of constraints}
+
+In order to take the dynamics into account, the constraints are directly included into the dynamic equations of motion of the robot. This is done by expressing the constraints as a set of hypersurfaces that the robot can not physically pass. It should be noted that the focus here is on manipulator end-effector constraints and not general constraints which should be used in the snake robot case. The constraint hypersurfaces are also expressed in the end-effector coordinates. Another important aspect of the paper is that it only addresses bilateral hypersurfaces (and not unilateral surfaces), meaning that the effector is prohibited from leaving the surface in any direction.
+
+It is assumed that a given constraint can be expressed by a set of $m$ hypersurfaces
+
+\begin{equation}\label{eq:hpfc:hypersurface}
+    p_i(\mathbf{r}) = 0, \quad i = 1, 2, ..., m,
+\end{equation}
+\\
+where $\mathbf{r}$ is the end effector position in a fixed reference frame. Differentiating (\ref{eq:hpfc:hypersurface}) with respect to time yields
+
+\begin{equation}\label{eq:hpfc:derhypsurf}
+    \mathbf{E}_F \mathbf{\dot{r}} = 0,
+\end{equation}
+\\
+where the vectors of $\mathbf{E}_F$ are the unit normal vectors to the hypersurfaces in (\ref{eq:hpfc:hypersurface}).
+
+By comparing the expression (\ref{eq:norm_vel4}) of the constraint on link $i$ found in \ref{seq:constraints} to (\ref{eq:hpfc:derhypsurf}), it is possible to extract the matrix $\mathbf{E}_{F,i}$ and a logical choice of $\mathbf{r}_i$ and $\mathbf{\dot{r}}_i$ presents itself.
+Specifically, if one chooses
+
+\begin{equation}
+    \mathbf{r}_i =
+    \begin{bmatrix}
+        x_{c,i} & y_{c,i} & \theta_{c,i}
+    \end{bmatrix}^T \in \mathcal{R}^3,
+\end{equation}
+\\
+then $\mathbf{\dot{r}}_i = [\dot{x}_{c,i}, \dot{y}_{c,i}, \dot{\theta}_{c,i}]^T \in \mathcal{R}^3$ and the matrix $\mathbf{E}_{F,i}$ can by comparison be found as
+
+\begin{equation}
+    \mathbf{E}_{F,i} =
+    \begin{bmatrix}
+        -sin(\theta_{c,i}) & cos(\theta_{c,i}) & 0
+    \end{bmatrix} \in \mathcal{R}^3.
+\end{equation}
+\\
+The subscript $i$ will now be used as the constraint number, where $n_c$ is the number of constraints/contact points.
+The angle of the link at the contact point $\theta_{c,i}$ with respect to the base frame is the same as the angle $\theta$ of the link in contact with respect to the base frame. It can by inspection be seen that $\mathbf{E}_{F,i}$ fulfills the criteria of being of unit size.
+
+These formulations do not supply an explicit expression of the corresponding constraint hypersurface. It is however not a necessity for the further computations. On the other hand it could be valuable to have the expressions for the hypersurfaces for analysis purposes.
+
+The coordinate space $\mathbf{r}$ should be able to aid in expressing all the constraints present on the snake robot. Therefore, it is chosen as 
+
+\begin{equation}
+    \mathbf{r} = 
+    \begin{bmatrix}
+        \mathbf{r}_1^T & \mathbf{r}_2^T & \dots &\mathbf{r}_{n_c}^T
+    \end{bmatrix}^T \in \mathcal{R}^{3 n_c}.
+\end{equation}
+\\
+The same goes for $\dot{\mathbf{r}}$. Furthermore, the matrix $\mathbf{E}_{F}$ describing the unit normal vectors to all the hypersurfaces can now be written as
+
+\begin{equation}
+    \mathbf{E}_F = 
+    \begin{bmatrix}
+        \mathbf{E}_{F,1} & \mathbf{0}_{1\times3} & \dots & \mathbf{0}_{1\times3} \\
+        \mathbf{0}_{1\times3} & \ddots & & \vdots \\
+        \vdots & & \ddots & \mathbf{0}_{1\times3} \\
+        \mathbf{0}_{1\times3} & \dots & \mathbf{0}_{1\times3} & \mathbf{E}_{F,n_c} \\
+    \end{bmatrix} \in \mathcal{R}^{n_c \times 3 n_c}
+\end{equation}
+\\
+
+Differentiating (\ref{eq:hpfc:derhypsurf}) further gives
+
+\begin{equation}
+    \mathbf{E}_F \mathbf{\ddot{r}} + \mathbf{a}_{r F} = 0, \quad \mathbf{a}_{r F} = \mathbf{\dot{E}}_F\mathbf{\dot{r}}
+\end{equation}
+\\
+For the snake robot case $\mathbf{a}_{r F} \in \mathcal{R}^{n_c}$.
+
+Furthermore, $\mathbf{E}_P$ is chosen so that all the vectors in the relation
+
+\begin{equation}
+    \mathbf{E} =
+    \begin{bmatrix}
+    \mathbf{E}_P & \mathbf{E}_F
+    \end{bmatrix}
+\end{equation}
+\\
+are mutually independent unit vectors. The matrix $\mathbf{E}_F$ represents the coordinate axes normal to the constraint surfaces, and $\mathbf{E}_P$ represents the coordinate axes complementing $\mathbf{E}_F$. Another way to display this is seeing $\mathbf{E}_F$ and $\mathbf{E}_P$ as the axes for force and position constrained directions respectively.
+
+From the equations
+
+\begin{equation}
+    \mathbf{E\dot{r}} =
+    \begin{bmatrix}
+        \mathbf{E}_P \mathbf{\dot{r}}\\
+        0
+    \end{bmatrix}
+    \quad \text{and} \quad
+    \mathbf{E\ddot{r}} =
+    \begin{bmatrix}
+        \mathbf{E}_P \mathbf{\ddot{r}} \\
+        -\mathbf{a}_{r F}
+    \end{bmatrix}
+\end{equation}
+\\
+it can be seen that the velocity to the constraint surface is zero, which is natural seeing as the end-effector should be physically unable to move through the surface.
+
+For the snake robot, a simple choice of $\mathbf{E}_{P,i}$ with unit vectors complementing $\mathbf{E}_{F,i}$ is by inspection found to be
+
+\begin{equation}
+    \mathbf{E}_{P,i} = 
+    \begin{bmatrix}
+        cos(\theta_{c,i}) & sin(\theta_{c,i}) & 0 \\
+        0 & 0 & 1
+    \end{bmatrix} in \mathcal{R}^{2\times 3}.
+\end{equation}
+\\
+Again, $\mathbf{E}_{P,i}$ corresponds to the $i$'th constraint. Combining all $\mathbf{E}_{P,i}$ gives 
+
+\begin{equation}
+    \mathbf{E}_P = 
+    \begin{bmatrix}
+        \mathbf{E}_{P,1} & \mathbf{0}_{2\times3} & \dots & \mathbf{0}_{2\times3} \\
+        \mathbf{0}_{2\times3} & \ddots & & \vdots \\
+        \vdots & & \ddots & \mathbf{0}_{2\times3} \\
+        \mathbf{0}_{2\times3} & \dots & \mathbf{0}_{2\times3} & \mathbf{E}_{P,n_c} \\
+    \end{bmatrix} \in \mathcal{R}^{2 n_c \times 3 n_c}
+\end{equation}
+\\
+and $\mathbf{E} \in \mathcal{R}^{3 n_c \times 3 n_c}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Kinematics and dynamics}
+
+In \cite{yoshikawa1987dynamic}, the relation between the joint variable vector $\mathbf{q}$ and the end effector position $\mathbf{r}$ is expressed as
+
+\begin{equation}\label{eq:hpfc:rq}
+    \mathbf{r = c(q)}.
+\end{equation}
+\\
+The following equations are generated by differentiating \ref{eq:hpfc:rq}.
+
+\begin{equation}
+    \mathbf{\dot{r} = J \dot{q}}, \quad \mathbf{J} = \frac{\partial \mathbf{c(q)}}{\partial \mathbf{q}^T}
+\end{equation}
+
+\begin{equation}
+    \mathbf{\ddot{r} = J \ddot{q}} + \mathbf{a}_q, \quad \mathbf{a}_q = \mathbf{J \dot{q}}   
+\end{equation}
+\\
+For the snake robot case, the matrix $\mathbf{J}$ is the Jacobians of all the contacts/constraints.
+
+\begin{equation}
+    \mathbf{J} = 
+    \begin{bmatrix}
+        \mathbf{J}_1 \\ \mathbf{J}_2 \\ \vdots \\ \mathbf{J}_{n_c}
+    \end{bmatrix} \in \mathcal{R}^{3 n_c \times N}
+\end{equation}
+\\
+$N$ is from section \ref{sec:kin} known as the size of $\mathbf{q}$. The Jacobian is also explained in the mentioned section. The Jacobian $\mathbf{J}_i \in \mathcal{R}^{3\times N}$ for a single contact point with respect to the contact point variable vector $\mathbf{r}_i$ is found as 
+
+\begin{equation}
+    \mathbf{J}_i =
+    \HUGE{
+    \begin{bmatrix}
+        \frac{\partial x_{c,i}}{\partial q_1} & \dots & \frac{\partial x_{c,i}}{\partial q_N} \\
+        \frac{\partial y_{c,i}}{\partial q_1} & \dots & \frac{\partial y_{c,i}}{\partial q_N} \\
+        \frac{\partial \theta_{c,i}}{\partial q_1} & \dots & \frac{\partial \theta_{c,i}}{\partial q_N}
+    \end{bmatrix}
+    }.
+\end{equation}
+\\
+Furthermore, $\mathbf{a}_q \in \mathcal{R}^{n_c}$.
+
+
+The relationship between the velocity vector $\mathbf{v}$ given in the end effector frame and the velocity vector $\dot{\mathbf{r}}$ in the fixed reference frame is given by the transformation matrix $\mathbf{T}$ in (\ref{eq:hpfc:vTr}).
+\begin{equation}\label{eq:hpfc:vTr}
+    \mathbf{v = T\dot{r}}
+\end{equation}
+\\
+The interpretation of this velocity vector for the snake robot case is
+\begin{equation}
+    \mathbf{v}_i = 
+    \begin{bmatrix}
+        v_{x,i} & v_{y,i}
+    \end{bmatrix}^T \in \mathcal{R}^2.
+\end{equation}
+This is the velocity of the $i$'th contact point given in the coordinate frame of the contact point. This is better explained by the illustration in Figure \ref{}.
+
+The corresponding transformation matrix converting between $\mathbf{r}_i$ and $\mathbf{v}_i$ is
+
+\begin{equation}
+    \mathbf{T}_i =
+    \begin{bmatrix}
+        cos(\theta_{c,i}) & sin(\theta_{c,i}) & 0 \\
+        -sin(\theta_{c,i}) & cos(\theta_{c,i}) & 0
+    \end{bmatrix} \in \mathcal{R}^{2 \times 3},
+\end{equation}
+\\
+which is simply a rotation around the local z-axis. Its inverse is given by
+
+\begin{equation}\label{eq:Tinv}
+    \mathbf{T}^{-1}_i =
+    \begin{bmatrix}
+        cos(\theta_{c,i}) & -sin(\theta_{c,i}) \\
+        sin(\theta_{c,i}) & cos(\theta_{c,i}) \\
+        0 & 0
+    \end{bmatrix} \in \mathcal{R}^{3 \times 2}.
+\end{equation}
+\\
+Combining all the transformation matrices yields
+
+\begin{equation}
+    \mathbf{T} =
+    \begin{bmatrix}
+        \mathbf{T}_1 & \mathbf{0}_{2\times3} & \dots & \mathbf{0}_{2\times3} \\
+        \mathbf{0}_{2\times3} & \ddots & & \vdots \\
+        \vdots & & \ddots & \mathbf{0}_{2\times3} \\
+        \mathbf{0}_{2\times3} & \dots & \mathbf{0}_{2\times3} & \mathbf{T}_{n_c} \\
+    \end{bmatrix} \in \mathcal{R}^{2 n_c \times 3 n_c}
+\end{equation}
+\\
+
+From (\ref{eq:hpfc:derhypsurf}) and (\ref{eq:hpfc:vTr}) it follows that
+
+\begin{equation}\label{eq:hpfc:EFTv}
+    \mathbf{E}_F \mathbf{T}^{-1} \mathbf{v} = 0.
+\end{equation}
+\\
+Furthermore, it is assumed that no friction works between the constraint surface and the end-effector. Thus, from the principle of virtual work, the force $\mathbf{f}$ exerted on the surface by the effector must follow
+
+\begin{equation}\label{eq:hpfc:vf}
+    \mathbf{v}^T \mathbf{f} = 0.
+\end{equation}
+\\
+An interpretation is, like mentioned above, that the force and velocity directions complement each other. From (\ref{eq:hpfc:EFTv}) and (\ref{eq:hpfc:vf}) it follows that
+
+\begin{equation}
+    \mathbf{f} = \hat{\mathbf{E}}_F^T \mathbf{f}_F, \quad \hat{\mathbf{E}}_F^T = \mathbf{E}_F \mathbf{T}^{-1},
+\end{equation}
+\\
+where $\mathbf{f}_F$ is an unknown vector representing the force $\mathbf{f}$ in terms of the unit force vectors.
+
+Calculating the force $\mathbf{f}_i$ for a given contact point gives
+
+\begin{equation}
+    \begin{split}
+        \mathbf{f}_i &= \hat{\mathbf{E}}_{F,i}^T \mathbf{f}_{F,i} = \mathbf{E}_{F,i} \mathbf{T}_i^{-1} \mathbf{f}_{F,i}\\
+        &=
+        \begin{bmatrix}
+            -sin(\theta_{c,i}) & cos(\theta_{c,i}) & 0
+        \end{bmatrix}
+        \begin{bmatrix}
+            cos(\theta_{c,i}) & -sin(\theta_{c,i}) \\
+            sin(\theta_{c,i}) & cos(\theta_{c,i}) \\
+            0 & 0
+        \end{bmatrix}
+        \mathbf{f}_{F,i}\\
+        &=
+        \begin{bmatrix}
+            0 \\ 1
+        \end{bmatrix}
+        \mathbf{f}_{F,i}
+    \end{split}
+\end{equation}
+\\
+This result corresponds with the intuition gained from studying figure \ref{}. \hl{Write some more about this result.}
+
+The corresponding torque is found by
+
+\begin{equation}
+    \boldsymbol{\tau}_F = (\mathbf{TJ})^T \mathbf{f} = \mathbf{J}^T \mathbf{E}_F^T \mathbf{f}_F.
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Calculation of the joint driving force}
+
+The total torque $\boldsymbol{\tau}$ applied to the robot will be the difference between the motor torque $\boldsymbol{\tau}_c$ and the constraint torque $\boldsymbol{\tau}_F$.
+
+\begin{equation}\label{eq:tau_dhpfc1}
+    \boldsymbol{\tau} = \boldsymbol{\tau}_c - \boldsymbol{\tau}_F
+\end{equation}
+\\
+
+Combining the torque in (\ref{eq:tau_dhpfc1}) with the equations of motion given in (\ref{eq:eom}) gives
+
+\begin{equation}\label{eq:dhpfc_stuff1}
+    \mathbf{M(q) \ddot{q}} + \mathbf{J}^T \mathbf{E}^T_F \mathbf{f}_F = \boldsymbol{\tau}_c - \mathbf{C(q, \dot{q})}
+\end{equation}
+\\
+and
+\begin{equation}\label{eq:dhpfc_stuff2}
+    \mathbf{E}_F \mathbf{J\ddot{q}} = - \mathbf{E}_F \mathbf{a}_q - \mathbf{a}_{rF}.
+\end{equation}
+\\
+Lastly, it can be shown that combining (\ref{eq:dhpfc_stuff1}) and (\ref{eq:dhpfc_stuff2}) yields the expressions
+
+\begin{equation}
+    \mathbf{\ddot{q}} = \mathbf{M}^{-1}(\mathbf{b}_1 + (\mathbf{E}_F \mathbf{J})^T \mathbf{K} (\mathbf{b}_2 - \mathbf{E}_F \mathbf{J} \mathbf{M}^{-1} \mathbf{b}_1)),
+\end{equation}
+
+\begin{equation}
+    \mathbf{f}_F = -\mathbf{K} (\mathbf{b}_2 - \mathbf{E}_F \mathbf{J} \mathbf{M}^{-1} \mathbf{b}_1).
+\end{equation}
+\\
+$\mathbf{K}$, $\mathbf{b}_1$ and $\mathbf{b}_2$ are given by
+
+\begin{equation}
+    \begin{split}
+        \mathbf{K} &= (\mathbf{E}_F \mathbf{J} \mathbf{M}^{-1} \mathbf{J}^T \mathbf{E}^T_F)^{-1}\\
+        \mathbf{b}_1 &= \boldsymbol{\tau}_c - \mathbf{C(q, \dot{q})}\\
+        \mathbf{b}_2 &= - \mathbf{E}_F \mathbf{a}_q - \mathbf{a}_{rF}.
+    \end{split}
+\end{equation}
+\\
+Eventually, it is possible to calculate the joint control torque. It consists of a component based on the desired movement $\mathbf{\ddot{r}}_d$ and a component based on the desired force $\mathbf{f}_{Fd}$ at applied to the constraint surfaces.
+
+\begin{equation}
+    \boldsymbol{\tau}_c = \boldsymbol{\tau}_P + \boldsymbol{\tau}_F
+\end{equation}
+\\
+The torque $\boldsymbol{\tau}_P$ is found by solving the equations of motion given in (\ref{eq:eom}) based on the desired values of the joint accelerations.
+
+\begin{equation}
+    \boldsymbol{\tau}_P = \mathbf{M(q)} \ddot{\mathbf{q}}_d + \mathbf{C}(\mathbf{q,\dot{q}})
+\end{equation}
+
+\begin{equation}
+    \boldsymbol{\tau}_F = \mathbf{J}^T \mathbf{E}^T_F \mathbf{f}_{Fd}
+\end{equation}
+
+\begin{equation}
+    \ddot{\mathbf{q}}_d = \mathbf{J}^+ (\mathbf{E}^{-1} 
+    \begin{bmatrix}
+        \mathbf{\ddot{r}}_{EPd} \\
+        - \mathbf{a}_{rF}
+    \end{bmatrix}
+    - \mathbf{a}_q)
+\end{equation}
+\\
+Here the vector $\mathbf{\ddot{r}}_{EPd} = \mathbf{E}_P \mathbf{\ddot{r}}_{d}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{The purpose/benefit/value of HPFC in snake robot locomotion}
+
+- Controlling both the force and position using compliance control would require us to frequently switch between very very high and very low compliance.
+
+- vi likevel ha en viss compliant behavior i at hvis en hindring beveger seg litt vil slangen følge etter --> men det kan være en assumption at hindringene har statisk posisjon
+
+- Lateral undulation etc is optimal for flat, obstacle-free environments.
+
+- Allows us to control force and position simultaneously in different directions.
+
+- posisjonsstyring gir stiv oppførsel og krafstyring gir dynamisk oppførsel
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Example of dynamic HPFC on simple snake robot}

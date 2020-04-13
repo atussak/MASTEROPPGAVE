@@ -1,0 +1,25 @@
+\section{User guide}
+
+- How to start the general simulator and use the GUI
+- How to start existing controllers and change their parameters
+
+Any addition to the SnakeSIM should be written as a separate node in the program. This will make the whole simulator more robust in the sense that if this extra node crashes, the rest of the simulator can still work fine.
+
+In order to send commands to the robot and receive data about its whereabouts, topics are used. It is possible to publish (write) or subscribe (read) from these topics. A list of the most useful topics for high level control are listed below.
+
+\begin{itemize}
+    \item \texttt{"/snakebot/pushpoints"}\\
+    Information about the detected obstacle pushpoints. This includes contact normals and tangents, as well as position of contact point and information about which links are in contact with an obstacle.
+    
+    \item \texttt{"/snakebot/robot\char`_pose"}\\
+    Global position of all snake robot links/joints??
+    
+    \item \texttt{"/snakebot/joint\char`_states"}\\
+    Angles of all joints relative to their preceding link. This topic also provides the corresponding velocity of the joints.
+    
+    \item \texttt{"/snakebot/joint\char`_01\char`_effort\char`_controller/command"}\\
+    Joint torque command to the specific joint actuators 
+    
+    \item \texttt{"/ft\char`_sensor\char`_topic\char`_01"}\\
+    Wrench in specific joint measured by the force/torque sensor in Gazebo 
+\end{itemize}

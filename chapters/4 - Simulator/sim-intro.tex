@@ -1,0 +1,9 @@
+\section{Overview/Background info}
+
+- Why was this particular simulator chosen (mention MATLAB)?
+
+SnakeSIM is a virtual rapid-prototyping framework made by Sanfilippo et al. \cite{sanfilippo2018snakesim} to allow researchers for the design and simulation of \textit{perception-driven obstacle-aided locomotion} (POAL) in a safe and rapid manner. The core of the simulator is based in the Robotic Operating System (ROS) \cite{quigley2009ros}. This is where the robot model and control is defined. Furthermore, it is connected to Gazebo \cite{koenig2004design}, providing both a robust physics engine and a real-time graphical user interface. SnakeSIM has an additional interface towards the RViz visualization tool. This part will however not be explained further as it has not been applied in this project.
+
+The customization of SnakeSIM towards the case of obstacle-aided locomotion is a crucial reason for why this particular simulator was chosen to conduct the experiments. It offers a setup with the desired frictionless environment and obstacles. Additionally, the physics engine included contributes to more realistic results in the experiments. This is especially helpful when looking at the interaction between the robot and obstacles. Lastly, it allows for smooth integration of additions to the program.
+
+The simulator has been modified to fit even better to the project. The main contribution is the implementation of the dynamic controller. This is explained further in \ref{sec:4-contributions}. Furthermore, certain properties of the simulator, like visual perception and 3D movement, have been neglected. The main purpose is to compare the results of the dynamic hybrid position/force controller and other traditional controllers. 

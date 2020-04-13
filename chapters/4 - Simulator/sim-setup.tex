@@ -1,0 +1,42 @@
+\section{General simulation setup}
+
+In the past, the simulator has been used to mimic an existing snake robot prototype, namely the Mamba snake robot \cite{liljeback2014mamba}. This snake robot has 14 identical links and 13 joints connecting these links. The visualization of the model can be seen in Figure \ref{}. The properties of this model are very incorporated into the simulator, and the model is thus used for this project as well. Further model details can be found in Table \ref{tab:snake_model_props}. This table shows that the links of the snake robot model have three dimensional properties, meaning both width, length and height. All experiments are however still only conducted in the two dimensional ground plane.
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        & Value & Unit\\
+        \hline
+        Number of links & $14$ & \\
+        Number of joints & $13$ & \\
+        Link mass & $1$ & $[kg]$ \\
+        Link length & $0.2$ & $[m]$ \\
+        Link height & $0.1$ & $[m]$ \\
+        Link width & $0.1$ & $[m]$ \\
+        Joint offset & $0.3$ & $[m]$\\
+        \hline
+    \end{tabular}
+    \caption{Simulated snake robot model properties}
+    \label{tab:snake_model_props}
+\end{table}
+
+When it comes to the configuration of the obstacles, it is based on the \textit{obstacle triplet model} \cite{sanfilippo2018snakesim}. The motivation behind this is explained in section \ref{}. The three obstacles are modeled as identical cylinders in the simulator. Nonetheless, contact with the snake robot is still frictionless point contact. Further details about the obstacle model can be found in Table \ref{tab:obst_model_props}.
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        & Value & Unit\\
+        \hline
+        Number of obstacles & $3$ & \\
+        Mass & $1$ & $[kg]$ \\
+        Radius & $0.1$ & $[m]$ \\
+        Height & $0.2$ & $[m]$ \\
+        \hline
+    \end{tabular}
+    \caption{Simulated obstacle model properties}
+    \label{tab:obst_model_props}
+\end{table}
+
+The simulated sensors added to the snake robot model are defined using the URDF \cite{} file format. The most relevant sensors for this project are the bumper sensors \cite{} detecting contact and contact forces, as well as the torque sensors in the joints of the robot.
