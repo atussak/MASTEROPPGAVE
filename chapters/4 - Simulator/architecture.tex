@@ -1,10 +1,32 @@
-\section{Simulator architecture}
+\section{Simulator architecture}\label{sec:sim_architecture}
 
-The SnakeSIM simulator is based in and run from the Robot Operating System (ROS) \cite{quigley2009ros}. It is a set of open source software libraries and tools designed to build robot applications. It further provides features like message-passing and package management. The ROS-based program is set up to launch the Gazebo 3D simulator, which is adopted to accurately simulate the snake robot in the desired environment with obstacles. All simulated objects making out the snake robot and the obstacles have attributes like mass and velocity, allowing for realistic behaviour when interaction and collisions occur.
-It is also possible to interact directly with the snake robot and its environment through the visual presentation provided by Gazebo.
+\subsection{ROS}
 
-Gazebo is responsible for reporting all physical variables and how they change with the movement within the world. It is also possible to add different kinds of sensors to the robot to retrieve forces, torques, contact positions, etc. The controllers implemented in the ROS platform listen to this data and use it to compute desired motor inputs for the actuators positioned in the snake robot joints. This is again data that Gazebo listens to in order to display the correct movement of the snake robot. The information flow is visualized in Figure \ref{}.
+As mentioned above, the SnakeSIM simulator is based in and run from ROS, which is a set of open source software libraries and tools designed to build robot applications.
+The use of nodes ensures the modular architecture of ROS. A node is an independent part of the program that has a specific computation task. More concretely, it is an executable file from a ROS package. An example of this is the position controller node or the collisions node, detecting and reporting collisions. The nodes are in this project programmed using C++. Another supported alternative is Python. The modular architecture of ROS even allows for the nodes to be developed with different programming languages without any complications.
 
-Moreover, the ROS part of the simulator is divided into several so called nodes that can run independently of each other. Some examples are the Gazebo node, the position controller, the dynamic controller, the environment setup configuration, etc. The relevant nodes and the information flow between them are shown in Figure \ref{}. The use of topics for message passing allows for the nodes to send and receive information independently of each other. The data is exchanged by publishing and subscribing to these designated topics (message passing). This means that any node does not have to wait for another node to read or receive the published data before continuing with its computations.
+Even though the nodes are able to run independently, they might need data from other nodes to make useful computations. The nodes therefore communicate with each other with the use of topics. A topic is simply a set of variables that can be continuously updated by a node. Updating these variables are referred to as publishing to the topic. At the same time other nodes may read the values posted on this topic. This is done by subscribing to the topic. There is no limit to how many nodes can publish and subscribe to a specific topic. A visualization of an example of this message passing system is presented in Figure \ref{fig:nodesntopics}.
 
-The configuration of the simulated snake robot and obstacles is implemented according to the Universal Robotic Description Format (URDF) \cite{}. This is a file format used to describe elements like links, joints, sensors and actuators and how these elements connect to each other.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/simulator/nodesntopics.pdf}
+    \caption{Message passing system in ROS}
+    \label{fig:nodesntopics}
+\end{figure}
+
+The nodes are able to find each other and communicate thanks to the ROS master. It registers all the 
+running nodes and tracks topic publishing and subscriptions.
+
+\subsection{Gazebo}
+
+The ROS-based program is set up to launch the Gazebo 3D physics simulator. Gazebo is adapted to accurately simulate the snake robot in the desired environment with obstacles. All simulated objects, meaning the snake robot and the obstacles, have attributes like mass and velocity. This allows for realistic behaviour when interaction and collisions occur. The configuration of the simulated snake robot and obstacles is implemented according to the Universal Robotic Description Format (URDF) \cite{urdfWeb}. This is an XML-based file format used to describe elements like links, joints, sensors and actuators and how these elements connect to each other.
+
+The added sensors are able to communicate properties like forces, torques, contact positions, etc. These properties, as well as all physical variables, are reported back to ROS by Gazebo.
+At the same time, Gazebo subscribes to information from the ROS controller nodes sending joint motor torque commands for the snake robot. The physics engine is then able to use all this information to enable Gazebo to show a realistic resulting movement. It is also possible to move and influence the simulated objects directly through the graphical user interface (GUI) provided by Gazebo (see Figure \ref{fig:gazebo_gui}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{figures/simulator/gazebo_gen_screen.png}
+    \caption{Gazebo graphical user interface}
+    \label{fig:gazebo_gui}
+\end{figure}
