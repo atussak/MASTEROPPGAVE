@@ -1,7 +1,12 @@
 \section{Hybrid position/force control (HPFC)}
 
-\subsection{"Normal HPFC"} \label{subseq:HPFC}
+The goal of the snake robot is to push against obstacles in a fashion that yields forward propulsion along a path. Consequently, the robot will have to curve itself along the path whilst applying a force to the obstacles considered advantageous. The behavior of the robot has to comprise with the constraints arising from the contact, which further motivates the use of hybrid position/force control (HPFC).
 
+HPFC is not a control method per se, but rather a method for determining when and in which directions force or motion control should be applied. It is desired to control motion along the unconstrained motion directions and force along the constrained motion directions. Different approaches to this problem exist. One is the use of selection matrices, introduced by Raibert and Craig et al. \cite{raibert1981hybrid}. The disadvantage of this approach is that the directions in which force and motion should be controlled has to be recalculated for every step, and is no simple procedure. In another approach, introduced by West and Asada \cite{west1985method}, two projection matrices are used as filters in joint space to automatically select between position- and force controlled vectors. There is however a disadvantage to this method as well, which is that the dynamics of the robot are ignored. A thoroughly studied method called dynamic HPFC, developed by Yoshikawa \cite{yoshikawa1987dynamic}, is therefore presented and adapted to the snake robot.
+
+Most of the theory on traditional HPFC, as well as this intro, is a modified part of the earlier project work of the author \cite{AtussaProsjektoppgp}. This method is mainly presented to shed light on the need to include the dynamics into the control. The rest of the chapter is focused on dynamic HPFC and the advantages and challenges that comes with adapting it to a snake robot model.
+
+\input{chapters/3 - Theory/traditional_hpfc}
 
 \subsection{Dynamic HPFC} \label{subsec:DHPFC}
 
@@ -403,7 +408,21 @@ Given that $\mathbf{r}_{P}$ is given by $\mathbf{r}_{Pd}$ and the described dyna
 
 There are surely several ways of implementing and designing the dynamic HPFC control logic on a snake robot. This section will focus on the challenges related to the application of the suggested design scheme in \ref{subsec:DHPFC}. Special attention is paid to the chosen variable spaces and the consequences of configuration transitions when the snake moves.
 
-Whenever the snake achieves successful forward or backward propulsion it will slide along the obstacles that are by its side. Eventually the contact between a link and an obstacle will be lost. At this point, the obstacle will either be left alone or come in contact with a neighboring link. \hl{Figure of this sequence.} If the contact is completely lost, it means that one constraint is lost as well and $n_c = n_c - 1$. This will in turn lead to the variable $\mathbf{r}$, describing the position of the contacts, shrinking. Consequently the mapping matrix $\mathbf{E}$ to the allowed force and movement directions will shrink as well. The greatest challenge in this case is changing the dimensions of the relevant variables in real time. One option could however be keeping all variable spaces and instead set the parts of $\mathbf{E}$ corresponding to the lost constraint to zero so that it has no impact on the following solution.
+Whenever the snake achieves successful forward or backward propulsion it will slide along the obstacles that are by its side. Eventually the contact between a link and an obstacle will be lost. At this point, the obstacle will either be left alone or come in contact with a neighboring link. These two scenarios are illustrated in Figures \ref{fig:obst_slide_seq1} and \ref{fig:obst_slide_seq2} respectively. If the contact is completely lost, it means that one constraint is lost as well and $n_c = n_c - 1$. This will in turn lead to the variable $\mathbf{r}$, describing the position of the contacts, shrinking. Consequently the mapping matrix $\mathbf{E}$ to the allowed force and movement directions will shrink as well. The greatest challenge in this case is changing the dimensions of the relevant variables in real time. One option could however be keeping all variable spaces and instead set the parts of $\mathbf{E}$ corresponding to the lost constraint to zero so that it has no impact on the following solution.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/theory/obst_slide_sequence1.pdf}
+    \caption{Snake robot losing contact with obstacle}
+    \label{fig:obst_slide_seq1}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/theory/obst_slide_sequence2.pdf}
+    \caption{Obstacle changing contact from one link to another}
+    \label{fig:obst_slide_seq2}
+\end{figure}
 
 If, on the other hand, the snake simply slides in a way that the contact is transferred to an adjoining link, the size $n_c$ and dimensions of all variables will remain unchanged. In addition to this, the obstacle will lie on the same side of the snake as it already was, which enables the direction of the desired force application to the obstacle to stay the same as well. Thus, the constraint will generally be on the same form. The only thing that has to change is the description of the position variables in $\mathbf{r}$ belonging to the new contact point. Again, the change is most probably slim since the two first variables $(x_c, y_c)$ describe the position of the contact point and the obstacle is assumed to be static (meaning its position will not change). Furthermore, the adjoining link adopting the contact is probable to have a similar angle $\theta_c = \theta$ relative to the base frame as the previous link given that the desired path is well designed and defined. This obviously makes the implementation simpler and the control sequence smoother and more predictable.
 
@@ -419,3 +438,9 @@ The greatest challenge arises if the number of contact points increase. This mea
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \input{chapters/3 - Theory/example_2link}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Constraint space analysis}

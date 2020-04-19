@@ -1,0 +1,56 @@
+\subsection{Traditional HPFC} \label{subseq:HPFC}
+
+Like mentioned above, velocity and force can be controlled in the directions in which they are not constrained. The end effector space of a robot can be divided into two orthogonal domains, a position domain and a force domain. These domains are complementary to the directions of the corresponding constraints at the end effector. It is logical to conclude that if there is contact with the environment, motion cannot be controlled freely. On the other hand, if there is no contact, there is no direction in which the robot can apply a force. Ergo, the force and motion control directions do not overlap and the domains are orthogonal. This means that position and force can be controlled independently and arbitrarily in these domains.
+
+The following relationships are known from \ref{seq:constr_kin} and \ref{subseq:constr_dyn}. 
+
+\begin{equation}
+	\mathbf{v = J \dot{q}} \textrm{,} \quad  \  \boldsymbol{\tau} \mathbf{= J}^T \mathbf{f}
+\end{equation}
+\\
+An important observation is that constraints due to contact with the environment are constraints due to a closed kinematic chain. In general, this is something that occurs when at least \textit{two} points of the robot are in contact with the environment. For the snake robot this might not always be the case. It is however possible to define a virtual closed kinematic chain where the robot is connected to the base with the virtual joint variables $x_0$, $y_0$ and $\phi_1$.
+A separate Jacobian is calculated for each closed kinematic chain, as explained in \ref{subseq:constr_inst}.
+%These Jacobians are denoted $\mathbf{J_{ci}}$, where $i = 1, .., k$ is the number of independent closed kinematic chains.
+%Since the motion is constrained at a contact point, the relationships
+
+Relationship (\ref{eq:constr_dyns}) comes from the motion being constrained at a contact point.
+
+\begin{equation} \label{eq:constr_dyns}
+    \mathbf{\dot{v}_{ci} = J_{ci} \dot{q} = 0}
+\end{equation}
+\\
+The solution to (\ref{eq:constr_dyns}) can be proven to be
+
+\begin{equation}
+    \mathbf{\dot{q} = (I - J_{ci}^+ J_{ci}) y},
+\end{equation}
+\\
+where $\mathbf{y}$ can be an arbitrary vector, as it will yield zero end effector motion. Furthermore, since the matrix $\mathbf{J_{ci}}$ might be non square, the pseudo inverse $\mathbf{J_{ci}^+}$ is used.
+For a closed kinematic chain, the work done at the end of the chain must also be zero. Therefore, the sum of the work done by each of the joints must be zero:
+
+\begin{equation} \label{eq:zero_joint_work}
+    \boldsymbol{\tau^T} \mathbf{\dot{q}} = \boldsymbol{\tau^T} \mathbf{(I - J_{ci}^+ J_{ci}) y = 0}.
+\end{equation}
+\\
+(\ref{eq:zero_joint_work}) has the general solution
+
+\begin{equation}
+   \boldsymbol{\tau}  \mathbf{= (J_{ci}^+ J_{ci})^T z},
+\end{equation}
+\\
+where $\mathbf{z}$ can be an arbitrary vector.
+
+The allowable motion is now characterized by $\mathbf{[I - J_{ci}^+ J_{ci}]}$ and the allowable forces by $\mathbf{[J_{ci}^+ J_{ci}]^T}$. These matrices are orthogonal projectors in joint space onto the allowable position and force variations respectively. A further explanation of this result is given in Chapter 5 of \cite{west1985method}. The projectors will be abbreviated to
+
+\begin{equation}\label{eq:proj_mtrices}
+    \mathbf{
+    \prescript{j}{ap}{P} = [I - J_{ci}^+ J_{ci}] \ \ \quad \textrm{and} \quad
+    \prescript{j}{af}{P} = [J_{ci}^+ J_{ci}]^T = [I - (\prescript{j}{ap}{P})^T]
+    }.
+\end{equation}
+\\
+The superscript $j$ denotes joint space, and $ap$ and $af$ stand for allowable positions and allowable forces respectively. It can be observed that these projection matrices project onto the nullspace of the respective constraint directions. This can further be related to the concept of task priority, in which tasks with lower priority are performed in the null-space of higher priority tasks \cite{chiaverini2008kinematically}. An important observation is that the mapping onto the allowable force and position spaces are in this method purely determined by the kinematics of the robot.
+
+\subsubsection{Multiple constraints}\label{subseq:mult_contacts}
+
+If there are several contact points, projection matrices are calculated for each constraint, and the final projection matrices are found by taking the union and intersect of the different $\prescript{j}{af}{P}$ and $\prescript{j}{ap}{P}$ respectively.
