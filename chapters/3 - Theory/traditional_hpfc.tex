@@ -8,7 +8,7 @@ The following relationships are known from \ref{seq:constr_kin} and \ref{subseq:
 	\mathbf{v = J \dot{q}} \textrm{,} \quad  \  \boldsymbol{\tau} \mathbf{= J}^T \mathbf{f}
 \end{equation}
 \\
-An important observation is that constraints due to contact with the environment are constraints due to a closed kinematic chain. In general, this is something that occurs when at least \textit{two} points of the robot are in contact with the environment. For the snake robot this might not always be the case. It is however possible to define a virtual closed kinematic chain where the robot is connected to the base with the virtual joint variables $x_0$, $y_0$ and $\phi_1$.
+An important observation is that constraints due to contact with the environment are constraints due to a closed kinematic chain. In general, this is something that occurs when at least \textit{two} points of the robot are in contact with the environment. For the snake robot this might not always be the case. It is however possible to define a virtual closed kinematic chain where the robot is connected to the base with the virtual joint variables $x_0$, $y_0$ and $\phi_0$.
 A separate Jacobian is calculated for each closed kinematic chain, as explained in \ref{subseq:constr_inst}.
 %These Jacobians are denoted $\mathbf{J_{ci}}$, where $i = 1, .., k$ is the number of independent closed kinematic chains.
 %Since the motion is constrained at a contact point, the relationships
@@ -43,14 +43,70 @@ where $\mathbf{z}$ can be an arbitrary vector.
 The allowable motion is now characterized by $\mathbf{[I - J_{ci}^+ J_{ci}]}$ and the allowable forces by $\mathbf{[J_{ci}^+ J_{ci}]^T}$. These matrices are orthogonal projectors in joint space onto the allowable position and force variations respectively. A further explanation of this result is given in Chapter 5 of \cite{west1985method}. The projectors will be abbreviated to
 
 \begin{equation}\label{eq:proj_mtrices}
-    \mathbf{
-    \prescript{j}{ap}{P} = [I - J_{ci}^+ J_{ci}] \ \ \quad \textrm{and} \quad
-    \prescript{j}{af}{P} = [J_{ci}^+ J_{ci}]^T = [I - (\prescript{j}{ap}{P})^T]
-    }.
+    \prescript{}{j}{\mathbf{P}}_{ap} = \mathbf{[I - J_{ci}^+ J_{ci}]} \ \ \quad \textrm{and} \quad
+    \prescript{}{j}{\mathbf{P}}_{af} = \mathbf{[J_{ci}^+ J_{ci}]^T = [I - (\prescript{j}{ap}{P})^T]}.
 \end{equation}
 \\
-The superscript $j$ denotes joint space, and $ap$ and $af$ stand for allowable positions and allowable forces respectively. It can be observed that these projection matrices project onto the nullspace of the respective constraint directions. This can further be related to the concept of task priority, in which tasks with lower priority are performed in the null-space of higher priority tasks \cite{chiaverini2008kinematically}. An important observation is that the mapping onto the allowable force and position spaces are in this method purely determined by the kinematics of the robot.
+The subscript $j$ denotes joint space, and $ap$ and $af$ stand for allowable positions and allowable forces respectively. It can be observed that these projection matrices project onto the nullspace of the respective constraint directions. This can further be related to the concept of task priority, in which tasks with lower priority are performed in the null-space of higher priority tasks \cite{chiaverini2008kinematically}. An important observation is that the mapping onto the allowable force and position spaces are in this method purely determined by the kinematics of the robot.
 
 \subsubsection{Multiple constraints}\label{subseq:mult_contacts}
 
-If there are several contact points, projection matrices are calculated for each constraint, and the final projection matrices are found by taking the union and intersect of the different $\prescript{j}{af}{P}$ and $\prescript{j}{ap}{P}$ respectively.
+If there are several contact points, projection matrices are calculated for each constraint, and the final projection matrices are found by taking the union and intersect of the different $\prescript{}{j}{\mathbf{P}}_{af}$ and $\prescript{}{j}{\mathbf{P}}_{ap}$ respectively.
+
+\subsubsection{Passive joints}
+
+The presence of passive joints in the robot imposes another constraint on the allowable forces. This is because the force in a passive joint is uncontrollable. \cite{west1985method} presents two methods of including this constraint. One of which is using a diagonal matrix $\mathbf{A}$ that denotes which joints are passive and which are active. A 1 on the diagonal indicates an active joint whereas a 0 indicates a passive joint. This matrix has to be manually initialized before controlling the robot. It can then be combined with the allowable force projection by taking the intersect of the space spanned by $\mathbf{A}$ and $\prescript{}{j}{\mathbf{P}}_{af}$.
+
+\subsubsection{Task analysis}
+
+An end effector task may consist of both a movement and force application onto a surface. The projectors $\prescript{}{j}{\mathbf{P}}_{ap}$ and $\prescript{}{j}{\mathbf{P}}_{af}$ make sure the force and movement are performed in the allowable force and movement directions. A specific task may however not be possible to perform within the restrictions of these spaces.
+
+\textit{Essential position variables} are defined as the directions om movement of the end effector which must be controlled in order to perform the task correctly. At the same time, \textit{arbitrary position variables} are those directions of movement which do not have to be controlled precisely. The terms \textit{essential force variables} and \textit{arbitrary force variables} follow the same logic, just for the force directions. According to \cite{west1985method}, the total number of essential variables, position plus force, is equal to the minimum number of controllable actuators in the manipulator necessary for performing the task.
+
+The essential position and force direction can be described by the column vectors (\ref{eq:hpfc_ep}) and (\ref{eq:hpfc_ef}) respectively.
+
+\begin{equation}\label{eq:hpfc_ep}
+    \mathbf{E}_p =
+    \begin{bmatrix}
+        \mathbf{e}_{p1} & ... & \mathbf{e}_{p\alpha}
+    \end{bmatrix}^T
+\end{equation}
+
+\begin{equation}\label{eq:hpfc_ef}
+    \mathbf{E}_f =
+    \begin{bmatrix}
+        \mathbf{e}_{f1} & ... & \mathbf{e}_{f\beta}
+    \end{bmatrix}^T
+\end{equation}
+\\
+Each column vector describes one direction. Following, the number of essential position directions is $\alpha$ and the number of essential force directions is $\beta$. The orthogonal projections onto the essential position and force spaces are given by (\ref{eq:hpfc_wep}) and (\ref{eq:hpfc_wef}) respectively.
+
+\begin{equation}\label{eq:hpfc_wep}
+    \prescript{}{w}{\mathbf{P}}_{ep} = \mathbf{E}_p(\mathbf{E}_p^T \mathbf{E}_p)^{-1} \mathbf{E}_p^T
+\end{equation}
+
+\begin{equation}\label{eq:hpfc_wef}
+    \prescript{}{w}{\mathbf{P}}_{ef} = \mathbf{E}_f(\mathbf{E}_f^T \mathbf{E}_f)^{-1} \mathbf{E}_f^T
+\end{equation}
+\\
+The inverse in the two equations above is, probably by mistake, not included in \cite{west1985method}. The $w$ denotes that the projectors are defined in work space coordinates. In order to combine these projectors with the allowable position and force projectors, it is desirable to define them in the joint space coordinate system. The precondition for this to be possible for the essential position space is that the number of joints linking the base of the manipulator to the end effector is greater than or equal to three (given the two dimensional case). For the essential force space, the number of \textit{active} joints has to be greater than or equal to three. The joint space projectors can then be found by
+
+\begin{equation}\label{eq:hpfc_jep}
+    \prescript{}{j}{\mathbf{P}}_{ep} = \mathbf{J}_t^+ \prescript{}{w}{\mathbf{P}}_{ep} \mathbf{J}_t
+\end{equation}
+
+\begin{equation}\label{eq:hpfc_jeF}
+    \prescript{}{j}{\mathbf{P}}_{ef} = \mathbf{J}_c^+ \prescript{}{w}{\mathbf{P}}_{ef} (\mathbf{J}_c^T)^+
+\end{equation}
+\\
+The Jacobian $\mathbf{J}_t$ relates the task specific coordinates to the joint space. Section \ref{subsec:DHPFC} explains how this Jacobian can be found for the snake robot case.
+
+Eventually, the projections in joint space that project onto the allowable motion and force spaces \textit{and} result in the desired motion and force necessary to perform the task are given by (\ref{eq:hpfc_fp}) and (\ref{eq:hpfc_ff}) respectively.
+
+\begin{equation}\label{eq:hpfc_fp}
+    \prescript{}{j}{\mathbf{F}}_{p} = \prescript{}{j}{\mathbf{P}}_{ap} (\prescript{}{j}{\mathbf{P}}_{ep} \prescript{}{j}{\mathbf{P}}_{ap})^+ \prescript{}{j}{\mathbf{P}}_{ep}
+\end{equation}
+
+\begin{equation}\label{eq:hpfc_ff}
+    \prescript{}{j}{\mathbf{F}}_{f} = \prescript{}{j}{\mathbf{P}}_{af} (\prescript{}{j}{\mathbf{P}}_{ef} \prescript{}{j}{\mathbf{P}}_{af})^+ \prescript{}{j}{\mathbf{P}}_{ef}
+\end{equation}

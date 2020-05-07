@@ -1,5 +1,7 @@
 \section{Snake robot dynamics} \label{sec:dyn}
 
+This section is, like the last section, taken from \cite{AtussaProsjektoppgp}. The only modifications made are the variable notations.
+
 The snake robot has $n-1$ joint actuators that all can apply torques to their corresponding joints. The dynamics describe how the robot moves in response to these actuator forces. For simplicity, it is assumed that the actuators do not have dynamics of their own and, hence, arbitrary torques can be commanded at the joints of the robot \cite{murray2017mathematical}.
 
 The dynamics of the snake robot will be expressed using the joint space equations of motion formulation
@@ -51,10 +53,10 @@ where the translational and rotational kinetic energy is given in (\ref{eq:k_tra
 Here $m$ is the link mass, and $(\dot{x}_i, \dot{y}_i)$ make out the velocity of the center of the link found by differentiating (\ref{eq:pos}) with respect to time. 
 
 \begin{equation} \label{eq:k_rot}
-    K_{rotational,i} = \frac{1}{2}I\dot{\phi_i}^2
+    K_{rotational,i} = \frac{1}{2}I\dot{\phi_{i-1}}^2
 \end{equation}
 \\
-$\dot{\phi}_i$ is the joint velocity of link $i$. Furthermore, every link has the same moment of inertia, namely $I = (1/12)ml^2$. This is the moment of inertia of a rod, corresponding to the moment of inertia of a cylinder with zero radius \cite{lynch2017modern}.
+$\dot{\phi}_{i-1}$ is the joint velocity of link $i$. Furthermore, every link has the same moment of inertia, namely $I = (1/12)ml^2$. This is the moment of inertia of a rod, corresponding to the moment of inertia of a cylinder with zero radius \cite{lynch2017modern}.
 
 
 %------------------------------------------------------------------------------------------------
@@ -80,13 +82,13 @@ According to Holden et al. \cite{holden2014optimal}, the force from an obstacle 
 The following derivations are inspired by \cite{rezapour2014path}. The force $\mathbf{f}^i_c$ can be expressed in the base frame by using the rotation matrix from (\ref{eq:trans_rot}):
 
 \begin{equation}
-    \mathbf{f}^b_{c,i} = \mathbf{R}_z(\alpha_i) \mathbf{f}^i_{c,i},
+    \mathbf{f}^b_{c,i} = \mathbf{R}_z(\theta_i) \mathbf{f}^i_{c,i},
 \end{equation}
 \\
-where $\alpha_i$ is the angle of link $i$ related to the base frame $b$. It can be found by 
+where $\theta_i$ is the angle of link $i$ related to the base frame $b$. It can be found by 
 
 \begin{equation}
-    \alpha_i = \sum_{k=1}^{i} \phi_k.
+    \theta_i = \sum_{k=0}^{i-1} \phi_k.
 \end{equation}
 \\
 The contact Jacobian (\ref{eq:Jac_constr}) can be used to find the generalized external torque as a result of the external forces:
@@ -97,7 +99,7 @@ The contact Jacobian (\ref{eq:Jac_constr}) can be used to find the generalized e
 
 \subsection{Momentum}\label{subseq:momentum}
 
-The calculation of the momentum of the robot is presented as it is used in the experiment in \ref{subseq:case3} in validation of the mathematical model employed in the project.
+\hl{Remove this if it isnt used in experiments} The calculation of the momentum of the robot is presented as it is used in the experiment in \ref{subseq:case3} in validation of the mathematical model employed in the project.
 
 Momentum is the product of the velocity and mass of an object
 

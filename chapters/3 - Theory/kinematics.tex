@@ -1,5 +1,10 @@
 \section{Snake robot kinematics}\label{sec:kin}
 
+This section is a modified part of the previous work of the author \cite{AtussaProsjektoppgp}. The modifications are 
+\begin{itemize}
+    \item re-made figures
+    \item variable notations
+\end{itemize}
 
 The snake robot is modeled as a serial chain, which is a system of rigid bodies in which each member is connected to two others, except for the first and last members that are each connected to only one other member \cite{waldron2016kinematics}. As opposed to traditional robot manipulator models, the first joint in the snake robot model is not physically connected to a base.
 
@@ -9,16 +14,16 @@ The vector of generalized coordinates $\mathbf{q}$ for a snake robot with $n$ li
 \begin{equation} \label{eq:q}
     \mathbf{q} = 
     \begin{bmatrix}
-        \phi_1 & \phi_2 & ... & \phi_n & x_0 & y_0
+        \phi_0 & \phi_1 & ... & \phi_{n-1} & x_0 & y_0
     \end{bmatrix}^T.
 \end{equation}
 \\
-The coordinates $(x_0, y_0)$ and $\phi_1$ represent the position and orientation of the tail of the snake robot in reference to the base frame $(x,y)$. These coordinates cannot be directly controlled and will therefore be referred to as virtual coordinates. The generalized coordinates ${\phi_2, ... ,  \phi_n}$, corresponding to the actuated joints, refer to the angle of the following link relative to the preceding link. The number of generalized coordinates including two position coordinates and $n$ joint angles is $N = n+2$.
+The coordinates $(x_0, y_0)$ and $\phi_0$ represent the position and orientation of the tail of the snake robot in reference to the base frame $(x,y)$. These coordinates cannot be directly controlled and will therefore be referred to as virtual coordinates. The generalized coordinates ${\phi_1, ... ,  \phi_{n-1}}$, corresponding to the actuated joints, refer to the angle of the following link relative to the preceding link. The number of generalized coordinates including two position coordinates and $n$ joint angles is $N = n+2$.
 
 The model of the snake robot with the named variables are illustrated in Figure \ref{fig:kin_name}. 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/theory/kinematics.PNG}
+    \includegraphics[width=0.9\textwidth]{figures/theory/kinematics1.pdf}
     \caption{Model of snake robot with notation}
     \label{fig:kin_name}
 \end{figure}
@@ -28,7 +33,7 @@ Homogeneous transformation matrices are used to express the pose (position and o
 The homogeneous transformation matrix for the end point of link $i$ from the base frame $b$ is given by (\ref{eq:transformationmatrix}). The base frame will stay put regardless of motion of the robot. Note also that the link length $l$ is assumed equal for all the links.
 
 \begin{equation} \label{eq:transformationmatrix}
-    \textbf{T}_{b i} = \textbf{D}_x(x_0) \textbf{D}_y(y_0) \sum_{k=1}^{i} \textbf{R}_z(\phi_k) \textbf{D}_x(l)
+    \textbf{T}_{b i} = \textbf{D}_x(x_0) \textbf{D}_y(y_0) \sum_{k=0}^{i-1} \textbf{R}_z(\phi_k) \textbf{D}_x(l)
 \end{equation}
 \\
 The translation and rotation matrices are given by
@@ -66,19 +71,19 @@ The resulting matrix can be written on the form
     \textbf{T}_{b i} =
     \NORMAL{
     \begin{bmatrix}
-        \textbf{R}_{b i}(\phi_{i,abs}) & \textbf{t}_{r i}^r \\
+        \textbf{R}_{b i}(\theta_i) & \textbf{t}_{r i}^r \\
         \textbf{0}^T & 1
     \end{bmatrix} }.
 \end{equation}
 \\
-The position is directly extracted from $\textbf{t}_{r i}^r = [x_i y_i]^T$. The orientation $\phi_{i,abs}$ is found by comparing $\textbf{R}_{b i}$ to $\textbf{R}_z$ and solving for $\phi_{i,abs}$.
+The position is directly extracted from $\textbf{t}_{r i}^r = [x_i y_i]^T$. The orientation $\theta_i$ is found by comparing $\textbf{R}_{b i}$ to $\textbf{R}_z$ and solving for $\theta_i$.
 
-Alternatively, one can directly compute the position of the center of a link $i$ from the expressions below
+Alternatively, one can directly compute the position of the center of a link $i$ from the expressions below \hl{last expr missing}
 
 \begin{equation} \label{eq:pos}
     \begin{split}
-        x_i &= x_0 + \sum_{k=1}^{i} l \cos{(\sum_{j=1}^{k} \phi_j)} \\
-        y_i &= y_0 + \sum_{k=1}^{i} l \sin{(\sum_{j=1}^{k} \phi_j)},
+        x_i &= x_0 + \sum_{k=0}^{i-1} l \cos{(\sum_{j=0}^{k} \phi_j)} \\
+        y_i &= y_0 + \sum_{k=0}^{i-1} l \sin{(\sum_{j=0}^{k} \phi_j)},
     \end{split}
 \end{equation}
 \\
@@ -119,24 +124,24 @@ The model assumes that any link can be in contact with at most one obstacle at t
 \begin{equation} \label{eq:q2}
     \mathbf{q} = 
     \begin{bmatrix}
-        \phi_1 & \phi_2 & ... & \phi_n & x_0 & y_0 & d_{c,1} & d_{c,2} & ... & d_{c,n}
+        \phi_0 & \phi_1 & ... & \phi_{n-1} & x_0 & y_0 & k_{0} & k_{1} & ... & k_{n-1}
     \end{bmatrix}^T,
 \end{equation}
 \\
 where $N = 2 + 2n$ is the new number of generalized coordinates.
 
-The newly introduced coordinates $d_{c,1}, ... , d_{c,n} \geq 0$ represent the distance to the possible contact point from the corresponding joint. For instance, the coordinate $d_{c,2}$ is the distance between the second joint and the contact point measured along the second link, as illustrated in Figure \ref{fig:3_obs_force}. Every link might not be in contact with an obstacle, but the maximum number of coordinates is introduced in the interest of keeping the vector size constant. 
+The newly introduced coordinates $k_{0}, ... , k_{n-1} \geq 0$ represent the distance to the possible contact point from the corresponding joint. For instance, the coordinate $k_{1}$ is the distance between the joint connecting link 1 and 2 and the contact point measured along the second link, as illustrated in Figure \ref{fig:3_obs_force}. Every link might not be in contact with an obstacle, but the maximum number of coordinates is introduced here in the interest of keeping the vector size constant. 
 Seeing as there is no actuation force directly connected to the obstacle-related coordinates, they will be referred to as virtual joints or virtual coordinates.
 
 The position of a contact point on link $1\leq i\leq n$ in the base frame can be derived through the corresponding transformation matrix (\ref{eq:obst_tfmatrix}).
 
 \begin{equation} \label{eq:obst_tfmatrix}
-    \textbf{T}_{b ci} = \textbf{D}_x(x_0) \textbf{D}_y(y_0) \sum_{k=1}^{i-1} (\textbf{R}_z(\phi_k) \textbf{D}_x(l)) \textbf{R}_z(\phi_i) \textbf{D}_x(d_{c,1})
+    \textbf{T}_{b ci} = \textbf{D}_x(x_0) \textbf{D}_y(y_0) \sum_{k=0}^{i-2} (\textbf{R}_z(\phi_k) \textbf{D}_x(l)) \textbf{R}_z(\phi_{i-1}) \textbf{D}_x(k_{i-1})
 \end{equation}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/theory/contact_point.PNG}
+    \includegraphics[width=0.9\textwidth]{figures/theory/kinematics2.pdf}
     \caption{Snake robot in contact with obstacle}
     \label{fig:3_obs_force}
 \end{figure}
@@ -152,8 +157,8 @@ The Jacobian matrix related to the velocity of the contact point can be derived 
     J_{c,i} = 
     \HUGE{
     \begin{bmatrix}
-        \frac{\partial x_{c,i}}{\partial \phi_2} & ... & \frac{\partial x_{c,i}}{\partial q_{N-1}} & \frac{\partial x_{c,i}}{\partial q_N} \\
-        \frac{\partial y_{c,i}}{\partial \phi_2} & ... & \frac{\partial y_{c,i}}{\partial q_{N-1}} & \frac{\partial y_{c,i}}{\partial q_N} \\
+        \frac{\partial x_{c,i}}{\partial q_1} & ... & \frac{\partial x_{c,i}}{\partial q_{N-1}} & \frac{\partial x_{c,i}}{\partial q_N} \\
+        \frac{\partial y_{c,i}}{\partial q_1} & ... & \frac{\partial y_{c,i}}{\partial q_{N-1}} & \frac{\partial y_{c,i}}{\partial q_N} \\
     \end{bmatrix}
     }.
 \end{equation}

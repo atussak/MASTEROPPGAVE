@@ -16,7 +16,7 @@ direction. If the movement is conducted without slipping, every part of the body
 Concertina locomotion is not employed on open ground, but rather in narrow spaces where the available range of motion is limited. The motion is carried out by curving the body
 to create an anchor against the narrow environment (see figure \ref{fig:concertina}). The snake alternates between curving the back and front part of the body so that the front part can be stretched forward and the back part can be drawn up \cite{liljeback2012snake}.
 
-A resembling mode of locomotion is sidewinding, in which one part of the body acts as an anchor while the other part is moved forward. The part that moves forward is simply lifted off the ground and displaced while the other part stays put, typically in areas with loose sand \cite{liljeback2012snake}. Figure \ref{fig:sidewinding} gives a visual explanation of this gait. Slangen skrur seg framover.
+A resembling mode of locomotion is sidewinding, in which one part of the body acts as an anchor while the other part is moved forward. The part that moves forward is simply lifted off the ground and displaced while the other part stays put, typically in areas with loose sand \cite{liljeback2012snake}. Figure \ref{fig:sidewinding} gives a visual explanation of this gait. \hl{Slangen skrur seg framover.}
 
 % Rectlinear crawling?
 
@@ -45,7 +45,7 @@ The method produces stable rhythmic patterns and is able to rapidly return the s
 
 \subsection{Obstacle-aided locomotion (OAL)}
 
-The locomotion strategies described above are all first and foremost successful in plain, obstacle-free environments where ground friction can be used to achieve propulsion. This method, on the other hand, considers flat environments with simple obstacles. The rest of the explanation of OAL is taken from \cite{} prosjektoppg.
+The locomotion strategies described above are all first and foremost successful in plain, obstacle-free environments where ground friction can be used to achieve propulsion. This method, on the other hand, considers flat environments with simple obstacles. The rest of the explanation of OAL is taken from the project work of the author \cite{AtussaProsjektoppgp}.
 
 \input{chapters/3 - Theory/OAL.tex}
 
@@ -71,8 +71,14 @@ The work of \cite{liljeback2014compliant} is based on a model of the snake robot
 
 Rollinson et al. \cite{rollinson2013gait} proposed a controller in which individual joints can "complain" to a high-level controller built around gait parameters that specify whole-body motions. The controller is simply commanding an amplitude with a constant offset from the estimated amplitude. In the case which \cite{rollinson2013gait} calls "position compliance", a positive offset causes the robot to drive forward in the gait cycle, while a negative offset causes it to drive backwards. Furthermore, the magnitude of the offset determines how hard the robot tries to push forward or backward.
 
-Directional Compliance in Snake Robot Obstacle-Aided Locomotion --> ikke optimalt.
+\subsubsection{Directional compliance}
 
+The disadvantage of shape-based compliance is that not all terrain features are helpful for locomotion. Some might impede the movement of the robot instead of aiding it. Because of this, a novel approach called directional compliance has been proposed by Wang et al. \cite{wang2020directional}. The approach is an improved version of the shape-based compliance controller that adapts the compliance according to the information it has about the obstacles. This information is obtained through the force measured through the joints of the robot. Thus, it is what can be called a reactive controller. Directional compliance allows the robot to selectively admit forces applied on one side and reject forces from the other side \cite{wang2020directional}.
+
+The most substantial discovery of Wang et al. \cite{wang2020directional} is that the amplitude of the shape parameters act as an indication of the robot's forward progression. Thus, the amplitude difference from the nominal value is used to determine whether the robot should increase or decrease it's curvature at certain segments of its body. Wang et al. \cite{wang2020directional} denotes admitting external forces that result in increases in curvature as positive directional compliance and admitting forces that result in decreases in curvature as negative directional compliance. The known shape-based compliance is the nominal compliance of the controller. Further, a filter function is used to adapt this nominal compliance and include the two other modes.
+
+In summary, directional compliance enables the robot to either push away from, or comply to, terrain features, based on the torque feedback measured over time \cite{wang2020directional}. This dynamical system strategy was proven successful even in three dimensional environment. However, the main aim of utilizing this controller was to avoid the robot getting stuck among obstacles that could not yield propulsion, rather than following a desired path. This means that the method most probably will not choose the most optimal path to move forward, as is desired in obstacle-aided locomotion.
+\hl{Is this correct??}
 
 \subsubsection{Mechanical compliance}
 
