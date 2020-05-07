@@ -384,22 +384,6 @@ If this holds, then
 \\
 Given that $\mathbf{r}_{P}$ is given by $\mathbf{r}_{Pd}$ and the described dynamics and constraints are correct, the system given by (\ref{eq:dhpfc_tau_c})-(\ref{eq:dhpfc_qddd}) will be able to realize both the desired position and force.
 
-\subsubsection{Task analysis}
-
-Even though the control solution presented above decomposes the workspace in force and movement directions, there are still some restrictions as to which tasks can be performed. 
-In \ref{subseq:HPFC} it is explained that there are certain directions of force and movement that are essential for performing a task. It is further claimed that the number of essential directions can not be greater than the number of controllable actuators in the robot. This is an important remark in the case of snake robots with passive joints, as none of these joints are controllable.
-
-For the snake robot the force and movement directions of a task are described by $\mathbf{E}_F$ and $\mathbf{E}_P$. In some cases, the number of directions described by these vectors might exceed the number of active joints even though not all directions have to be controlled precisely in order to perform the task. So in other words, the number of essential directions in $\mathbf{E}_F$ and $\mathbf{E}_P$ together can not exceed the number of active joints in the robot. An example is a robot with 8 active joints in contact with 4 obstacles. The total number of force and movement directions described by its $\mathbf{E}_F$ and $\mathbf{E}_P$ is 3 per contact point, meaning 12 directions. This is obviously greater than 8 and the force and position can not be controlled independently in all these directions.
-
-Another very important factor to note here is that this logic is described for a closed kinematic chain. This is in the snake robot case the joints connecting the virtual base to the contact point. Because of this, active joints \textit{after} the contact point do not contribute to greater controllability. Furthermore, the segments between the contact points can be seen as closed kinematic chains. For this reason, the placement of the obstacles by the snake has an impact on how many directions can be controlled independently. Thus, the number of directions that can be controlled for the mentioned example might not be 8. If the 4 obstacles are placed by the first 4 links, only three directions can be controlled independently. \hl{These have to be position directions??? Research further!!}
-
-The essential position and force directions can be described by (\ref{eq:hpfc_wep}) and (\ref{eq:hpfc_wef}). The filters (\ref{eq:hpfc_fp}) and (\ref{eq:hpfc_ff}) can then be used to focus the control on these essential directions. This is of course given that the requirements regarding the number of active joints are fulfilled. The new input control torques can now be found by
-
-\begin{equation}
-    \boldsymbol{\tau}_c = \prescript{}{j}{\mathbf{F}}_{p} \boldsymbol{\tau}_P + \prescript{}{j}{\mathbf{F}}_{f} \boldsymbol{\tau}_F
-\end{equation}
-\\
-\hl{But can Fp be used like this thoooo?? If yes, write why cuz it is an approximation}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -478,4 +462,3 @@ decomposed to illuminate necessary and sufficient conditions for propulsion.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Constraint space analysis}
