@@ -1,0 +1,92 @@
+The relationship between the velocity vector $\mathbf{v}$ given in the  frame and the velocity vector $\dot{\mathbf{r}}$ in the fixed reference frame is given by the transformation matrix $\mathbf{T}$ in (\ref{eq:hpfc:vTr}).
+\begin{equation}\label{eq:hpfc:vTr}
+    \mathbf{v = T\dot{r}}
+\end{equation}
+\\
+The interpretation of this velocity vector for the snake robot case is
+\begin{equation}
+    \mathbf{v}_i = 
+    \begin{bmatrix}
+        v_{x,i} & v_{y,i}
+    \end{bmatrix}^T \in \mathcal{R}^2.
+\end{equation}
+This is the velocity of the $i$'th contact point given in the coordinate frame of the contact point. This is better explained by the illustration in Figure \ref{}.
+
+The corresponding transformation matrix converting between $\mathbf{r}_i$ and $\mathbf{v}_i$ is
+
+\begin{equation} \label{eq:dhpfc_Ti}
+    \mathbf{T}_i =
+    \begin{bmatrix}
+        cos(\theta_{c,i}) & sin(\theta_{c,i}) & 0 \\
+        -sin(\theta_{c,i}) & cos(\theta_{c,i}) & 0
+    \end{bmatrix} \in \mathcal{R}^{2 \times 3},
+\end{equation}
+\\
+which is simply a rotation around the local z-axis. Its inverse is given by
+
+\begin{equation}\label{eq:Tinv}
+    \mathbf{T}^{-1}_i =
+    \begin{bmatrix}
+        cos(\theta_{c,i}) & -sin(\theta_{c,i}) \\
+        sin(\theta_{c,i}) & cos(\theta_{c,i}) \\
+        0 & 0
+    \end{bmatrix} \in \mathcal{R}^{3 \times 2}.
+\end{equation}
+\\
+Combining all the transformation matrices yields
+
+\begin{equation}
+    \mathbf{T} =
+    \begin{bmatrix}
+        \mathbf{T}_1 & \mathbf{0}_{2\times3} & \dots & \mathbf{0}_{2\times3} \\
+        \mathbf{0}_{2\times3} & \ddots & & \vdots \\
+        \vdots & & \ddots & \mathbf{0}_{2\times3} \\
+        \mathbf{0}_{2\times3} & \dots & \mathbf{0}_{2\times3} & \mathbf{T}_{n_c} \\
+    \end{bmatrix} \in \mathcal{R}^{2 n_c \times 3 n_c}
+\end{equation}
+\\
+
+From (\ref{eq:hpfc:derhypsurf}) and (\ref{eq:hpfc:vTr}) it follows that
+
+\begin{equation}\label{eq:hpfc:EFTv}
+    \mathbf{E}_F \mathbf{T}^{-1} \mathbf{v} = 0.
+\end{equation}
+\\
+Furthermore, it is assumed that no friction works between the constraint surface and the end-effector. Thus, from the principle of virtual work, the force $\mathbf{f}$ exerted on the surface by the effector must follow
+
+\begin{equation}\label{eq:hpfc:vf}
+    \mathbf{v}^T \mathbf{f} = 0.
+\end{equation}
+\\
+An interpretation is, like mentioned above, that the force and velocity directions complement each other. From (\ref{eq:hpfc:EFTv}) and (\ref{eq:hpfc:vf}) it follows that
+
+\begin{equation}
+    \mathbf{f} = \hat{\mathbf{E}}_F^T \mathbf{f}_F, \quad \hat{\mathbf{E}}_F^T = \mathbf{E}_F \mathbf{T}^{-1},
+\end{equation}
+\\
+where $\mathbf{f}_F$ is an unknown vector representing the force $\mathbf{f}$ in terms of the unit force vectors.
+
+Calculating the force $\mathbf{f}_i$ for a given contact point gives
+
+\begin{equation}
+    \begin{split}
+        \mathbf{f}_i &= \hat{\mathbf{E}}_{F,i}^T \mathbf{f}_{F,i} = \mathbf{E}_{F,i} \mathbf{T}_i^{-1} \mathbf{f}_{F,i}\\
+        &=
+        \begin{bmatrix}
+            -sin(\theta_{c,i}) & cos(\theta_{c,i}) & 0
+        \end{bmatrix}
+        \begin{bmatrix}
+            cos(\theta_{c,i}) & -sin(\theta_{c,i}) \\
+            sin(\theta_{c,i}) & cos(\theta_{c,i}) \\
+            0 & 0
+        \end{bmatrix}
+        \mathbf{f}_{F,i}\\
+        &=
+        \begin{bmatrix}
+            0 \\ 1
+        \end{bmatrix}
+        \mathbf{f}_{F,i}
+    \end{split}
+\end{equation}
+\\
+This result corresponds with the intuition gained from studying figure \ref{}. \hl{Write some more about this result.}

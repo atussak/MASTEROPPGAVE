@@ -1,4 +1,4 @@
-\section{Terrestrial snake robot locomotion strategies}
+\section{Terrestrial snake robot locomotion strategies}\label{sec:locomotion}
 
 
 %--------------------------------------------------------------------------
@@ -6,7 +6,7 @@
 
 Several methods have been proposed for snake robot locomotion, most of which are inspired by nature. This part presents some of the well established strategies, as well as the newer approach, obstacle aided locomotion, which this report is based on. Finally, compliance control in snake robot locomotion is presented to open up for a later comparison to what the hybrid position/force control offers.
 
-\subsection{Traditional locomotion strategies}
+\subsection{Traditional locomotion strategies}\label{subsec:traditional-loco}
 
 Lateral undulation is the fastest and by far the most commonly implemented locomotion gait for snake robots \cite{sanfilippo2017perception}.
 It is a continuous movement of the entire body of the snake relative to the ground. The locomotion is obtained by propagating sine-waves from the front to the rear of the snake \cite{transeth2006developments}, as illustrated in figure \ref{fig:lateral}.
@@ -43,7 +43,7 @@ A central pattern generator for locomotion control is where neuroscience meets r
 The method produces stable rhythmic patterns and is able to rapidly return the system to its normal rhythmic behavior after transient perturbations. Furthermore, CPG models tend to reduce the dimensionality/complexity of the control problem in that they have only a few control parameters. These parameters allow modulation of the locomotion, for instance the speed and direction or even the type of gait. This allows for higher-level controllers to circumvent the generation of multidimensional motor commands and stick to higher level control signals.
 \hl{Er CPG en type lateral undulation?}
 
-\subsection{Obstacle-aided locomotion (OAL)}
+\subsection{Obstacle-aided locomotion (OAL)}\label{subsec:OAL}
 
 The locomotion strategies described above are all first and foremost successful in plain, obstacle-free environments where ground friction can be used to achieve propulsion. This method, on the other hand, considers flat environments with simple obstacles. The rest of the explanation of OAL is taken from the project work of the author \cite{AtussaProsjektoppgp}.
 
@@ -53,7 +53,7 @@ The locomotion strategies described above are all first and foremost successful 
 %--------------------------------------------------------------------------
 
 
-\subsection{Locomotion strategies with compliance control}
+\subsection{Locomotion strategies with compliance control}\label{subsec:compliance-control}
 
 Biological snakes cannot in any way be seen as rigid animals. Robots, on the other hand, are by default very rigid/stiff, both in the body material and actuators used.
 Compliant control is fundamental when dealing with unstructured environments because it implicitly controls the energy transfer to the environment \cite{calanca2015review}.
