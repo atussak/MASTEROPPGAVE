@@ -16,19 +16,6 @@ This section aims at describing the improved method, and the content is based th
 
 It is worth noting that the solution of Yoshikawa is designed for a robot manipulator with a static base where the only constraint present is targeted at the manipulator end effector. For this reason, special effort has been put into finding a suitable formulation of the snake robot constraints. Additionally, the difference between the coordinate spaces introduced in the paper are easy to confuse and special attention has been directed at thoroughly defining these spaces for the snake robot so that the following calculations can be both as clear and logical as possible.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/theory/dhpfc_robot.pdf}
-    \caption{Model of snake robot and obstacles illustrating joint and obstacle variables}
-    \label{fig:dhpfc_robot1}
-\end{figure}
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/theory/dhpfc_robot_2.pdf}
-    \caption{Model of snake robot and obstacles illustrating velocity and force directions}
-    \label{fig:dhpfc_robot2}
-\end{figure}
-
 \subsubsection{Description of variables}
 
 A brief overview of all variables used in this section is provided below.
@@ -39,9 +26,18 @@ The most general variables correspond to the ones presented in \ref{sec:kin}.
     \item $n_c$: number of contact points
     \item $N$: size of the joint space
     \item $\mathbf{q}$: joint space vector
-    \item $\mathbf{r_t}$: task coordinates related to the contact point coordinate system
+    \item $\mathbf{r_t}$: task coordinates related to the contact point (task) coordinate system
     \item $\mathbf{r_c}$: constraint coordinates related to the fixed obstacle coordinate system
 \end{itemize}
+
+The task and obstacle frames $\mathbf{r_t}$ and $\mathbf{r_c}$ are visualized in Figure \ref{fig:rt-rc}. The values for both $r_{t,i} = [x_{t,i}, y_{t,i}, \theta_{t,i}]$ and $r_{c,i} = [x_{c,i}, y_{c,i}, \theta_{c,i}]$ are defined with respect to the base frame.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/theory/rt-rc.pdf}
+    \caption{Model of snake robot and obstacles illustrating the task and contact frames}
+    \label{fig:rt-rc}
+\end{figure}
 
 
 \subsubsection{Description of constraints}
@@ -82,7 +78,7 @@ then $\mathbf{\dot{r}}_{t,i} = [\dot{x}_{t,i}, \dot{y}_{t,i}, \dot{\theta}_{t,i}
 \end{equation}
 \\
 The subscript $i$ will now be used as the constraint number, where $n_c$ is the number of constraints/contact points.
-The angle of the link at the contact point $\theta_{t,i}$ with respect to the base frame is the same as the angle $\theta$ of the link in contact with respect to the base frame. It can by inspection be seen that $\mathbf{E}_{F,i}$ fulfills the criteria of being of unit size.
+The angle of the link at the contact point $\theta_{t,i}$ with respect to the base frame is the same as the angle $\theta$ of the link in contact with respect to the base frame (see Figure \ref{fig:rt-rc}). It can by inspection be seen that $\mathbf{E}_{F,i}$ fulfills the criteria of being of unit size.
 
 %These formulations do not supply an explicit expression of the corresponding constraint hypersurface. It is however not a necessity for the further computations. On the other hand it could be valuable to have the expressions for the hypersurfaces for analysis purposes.
 
@@ -152,7 +148,7 @@ For the snake robot, a simple choice of $\mathbf{E}_{P,i}$ with unit vectors com
     \begin{bmatrix}
         1 & 0 & 0 \\
         0 & 0 & 1
-    \end{bmatrix} in \mathcal{R}^{2\times 3}.
+    \end{bmatrix} \in \mathcal{R}^{2\times 3}.
 \end{equation}
 \\
 This is a very logical choice, seeing as the snake robot link in contact is allowed to rotate about the obstacle and move along the obstacle.
