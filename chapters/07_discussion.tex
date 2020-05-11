@@ -3,14 +3,17 @@
 
 \section{Dynamic HPFC for snake robots}
 
+Dynamic model should be prettyyy accurate for best results.
+
+DHPFC does not consider if a task is actually achievable, this is left to the user. A solution is combining the method with the mapping filters of West and Asada that have zero rank if the task is outside the allowable and essential area. This only looks at the directions and not the magnitudes of the desired position or force commands. This is as in most cases left to the user anywayyyys. Dont want to break the motors etc. Of course it is natural to add a saturation for the torque.
 
 \section{Simulation limitations}
 
 Too few links ://
 
-Very bad force sensors..
+Very bad force sensors.. --> could possibly have lowpass filtered the input signal to have made the control even more stable as well. Although, the control really is not as twitchy as the force signals.
 
-Twitchy torque controller.
+Twitchy torque controller. (because of what i said above)
 
 Model is only for specific scenario and all contacts have to remain.
 

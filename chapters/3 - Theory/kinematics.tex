@@ -4,6 +4,8 @@ This section is a modified part of the previous work of the author \cite{AtussaP
 \begin{itemize}
     \item re-made figures
     \item variable notations
+    \item fixed mistake in (\ref{eq:pos})
+    \item altered vector of generalized coordinates for the constained case in \ref{seq:constr_kin}
 \end{itemize}
 
 The snake robot is modeled as a serial chain, which is a system of rigid bodies in which each member is connected to two others, except for the first and last members that are each connected to only one other member \cite{waldron2016kinematics}. As opposed to traditional robot manipulator models, the first joint in the snake robot model is not physically connected to a base.
@@ -13,9 +15,9 @@ The vector of generalized coordinates $\mathbf{q}$ for a snake robot with $n$ li
 
 \begin{equation} \label{eq:q}
     \mathbf{q} = 
-    \begin{bmatrix}
-        \phi_0 & \phi_1 & ... & \phi_{n-1} & x_0 & y_0
-    \end{bmatrix}^T.
+    [
+        \phi_0 \quad \phi_1 \quad ... \quad \phi_{n-1} \quad x_0 \quad y_0
+    ]^T.
 \end{equation}
 \\
 The coordinates $(x_0, y_0)$ and $\phi_0$ represent the position and orientation of the tail of the snake robot in reference to the base frame $(x,y)$. These coordinates cannot be directly controlled and will therefore be referred to as virtual coordinates. The generalized coordinates ${\phi_1, ... ,  \phi_{n-1}}$, corresponding to the actuated joints, refer to the angle of the following link relative to the preceding link. The number of generalized coordinates including two position coordinates and $n$ joint angles is $N = n+2$.
@@ -62,7 +64,7 @@ The translation and rotation matrices are given by
     \end{split}
 \end{equation}
 \\
-The transformation matrix from the reference frame to the center of link $i$ can be found in the same manner. The only difference is that the very last translational matrix has to take the argument $l/2$ instead of $l$. This is useful to keep in mind as it be used in Section \ref{sec:dyn} for the derivation of the kinetic energy of the links.
+The transformation matrix from the reference frame to the center of link $i$ can be found in the same manner. The only difference is that the very last translational matrix has to take the argument $l/2$ instead of $l$. This is useful to keep in mind as it will be used in Section \ref{sec:dyn} for the derivation of the kinetic energy of the links.
 
 As mentioned earlier, the transformation matrix $\textbf{T}_{b i}$ can be used to find the absolute orientation and position of the tip of link $i$ in the base frame.
 The resulting matrix can be written on the form
@@ -78,16 +80,24 @@ The resulting matrix can be written on the form
 \\
 The position is directly extracted from $\textbf{t}_{r i}^r = [x_i y_i]^T$. The orientation $\theta_i$ is found by comparing $\textbf{R}_{b i}$ to $\textbf{R}_z$ and solving for $\theta_i$.
 
-Alternatively, one can directly compute the position of the center of a link $i$ from the expressions below \hl{last expr missing}
+The global link orientations $\theta_i$ are visualized in Figure \ref{fig:theta}.
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/theory/extra-coords-no-obst.pdf}
+    \caption{Snake robot global link angles}
+    \label{fig:theta}
+\end{figure}
+
+Alternatively, one can directly compute the position of the center of a link $i$ from the expressions below
 
 \begin{equation} \label{eq:pos}
     \begin{split}
-        x_i &= x_0 + \sum_{k=0}^{i-1} l \cos{(\sum_{j=0}^{k} \phi_j)} \\
-        y_i &= y_0 + \sum_{k=0}^{i-1} l \sin{(\sum_{j=0}^{k} \phi_j)},
+        x_i &= x_0 + \sum_{k=0}^{i-2} l \cos{(\sum_{j=0}^{k} \phi_j)} + \frac{l}{2} \cos{(\sum_{j=0}^{i-1} \phi_j)} \\
+        y_i &= y_0 + \sum_{k=0}^{i-2} l \sin{(\sum_{j=0}^{k} \phi_j)} + \frac{l}{2} \sin{(\sum_{j=0}^{i-1} \phi_j)},
     \end{split}
 \end{equation}
 \\
-where $l$ is the link length and $1\leq i\leq n$.
+where $1\leq i\leq n$.
 
 \subsubsection{Forward and inverse instantaneous kinematics}\label{subseq:inst_fwd}
 
@@ -119,32 +129,32 @@ $\mathbf{J(q)^\dagger}$ is the pseudo inverse of the Jacobian, which has to be u
 %\hl{Virtual closed kinematic chain}\\
 For the case in which the robot is in contact with the environment, the motion will be constrained. The obstacles found in the environment are modelled as single frictionless points. The only constraint imposed by the environment is that the robot cannot penetrate the obstacles. It can, however, both apply an arbitrary large force against them or move along them.
 
-The model assumes that any link can be in contact with at most one obstacle at the time. To represent the mentioned constraint, the vector of generalized coordinates is expanded with $n$ further elements, where $n$ is the number of links. The updated vector $\mathbf{q}$ is now
+The model assumes that any link can be in contact with at most one obstacle at the time. To represent the mentioned constraint, the vector of generalized coordinates is expanded with $2n_c$ further elements, where $n_c$ is the number of obstacles in contact. The updated vector $\mathbf{q}$ is now
 
 \begin{equation} \label{eq:q2}
     \mathbf{q} = 
-    \begin{bmatrix}
-        \phi_0 & \phi_1 & ... & \phi_{n-1} & x_0 & y_0 & k_{0} & k_{1} & ... & k_{n-1}
-    \end{bmatrix}^T,
+    [
+        \phi_0 \quad... \quad \phi_{n-1} \quad x_0 \quad y_0 \quad k_{1} \quad ... \quad k_{n_c} \quad \phi_{c,1} \quad ... \quad \phi_{c,n_c}
+    ]^T,
 \end{equation}
 \\
-where $N = 2 + 2n$ is the new number of generalized coordinates.
+where $N = n + 2 + 2n_c$ is the new number of generalized coordinates.
 
-The newly introduced coordinates $k_{0}, ... , k_{n-1} \geq 0$ represent the distance to the possible contact point from the corresponding joint. For instance, the coordinate $k_{1}$ is the distance between the joint connecting link 1 and 2 and the contact point measured along the second link, as illustrated in Figure \ref{fig:3_obs_force}. Every link might not be in contact with an obstacle, but the maximum number of coordinates is introduced here in the interest of keeping the vector size constant. 
+The newly introduced coordinates $k_{1}, ... , k_{n_c} \geq 0$ represent the distance to the contact point from the preceding joint to the link in contact. For instance, if link 2 is the first link in contact with an obstacle, then the coordinate $k_{1}$ is the distance between the joint connecting link 1 and 2 and the contact point measured along the second link, as illustrated in Figure \ref{fig:obst-coords}. Furthermore, $\phi_{c,1}, ... , \phi_{c,n_c}$ are the angles from the links in contact to the global x-axis. This variable is later used to describe the constraint that the obstacles are fixed in space. An example is illustrated in Figure \ref{fig:obst-coords} for the last link in contact with an obstacle.
 Seeing as there is no actuation force directly connected to the obstacle-related coordinates, they will be referred to as virtual joints or virtual coordinates.
 
-The position of a contact point on link $1\leq i\leq n$ in the base frame can be derived through the corresponding transformation matrix (\ref{eq:obst_tfmatrix}).
+\begin{figure}\label{fig:obst-coords}
+    \centering
+    \includegraphics[width=\textwidth]{figures/theory/obst-coords.pdf}
+    \caption{Snake robot in contact with obstacles}
+    \label{fig:obst-coords}
+\end{figure}
+
+The position of a contact point $1\leq j\leq n_c$ on link $1\leq i\leq n$ in the base frame can be derived through the corresponding transformation matrix (\ref{eq:obst_tfmatrix}).
 
 \begin{equation} \label{eq:obst_tfmatrix}
-    \textbf{T}_{b ci} = \textbf{D}_x(x_0) \textbf{D}_y(y_0) \sum_{k=0}^{i-2} (\textbf{R}_z(\phi_k) \textbf{D}_x(l)) \textbf{R}_z(\phi_{i-1}) \textbf{D}_x(k_{i-1})
+    \textbf{T}_{b ci} = \textbf{D}_x(x_0) \textbf{D}_y(y_0) \sum_{k=0}^{i-2} (\textbf{R}_z(\phi_k) \textbf{D}_x(l)) \textbf{R}_z(\phi_{i-1}) \textbf{D}_x(k_{j})
 \end{equation}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{figures/theory/kinematics2.pdf}
-    \caption{Snake robot in contact with obstacle}
-    \label{fig:3_obs_force}
-\end{figure}
 
 
 %------------------------------------------------------------------------------------------------
