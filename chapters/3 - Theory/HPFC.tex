@@ -1,4 +1,6 @@
-\section{Hybrid position/force control (HPFC)}
+\chapter{Dynamic hybrid position/force control for snake robots}
+
+\section{Hybrid position/force controllers}
 
 The goal of the snake robot is to push against obstacles in a fashion that yields forward propulsion along a path. Consequently, the robot will have to curve itself along the path whilst applying a force to the obstacles considered advantageous. The behavior of the robot has to comprise with the constraints arising from the contact, which further motivates the use of hybrid position/force control (HPFC).
 
@@ -287,10 +289,12 @@ The torque $\boldsymbol{\tau}_P$ is found by solving the equations of motion giv
         \mathbf{\ddot{r}}_{EP,t,d} \\
         - \mathbf{a}_{rF}
     \end{bmatrix}
-    - \mathbf{a}_q)
+    - \mathbf{a}_q) + (\mathbf{I}-  \mathbf{J}_t^+ \mathbf{J}_t)\mathbf{k}
 \end{equation}
 \\
-Here the vector $\mathbf{\ddot{r}}_{EP,t,d} = \mathbf{E}_P \mathbf{\ddot{r}}_{t,d}$. Furthermore, $\mathbf{J}_t^+$ denotes the pseudo inverse of the Jacobian. According to Yoshikawa \cite{yoshikawa1987dynamic} the position and force can be simultaneously controlled by applying the sum of the joint torque $\boldsymbol{\tau}_P$ for achieving the desired acceleration and the joint torque $\boldsymbol{\tau}_F$ for achieving the desired force as long as the robot is not in a singular state.
+Here the vector $\mathbf{\ddot{r}}_{EP,t,d} = \mathbf{E}_P \mathbf{\ddot{r}}_{t,d}$. Furthermore, $\mathbf{J}_t^+$ denotes the pseudo inverse of the Jacobian.
+The last term is included for redundant manipulators, where the vector $\mathbf{k}$ is an arbitrary time function representing the arbitrariness of the joint accelerations.
+According to Yoshikawa \cite{yoshikawa1987dynamic} the position and force can be simultaneously controlled by applying the sum of the joint torque $\boldsymbol{\tau}_P$ for achieving the desired acceleration and the joint torque $\boldsymbol{\tau}_F$ for achieving the desired force as long as the robot is not in a singular state.
 
 Describing the desired acceleration through $\mathbf{\ddot{r}}_{t,d}$ might not be the most intuitive task. It is therefore suggested that $\mathbf{E}_P$ is chosen in such a manner that a function $\mathbf{\dot{r}}_{P,t} = s(\mathbf{r}_t)$ exists and satisfies
 

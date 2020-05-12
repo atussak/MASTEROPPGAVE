@@ -3,9 +3,13 @@
 
 \section{Dynamic HPFC for snake robots}
 
-Dynamic model should be prettyyy accurate for best results.
+Dynamic model should be prettyyy accurate for best results. Når den ikke er det, som i eksperimentene, så er det tydelig at kontrollen ikke blir helt uavhengig for de forskjellige settpunktene. Den kan godt klare å holde forskjellige verdier på ønskede verdier så lenge det er nok aktuatorer, men veien dit for de forskjellige variablene påvirker fort hverandre. Dette er jo gjerne også delen som i høyst grad er avhengig av den dynamiske modellen, så det gir sånn sett mening. Påvirkning mellom lukkede kinematiske sløyfer vil naturlig nok være mye mindre med flere ledd i hver sløyfe og all kontroll generelt mye mer robust.
 
 DHPFC does not consider if a task is actually achievable, this is left to the user. A solution is combining the method with the mapping filters of West and Asada that have zero rank if the task is outside the allowable and essential area. This only looks at the directions and not the magnitudes of the desired position or force commands. This is as in most cases left to the user anywayyyys. Dont want to break the motors etc. Of course it is natural to add a saturation for the torque.
+
+Når kompleksiteten på kontrolleren øker så er det også mye mer som må optimaliseres (altså desto mer som er med, desto mer må være riktig samtidig). DHPFC er mye mer komplekst enn WnA sin løsning.
+
+Med feedback controllerne kan man også vekte hvilke pos- og kraftvariabler man vil styre strengest.
 
 \section{Simulation limitations}
 
@@ -17,6 +21,9 @@ Twitchy torque controller. (because of what i said above)
 
 Model is only for specific scenario and all contacts have to remain.
 
+Måtte kjøre veldig sakte så kontakten hele tiden var opprettholdt og modellen gjaldt. Litt dumt for da kommer den dynamiske delen ikke så godt fram.
+Med en gang man får en overshoot er løpet kjørt, så PID'ene må tunes veldig nøyaktig.
+
 \section{The snake robot position and force space}
 
 \section{Task limitations}
@@ -24,5 +31,7 @@ Model is only for specific scenario and all contacts have to remain.
 Need many many links and well spaced obstacles.
 
 Minimal CKCs and Jacobians means that the desired contact variables have to be defined with respect to the previous contact point --> not as intuitive as defining everything with respect to the base frame. Could solve by defining wrt base frame and then use homogeneous transformation matrices. Still have to update the desired variables for every loop cycle!
+
+Burde ha en algoritme som kan finne den størst mulige lukkede kinematiske sløyfa tilfelle ikke alle kontaktpunkter trenger å bli styrt.
 
 \section{Dynamic HPFC application and OAL}

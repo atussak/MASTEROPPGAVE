@@ -1,4 +1,4 @@
-\subsection{The benefits of dynamic HPFC in snake robot locomotion}
+\section{The benefits of dynamic HPFC in snake robot locomotion}
 
 Most of the snake robot locomotion strategies today are intended for flat surfaces. Lateral undulation and sidewinding are two of these strategies presented in \ref{subsec:traditional-loco}. Even though they are based on flat surfaces, they require some amount of ground friction to yield propulsion. Either way, the snake robot body motions are in these cases the basis for the propulsion. A position controller for the joint angles of the snake robot would thus induce a satisfying behavior. Consequently, a hybrid position force controller would simply be an overkill for these strategies. The concertina locomotion strategy, on the other hand, is conducted in narrow spaces where the snake robot anchors itself against the environment. This is also explained further in \ref{subsec:traditional-loco}. A position/joint controller is sufficient in this case as well if one only considers the curling up and stretching out of the robot. It might however be desired for the snake robot to push against its environment at the same time as this movement takes place. A hybrid position force controller could then be useful to simultaneously realize these control goals.
 
@@ -19,11 +19,11 @@ The locomotion method which can take the most advantage of the dynamic HPFC is t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{The challenges related to the application of dynamic HPFC}
+\section{The challenges related to the application of dynamic HPFC}
 
 There are surely several ways of implementing and designing the dynamic HPFC control logic on a snake robot. This section will focus on the challenges related to the application of the suggested design scheme in \ref{subsec:DHPFC}. Special attention is paid to the chosen variable spaces and the consequences of configuration transitions when the snake moves.
 
-\subsubsection{Computational challenges}
+\subsection{Computational challenges}
 
 Whenever the snake robot achieves successful forward or backward propulsion it will slide along the obstacles that are by its side. Eventually the contact between a given link and an obstacle will be lost. At this point, the obstacle will either be left alone or come in contact with a neighboring link. These two scenarios are illustrated in Figures \ref{fig:obst_slide_seq1} and \ref{fig:obst_slide_seq2} respectively. If the contact is completely lost, it means that one constraint is lost as well and $n_c = n_c - 1$. This will in turn lead to the variable $\mathbf{r}_t$, describing the position of the contacts, shrinking. Consequently the mapping matrix $\mathbf{E}$ to the allowed force and movement directions will shrink as well. The greatest challenge in this case is changing the dimensions of the relevant variables in real time. One option could however be keeping all variable spaces and instead set the parts of $\mathbf{E}$ corresponding to the lost constraint to zero so that it has no impact on the following solution.
 
@@ -49,7 +49,7 @@ With a contact moving from one link to another, the corresponding joint variable
 
 The greatest challenge arises if the number of contact points increase. This means that the dimension of all variables will have to increase correspondingly and the Jacobians have to be either re-computed or re-assembled. It is in this case important to keep in mind the challenge associated with memory allocation in the software being used.
 
-\subsubsection{Differences with the traditional manipulator case}
+\subsection{Differences with the traditional manipulator case}
 
 One significant challenge with snake robots as opposed to traditional robot manipulators is the presence of passive joints. The passive joints of the snake robot that are attached to the base frame, $[\phi_0, x_0, y_0]$ are included in the description of the position of every link and contact point. This means that if they were actuated, they could have influenced all the points that are desired to control, given that the robot is not stuck inbetween obstacles. The dynamic hybrid position force controller could therefore introduce a desired joint acceleration value $\ddot{q}_d$ for these passive joints when recalculating from the desired contact point accelerations $\ddot{r}_{t,d}$. Since these joints are passive, they are also uncontrollable and a desired input on the joints is not realisable. A greater number of joints will generally make this challenge more insignificant because it leads to a larger degree of controllability of all contact points.
 
@@ -61,7 +61,7 @@ When it comes to the assignments of traditional robot manipulators and snake rob
 
 %- The environment is constantly changing and the contact wont be a point contact in the real world, and the snake robot might encounter all kinds of surfaces and textures (rigid, soft, slippery etc)
 
-\subsubsection{Utilizing the force and position spaces}
+\subsection{Utilizing the force and position spaces}
 
 \hl{Pay special attention to the
 roles played by the so-called force and position spaces, and how these can be utilized and further
