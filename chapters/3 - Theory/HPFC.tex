@@ -293,7 +293,8 @@ The torque $\boldsymbol{\tau}_P$ is found by solving the equations of motion giv
 \end{equation}
 \\
 Here the vector $\mathbf{\ddot{r}}_{EP,t,d} = \mathbf{E}_P \mathbf{\ddot{r}}_{t,d}$. Furthermore, $\mathbf{J}_t^+$ denotes the pseudo inverse of the Jacobian.
-The last term is included for redundant manipulators, where the vector $\mathbf{k}$ is an arbitrary time function representing the arbitrariness of the joint accelerations.
+The last term is included for redundant manipulators, where the vector $\mathbf{k}$ is an arbitrary time function representing the arbitrariness of the joint accelerations. It can be observed that the term $ (\mathbf{I}-  \mathbf{J}_t^+ \mathbf{J}_t)$ is the same as the projection matrix $\prescript{}{j}{\mathbf{P}}_{ap}$ onto the allowable motion space from \ref{subseq:HPFC}.
+
 According to Yoshikawa \cite{yoshikawa1987dynamic} the position and force can be simultaneously controlled by applying the sum of the joint torque $\boldsymbol{\tau}_P$ for achieving the desired acceleration and the joint torque $\boldsymbol{\tau}_F$ for achieving the desired force as long as the robot is not in a singular state.
 
 Describing the desired acceleration through $\mathbf{\ddot{r}}_{t,d}$ might not be the most intuitive task. It is therefore suggested that $\mathbf{E}_P$ is chosen in such a manner that a function $\mathbf{\dot{r}}_{P,t} = s(\mathbf{r}_t)$ exists and satisfies
