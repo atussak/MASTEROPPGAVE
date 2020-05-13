@@ -53,9 +53,21 @@ The greatest challenge arises if the number of contact points increase. This mea
 
 One significant challenge with snake robots as opposed to traditional robot manipulators is the presence of passive joints. The passive joints of the snake robot that are attached to the base frame, $[\phi_0, x_0, y_0]$ are included in the description of the position of every link and contact point. This means that if they were actuated, they could have influenced all the points that are desired to control, given that the robot is not stuck inbetween obstacles. The dynamic hybrid position force controller could therefore introduce a desired joint acceleration value $\ddot{q}_d$ for these passive joints when recalculating from the desired contact point accelerations $\ddot{r}_{t,d}$. Since these joints are passive, they are also uncontrollable and a desired input on the joints is not realisable. A greater number of joints will generally make this challenge more insignificant because it leads to a larger degree of controllability of all contact points.
 
-When it comes to the assignments of traditional robot manipulators and snake robots, they are usually a lot more repetitive and pre defined for robot manipulators. A typical task for an industrial hybrid position force controlled robot manipulator is polishing a known surface with a given pressure. The snake robot might also be familiar with the shape of its current environment, but this is something that is constantly changing as the robot moves through the world. Thus, the position and force application requirements are constantly changing as well. Furthermore, since the snake robot is eventually meant to locomote through outdoor environments, it will encounter different kinds of obstacles. They can differ in both size, texture and be either soft or rigid. Thus, there are a lot of factors the snake robot will have to take into account. For this project however, the environment and control goals are significantly simplified.
+When it comes to the assignments of traditional robot manipulators and snake robots, they are usually a lot more repetitive and pre defined for robot manipulators. A typical task for an industrial hybrid position force controlled robot manipulator is polishing a known surface with a given pressure. An example is given in Figure \ref{fig:robotman-polish}. The snake robot might also be familiar with the shape of its current environment, but this is something that is constantly changing as the robot moves through the world. Thus, the position and force application requirements are constantly changing as well. Furthermore, since the snake robot is eventually meant to locomote through outdoor environments, it will encounter different kinds of obstacles as illustrated in Figure \ref{fig:weird-env}. They can differ in both size, texture and be either soft or rigid. Thus, there are a lot of factors the snake robot will have to take into account. For this project however, the environment and control goals are significantly simplified.
 
-\hl{Figure of robot manipulator polishing a car and figure of snake robot in weird environment.}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/theory/robotman-polish.pdf}
+    \caption{Industrial robot manipulator polishing a car}
+    \label{fig:robotman-polish}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/theory/weird-environment.pdf}
+    \caption{Snake robot in environment with varying obstacle types}
+    \label{fig:weird-env}
+\end{figure}
 
 %- Arbitrary number of obstacles and constantly changing requirements (desired force application etc, as opposed to a typical industrial manipulator that simply should polish a surface with a given pressure repeatedly)
 

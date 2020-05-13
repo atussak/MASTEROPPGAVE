@@ -4,15 +4,6 @@ Constraints typisk bare på end effector på manipulatorer. Hvis de har constrai
 
 Constraint Jacobian vs task Jacobian.
 
-Poenget er vel den tredelingen jeg har snakket om før: 1) kraftrommet (constraint space, la oss kalle det C), 2) fremdriftsrommet (propulsion space P) og 3) form-romet (shape space S).
-
-C tilsvarer «Force space» i WogA og Yoshi, mens P og S til sammen utgjør «position space», dvs. der vi kan ha posisjonsendringer.
-
-Hvis det du skriver helt til sist i mailen din stemmer, kan vi trolig bruke noe a la denne algoritmen:
-
-Finn C, og bruk det til å sikre deg mot «jam» (evt. sett opp en liten kraft her for å siker at roboten har stødig kontakt med alle ønskede hindringer).
-Finn P, som er det underrommet av leddkoordinatrommet som kan styre hodets akselerasjon langs banen.  Det vil generelt være flere dimensjoner i dette rommet, så en minste kvadraters løsning (dvs. finne den korteste tau-vektoren i P som gir den ønskede hodeakselerasjonen) burde være første ting å forsøke.
-S finnes nå som de dimensjonene i konfigurasjonsrommet som ikke er med i hverken C eller P. I disse dimensjonene kan vi styre robotens form slik at den tilsvarer banens geometri.
 
 \section{Task analysis}
 

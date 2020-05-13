@@ -1,0 +1,33 @@
+\section{Hybrid obstacle aided locomotion (HOAL)}\label{sec:dhpfc-oal}
+
+The motivation behind using dynamic HPFC for the OAL is that this locomotion method requires both interaction with the environment, meaning force application, and purposeful movement of the snake robot body. Instead of constantly switching between force and position controlling the snake robot, the dynamic HPFC can manage to control both of these attributes simultaneously in different directions. Furthermore, the dynamic method is researched in this project because it is believed that the dynamics play a big role in the behavior of the snake robot. This is even more significant in outdoor environments where friction play a big part, as opposed to a sterile, frictionless simulation environment. However, modeling the friction and other traits of the environment becomes harder as the surroundings get more complex and diverse.
+
+Being able to predict the dynamical response of the snake robot enables the feed forward control and thus a smoother control trajectory. \hl{mhm?}
+The dynamics of going from no contact to contact have not been modeled in this project, and are believed to be a very complex task. It is yet to be assessed whether or not the collision-modeling can profit the overall control of the snake robot.
+
+\subsection{General strategy for OAL}
+
+There is much more to OAL than just pushing against obstacles and changing the shape of the robot at the same time. First of all, the snake robot needs an end goal, or at least a temporary goal to follow. The approach for reaching this goal should be assisted by a defined path from the current location of the snake robot. This path should be designed not only to allow the snake robot to pass by constructive obstacles for propulsion, but also to make it propel itself in the best way possible from start to finish. The best way is here considered to be a path that is both minimizing the distance and the energy usage. These attributes are of course not independent of each other.
+
+%\cite{holden2014optimal} designed an optimization problem that seeks to minimize energy consumption while achieving propulsion along the desired path and thus determining the optimal use of the motor torques. Using this method requires the path to already be designed. It can however be discussed if the task of finding a desired path and the task of finding the optimal motor torques should be linked. For simplicity, they are kept separated for now.
+
+A general procedure for achieving OAL is given below
+
+\begin{enumerate}
+    \item Establish the position of the end goal of the snake robot head.
+    \item Design a path from the current location of the snake robot to the end goal. Here, the distance should be minimized while taking into account that enough obstacles have to be passed by to achieve propulsion. The orientation of the robot along these obstacles should be taken into account as well.
+    \item Determine the desired force magnitudes against each obstacle based on the propulsion speed of the head of the snake robot.
+    \item Use dynamic HPFC and a suitable control structure to realize the desired forces and position/orientation defined by the steps above.
+\end{enumerate}
+
+\subsection{Necessary and sufficient conditions}
+
+There are some criteria that have to be fulfilled in order for this algorithm to be successful. First of all it requires knowledge of the environment and the position of the obstacles within a given relevant range. Second of all, as mentioned earlier, the modeling of the dynamics should be as accurate as possible.
+
+It is also relevant to look at the position and force spaces of the robot. In which direction is the snake robot actually able to apply forces? In which directions can it move freely? In which directions will movement lead to forward propulsion? In what configurations will the snake robot be jammed? These are all very important questions that should be addressed in the construction of the desired path.
+
+According to \cite{StavdahlNote}, the position or motion space $\mathbb{M}$ can be further decomposed into a shape space $\mathbb{S}$ and a propulsion space $\mathbb{P}$. Furthermore, the force space $\mathbb{F}$ is referred to as the constraint space $\mathbb{C}$ because it does not directly yield propulsion. The knowledge about these spaces can be utilized to design a path and a set of desired forces that support the snake robot in propelling forward.
+
+The most essential task is finding the propulsion space of the head of the snake robot. This is logically a necessary condition for propulsion. When a path has been constructed, the constraint and shape spaces should be utilized to keep the head of the snake robot within its propulsion space. $\mathbb{C}$ can be used to keep the snake robot from getting jammed between obstacles. It should also be used to make sure that the snake robot has a steady contact with all obstacles necessary. Furthermore, $\mathbb{S}$ is the remaining dimensions that can be used to change the shape of the robot according to the path. Thus, staying in the propulsion space is a necessary condition for propulsion, whereas the constraint and shape spaces make out the sufficient conditions that profit the necessary condition. \hl{mhm??}
+
+\hl{What is the best way of decomposing the motion space into the propulsion and shape spaces?}
