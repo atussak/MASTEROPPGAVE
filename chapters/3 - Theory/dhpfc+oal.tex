@@ -30,4 +30,10 @@ According to \cite{StavdahlNote}, the position or motion space $\mathbb{M}$ can 
 
 The most essential task is finding the propulsion space of the head of the snake robot. This is logically a necessary condition for propulsion. When a path has been constructed, the constraint and shape spaces should be utilized to keep the head of the snake robot within its propulsion space. $\mathbb{C}$ can be used to keep the snake robot from getting jammed between obstacles. It should also be used to make sure that the snake robot has a steady contact with all obstacles necessary. Furthermore, $\mathbb{S}$ is the remaining dimensions that can be used to change the shape of the robot according to the path. Thus, staying in the propulsion space is a necessary condition for propulsion, whereas the constraint and shape spaces make out the sufficient conditions that profit the necessary condition. \hl{mhm??}
 
-\hl{What is the best way of decomposing the motion space into the propulsion and shape spaces?}
+The issue that now has to be addressed is decomposing the motion space into $\mathbb{S}$ and $\mathbb{P}$. In \ref{subseq:HPFC} it is shown how the allowable motion and force spaces can be deducted from the constraint Jacobian $\mathbf{J}_c$. Based on the same logic, the Jacobian $\mathbf{J}_P$ relating the joint velocities to the velocity of the head of the snake robot can be used to find the propulsion space. The pseudoinverse $\mathbf{J}^+_P$ can be used to find the joint velocities related to a given snake robot head velocity $\mathbf{v}_P$ (typically referred to as the end effector velocity in traditional robot theory). The relation is given in (\ref{eq:endeff-vel}).
+
+\begin{equation}\label{eq:endeff-vel}
+    \dot{\mathbf{q}} = \mathbf{J}^+_P \mathbf{v}_P
+\end{equation}
+\\
+Furthermore, $(\mathbf{I} - \mathbf{J}^+_P \mathbf{J}_P)$ represents the orthogonal projection matrix in the null space of $\mathbf{J}_P$ \cite{chiaverini2008kinematically}. That means that joint velocities projected onto this space yield zero velocity for the snake robot head. The shape and constraint spaces $\mathbb{S}$ and $\mathbb{C}$ thus make out this space. $\mathbb{S}$ can now be found as the remaining part of this space that is not spanned by $\mathbb{C}$.

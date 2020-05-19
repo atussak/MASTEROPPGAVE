@@ -4,6 +4,15 @@
 \chapter{Introduction}\label{Chapter:introduction}
 
 \section{Previous work}
+- NTNU and snake robots
+- Terrestrial snake robot locomotion (common approaches)
+- OAL
+- The need to control both position and force led to the familiarization with HPFC.
+- HPFC Raibert+Craig and West+Asada
+- Stavdahl and the term HOAL
+- Summarized by Klafstad
+- Concept tested by the author in previous project
+- Because the behaviour of a snake robot is "driven" by its dynamics, the research is now continued to explore the dynamic HPFC for snake robots in light of OAL
 
 \section{Scope of the project}
 
@@ -17,6 +26,14 @@
 - Design a control structure to test the dynamic HPFC algorithm.
 - Find and evaluate a simulator for the testing
 - Test the performance of the dynamic HPFC method on snake robots. The tests should shed light on the benefits and limitations of the method.
+
+\subsection{Simplifications}
+
+- Not very many links in the snake robot. -> led to a a lack of test variations
+- Model for a very specific scenario (always contact with three obstacles with the same three links, thus movement can only happen in the bounds of this)
+- All links are modeled as 2D lines although they both have a width and are 3D in the simulator.
+- Dynamics are generally linearized
+- No modeling of collisions although they unwantedly occur as a result of the super hyper sensitive force sensors in the simulator and the physiscs engine constantly trying to push the bodies apart.
 
 \subsection{Contributions}
 
