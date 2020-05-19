@@ -2,7 +2,7 @@
 
 The purpose of this experiment is illustrating the differences of using the two different closed kinematic chain (CKC) formulations described in \ref{subsec:task-restrictions}. The first simulation is run with minimal CKCs, and the second one is run with the regular CKCs all defined with respect to the base frame.
 
-The snake robot is in contact with three obstacles, whereas the force against the second and third obstacle is controlled. The desired force magnitude $f_{F,d}$ is 2 $N$ for both contacts. The simulation configuration is summarized in Table \ref{tab:exp_2xf} and is common for both simulations.
+The snake robot is in contact with three obstacles, whereas the force against the second and third obstacle is controlled. The desired force magnitude $f_{F,d}$ is 2 $N$ for both contacts. The simulation configuration is summarized in Table \ref{tab:exp_2xf} and is common for both simulations. The control structure for this experiment is given in Figure \ref{fig:diag-f}.
 
 \begin{table}[]
     \centering
@@ -19,6 +19,13 @@ The snake robot is in contact with three obstacles, whereas the force against th
     \caption{Simulation configuration for force control experiment with minimal CKCs}
     \label{tab:exp_2xf}
 \end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[trim=0cm 0cm 3cm 0cm, clip=true, width=\textwidth]{figures/experiments/control-diagrams/2f-control-diagram.pdf}
+    \caption{Control diagram for force control}
+    \label{fig:diag-f}
+\end{figure}
 
 It should be mentioned that very thorough tuning of control parameters could improve the results of both simulations, although a great deal of tuning already has been conducted. Furthermore, the control is quite twitchy as a result of the very varying force sensor feedback. The experiment in \ref{sec:pos-force-control-exp} is conducted with a low pass filtering of these sensor signals, and proves that the control consequently gets smoother as well.
 

@@ -1,10 +1,10 @@
-\section{Essential position control}
+\section{Essential position control}\label{sec:ess-pos}
 
 This experiment covers angle reference following for a single link in contact with an obstacle. The motivation is to show the impact of the mapping to the essential position space within the allowable position space. In other words, the use of the filter $\prescript{}{j}{\mathbf{F}}_{p}$ from (\ref{eq:hpfc_fp}). This method is also described in more detail in \ref{subsec:task-oriented}.
 
 Link number 5, which is in contact with the foremost obstacle, is controlled to a constant angle $\theta_{t,d,3}$ measured with respect to the base frame. The controlled variable is referred to as $\theta_{t,3}$, and is the only essential variable the mentioned filter takes into account in this example. A simulation without the filter is also included to show the importance of defining which variables are essential for a given task when the total number of variables that \textit{could} be controlled are greater than the number of actuated joints.
 
-The setup for this experiment is presented in Table \ref{tab:exp_single_pos}. It should b noted that the force control is left out for this experiment.
+The setup for this experiment is presented in Table \ref{tab:exp_single_pos}. It should b noted that the force control is left out for this experiment. The control structure of the experiment including the position filter is given in Figure \ref{fig:diag-p}.
 
 \begin{table}[]
     \centering
@@ -23,6 +23,13 @@ The setup for this experiment is presented in Table \ref{tab:exp_single_pos}. It
     \caption{Simulation configuration for position control experiment}
     \label{tab:exp_single_pos}
 \end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[trim=1cm 0cm 3cm 0cm, clip=true, width=\textwidth]{figures/experiments/control-diagrams/p-control-diagram.pdf}
+    \caption{Control diagram for essential position control}
+    \label{fig:diag-p}
+\end{figure}
 
 The global contact link angle, joint angles and joint torques for the experiments are shown in Figures \ref{fig:singlepos} and \ref{fig:singlepos-nofilter}. As one could imagine, the latter shows the unfiltered control case. The contact link is quite far from reaching its reference and the control does not seem to be very meaningful for the purpose. The corresponding joint angle values show that the snake simply turns its first actuated joint, resulting in the tail of the snake robot spinning around before getting stuck. The behavior of the snake robot in the filtered example makes more sense, as it simply bends the joint preceding to the link and compensates by bending the following joint in the opposite direction.
 

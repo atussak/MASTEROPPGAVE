@@ -1,10 +1,10 @@
-\section{Position control with active joint torque focus}
+\section{Position control with active joint torque focus}\label{sec:pas-pos}
 
 As seen in \ref{subsec:DHPFC}, the equations of motion are used to find the desired torques satisfying the desired joint accelerations. However, the equations of motion do not consider that some of the joints are passive and will assign joint torques to all joints, both passive and active. This is of course an issue since the computed solution relies on these torques being realised.
 
 This experiment aims at illustrating the difference in just ignoring the passive joint torque commands and in mapping all joint torques over to the active joints. Because the focus is on the position torques $\boldsymbol{\tau}_P$, the link angle by the second and third obstacle is controlled. It is first controlled only by using the equations of motion as in (\ref{eq:dhpfc_taup}). Here the torques for the passive joints are simply neglected. The second simulation shows control where all torques are mapped to the active joints, as explained in \ref{subsec:passive-joints}. For this experiment it was simply chosen that the desired values of the active joints should be followed and that the passive joints could take resulting arbitrary values. This is probably not the optimal choice of variables to control, but no method for determining this has to this point been developed. The matter is discussed further in \ref{}.
 
-The minimal CKC formulation is used for both simulations, which implies that the desired angles are defined according to the previous contact point. Further simulation configurations are presented in Table \ref{tab:exp_2xp}.
+The minimal CKC formulation is used for both simulations, which implies that the desired angles are defined according to the previous contact point. Further simulation configurations are presented in Table \ref{tab:exp_2xp}. The control structure for the experiment is given in Figure \ref{fig:diag-2p}. The equation (\ref{eq:tau-act}) is substituted with (\ref{eq:dhpfc_taup}) for the first simulation.
 
 \begin{table}[]
     \centering
@@ -23,6 +23,13 @@ The minimal CKC formulation is used for both simulations, which implies that the
     \caption{Simulation configuration for force control experiment with minimal CKCs}
     \label{tab:exp_2xp}
 \end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[trim=1cm 0cm 3cm 0cm, clip=true, width=\textwidth]{figures/experiments/control-diagrams/2p-control-diagram.pdf}
+    \caption{Control diagram for position control with active joint torque focus}
+    \label{fig:diag-2p}
+\end{figure}
 
 \subsection{Control torques computed for both passive and active joints}
 

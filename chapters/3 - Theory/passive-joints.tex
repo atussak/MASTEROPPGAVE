@@ -1,8 +1,8 @@
 \section{Passive joints consideration}\label{subsec:passive-joints}
 
-The problem that arises when computing $\boldsymbol{\tau}_P$ from (\ref{eq:dhpfc_taup}) in \ref{subsec:DHPFC}, is that the motor torques will be calculated for all joints, including the passive joints. Since the passive joints are unactuated, it is not feasible to pursue all parts of this control command. The objective is thus to change the dynamic calculations to only apply torques to the active joints. It should be noted that this challenge is more crucial for snake robots with few (active) joints. This is because a large number of active joints will then dominate the control and a bigger part of the control torque can be realised.
+The problem that arises when computing $\boldsymbol{\tau}_P$ from (\ref{eq:dhpfc_taup}) in \ref{subsec:DHPFC}, is that the motor torques will be calculated for all joints, including the passive joints. Since the passive joints are unactuated, it is not feasible to pursue all parts of this control command. The objective is thus to change the dynamic calculations to only apply torques to the active joints. It should be noted that this challenge is more crucial for snake robots with few (active) joints. This is because a large number of active joints will dominate the control and a bigger part of the control torque can be realised.
 
-One idea is using the dynamic coupling characteristics between the passive and active joints, as proposed by Arai et al. \cite{arai1991position}. This method assumes that there is a certain amount of active joints that can take arbitrary values determined by the other active and passive joints desired to control. That means that all joint variables still cannot be controlled to their desired value and it has to be determined which joints this should apply to. The reason for this is that the system is underactuated. \hl{mhm?} The rest of this section is based on the work of Arai et al. \cite{arai1991position}.
+One idea is using the dynamic coupling characteristics between the passive and active joints, as proposed by Arai et al. \cite{arai1991position}. This method assumes that there is a certain amount of active joints that can take arbitrary values determined by the other active and passive joints desired to control. That means that all joint variables still cannot be controlled to their desired values and it has to be determined which joints this should apply to. The reason for this is that the system is underactuated. The rest of this section is based on the work of Arai et al. \cite{arai1991position}.
 
 The total number of joints is now denoted $n$, whereas $r$ of these joints are active. To start off, the elements of the familiar variables $\mathbf{q}$ and $\boldsymbol{\tau}$ should be rearranged as follows
 
@@ -61,7 +61,7 @@ The inertia and Coriolis matrices $\mathbf{M(q)}$ and $\mathbf{C(q,\dot{q})}$ ca
 \end{equation}
 \end{subequations}
 \\
-Using (\ref{eq:pas-M}) and (\ref{eq:pas-C}), the equations of motion (\ref{eq:eom}) can be split into to separate equations.
+Using (\ref{eq:pas-M}) and (\ref{eq:pas-C}), the equations of motion (\ref{eq:eom}) can be split into two separate equations.
 
 \begin{subequations}
 \begin{equation}\label{eq:pas-eom-1}
@@ -83,12 +83,12 @@ Solving (\ref{eq:pas-eom-2}) for $\ddot{\boldsymbol{\phi}}$ yields
 This is given that the matrix $\mathbf{M}_{21}$ is nonsingular. Arai et al. proved that this is also the condition for output controllability.
 The generalized forces on the active joints can be found by substituting (\ref{eq:pas-phidd}) into (\ref{eq:pas-eom-1}).
 
-\begin{equation}
+\begin{equation}\label{eq:tau-act}
     \boldsymbol{\tau}_{act} = (\mathbf{M}_{12} - \mathbf{M}_{11} \mathbf{M}^{-1}_{21} \mathbf{M}_{22})\ddot{\boldsymbol{\psi}}_d + \mathbf{C}_1 - \mathbf{M}_{11} \mathbf{M}^{-1}_{21} \mathbf{C}_2
 \end{equation}
 \\
 If the generalized forces $\boldsymbol{\tau}_{act}$ are applied to the active joints, the resulting accelerations will be $\ddot{\boldsymbol{\phi}}$ and $\ddot{\boldsymbol{\psi}}_d$ \cite{arai1991position}.
 
-From the dimensions of $\boldsymbol{\phi}$ and $\boldsymbol{\psi}$ it can be deducted that if the number of active joints $r$ equals the total number of joints $n$, all joint variables can be controlled. This is what would be referred to a fully actuated system. If, on the other hand, there were no active joints, the dimension of $\boldsymbol{\psi}$ would be zero and all variables would be uncontrollable. These two cases are both quite intuitive. The more vital question is exactly how many of the joints are required to be active in order to achieve the desired control goal. This is equivalent to the question of how many of the joint variables are desired to be controlled, and is dependent on the full HOAL algorithm.
+From the dimensions of $\boldsymbol{\phi}$ and $\boldsymbol{\psi}$ it can be deduced that if the number of active joints $r$ equals the total number of joints $n$, all joint variables can be controlled. This is what would be referred to as a fully actuated system. If, on the other hand, there were no active joints, the dimension of $\boldsymbol{\psi}$ would be zero and all variables would be uncontrollable. These two cases are both quite intuitive. The more vital question is exactly how many of the joints are required to be active in order to achieve the desired control goal. This is equivalent to the question of how many of the joint variables are desired to be controlled, and is dependent on the full HOAL algorithm.
 
-Seeing as the joints desired to be controlled will change continuously for a snake robot traversing a terrain with obstacles, this is probably not the most robust solution. However, the bottom line is that the control torques are mapped to the active joints and all of them can now be applied to the snake robot.
+Seeing as the joints desired to be controlled will change continuously for a snake robot traversing a terrain with obstacles, this is probably not the most robust solution. The bottom line is however that the control torques are mapped to the active joints and all of them can now be commanded to the snake robot.
