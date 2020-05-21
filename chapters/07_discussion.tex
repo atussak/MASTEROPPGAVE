@@ -1,45 +1,76 @@
 \chapter{Discussion}\label{ch:discussion}
 
+This chapter looks at ...
 
-\section{Dynamic HPFC for snake robots}
+\section{The snake robot dynamic HPFC method}
 
-Dynamic model should be prettyyy accurate for best results. Når den ikke er det, som i eksperimentene, så er det tydelig at kontrollen ikke blir helt uavhengig for de forskjellige settpunktene. Den kan godt klare å holde forskjellige verdier på ønskede verdier så lenge det er nok aktuatorer, men veien dit for de forskjellige variablene påvirker fort hverandre. Dette er jo gjerne også delen som i høyst grad er avhengig av den dynamiske modellen, så det gir sånn sett mening. Påvirkning mellom lukkede kinematiske sløyfer vil naturlig nok være mye mindre med flere ledd i hver sløyfe og all kontroll generelt mye mer robust.
+This section discusses the modifications made to the dynamic HPFC method in order to adapt it to snake robots.
 
-DHPFC does not consider if a task is actually achievable, this is left to the user. A solution is combining the method with the mapping filters of West and Asada that have zero rank if the task is outside the allowable and essential area. This only looks at the directions and not the magnitudes of the desired position or force commands. This is as in most cases left to the user anywayyyys. Dont want to break the motors etc. Of course it is natural to add a saturation for the torque.
+\subsection{Differences with traditional HPFC}\label{subsec:dis-diff}
 
-Når kompleksiteten på kontrolleren øker så er det også mye mer som må optimaliseres (altså desto mer som er med, desto mer må være riktig samtidig). DHPFC er mye mer komplekst enn WnA sin løsning.
+The dynamic HPFC method of Yoshikawa \cite{yoshikawa1987dynamic} described in \ref{subsec:DHPFC} is dependent on the dynamical model of the robot, as the name implies. This is the main difference from the plain HPFC method of West and Asada \cite{west1985method} described in \ref{subseq:HPFC}, and makes the calculations significantly more complex. It is however believed that it pays off in the resulting ability to predict the dynamical behaviour of the snake robot.
 
-Med feedback controllerne kan man også vekte hvilke pos- og kraftvariabler man vil styre strengest.
+In this project, the dynamics were calculated using the Euler Lagrange method. It was soon discovered that the computations get quite extensive for snake robots with a large amount of links. An alternative method is presented by Liljebäck et al. \cite{liljeback2012snake}, which is significantly easier adaptable to snake robots with many links. The disadvantage with this method is however that it is based on the center of mass of the snake robot, which is an irrelevant parameter for the OAL problem where the main focus is guiding the head of the snake robot. An option could be adapting this method to depend on the position of the tail instead, which is already part of the generalized coordinates in the presented model.
 
-Kreftene mot hindringene er ofte zero to a hundred. Dette gjør kontrollen mindre stabil. Samtidig viser det hvor viktig den dynamiske delen er. I teorien skal ingen uventede krefter komme med, men det er vanskelig å unngå når slangen hele tiden ligger inntil hindringene og kontrollen ikke er heeelt perfekt.
+The assumption of no friction made in this project surely simplified the equations of motion of the snake robot. The friction will however play a significant role in physical situations and should later be included in the model. This is one of the challenges related to terrestrial snake robot locomotion as opposed to underwater locomotion.
 
-Krevde mye mer tuning enn WA sin metode for å få tilfredsstillende resultater.
+The second significant difference between dynamic HPFC and HPFC is the description of the constraints. In \cite{west1985method}, these are purely defined through the presence of closed kinematic chains. The closed kinematic chains are defined by including virtual joints connecting the robot and the environment. As the contact surface between the robot and the environment gets more complex, more virtual joints have to be introduced. \cite{yoshikawa1987dynamic} instead describes the surface directly as a set of hypersurfaces. They are then differentiated and included in the dynamical calculations for finding the control torques to achieve a given desired trajectory. This generally makes this method more resilient. However, the individual constraints are not very complex in this project as all obstacles simply are static points in the world. When the research evolves, more advantage may be taken of this feature.
 
-Kanskje den dynamiske modellen ikke er grundig nok??? Kanskje det ikke er innafor å linearisere dynamikken til en slangerobot??????
+The HPFC method is able to analyze whether or not a task is achievable with its use of essential task direction vectors and allowable position and force mappings. These directions have to be defined by the user assigning the robot the given task. For dynamic HPFC, the allowable motion and force directions have to be pre-defined as well, but in addition, the user or planner algorithm has to consider which task combinations are in fact achievable. For instance, the snake robot might be able to push against and shape itself along five obstacles, but depending on the composition of the snake robot and the position of these obstacles, achieving all control goals might not be feasible at one time. 
 
-Friksjon må være med irl
+A solution could be including the mapping filters of West and Asada \cite{west1985method} that have zero rank if the task is outside the combined allowable and essential space. Ideally, the information gained from these filters should be exploited by the planner algorithm, leaving the controller to simply perform what it is told.
+
+\subsection{Mathematical formulations}
+
+It should be mentioned that since it is the first time the dynamic HPFC method has been adapted to snake robots, the chosen formulations can still be challenged. The formulations of the contact points were initially based on the idea of which variables the HOAL algorithm will desire to control. That is the global orientation of the contact link and the directions along and against the obstacle. When the minimal CKC formulation was implemented and used to compute the Jacobians, these variables were no longer all defined with respect to the base frame, but rather the frame of the preceding contact point. The intuition behind what the desired variables should be was then somewhat lost. Still this can easily be solved by defining all desired values with respect to the base frame and use homogeneous transformation matrices to input the right format to the controller.
+
+\subsection{Passive joints}\label{subsec:dis-passive-joints}
+
+An issue that was encountered is that the dynamic HPFC method does not consider that some of the joints are passive and thus unactuated. Consequently it computes motor commands for these joints as well as for the active joints. These commands can not be realised and just ignoring them leads to unwanted behaviours, as was seen in the experiment in \ref{sec:pas-pos}. The solution in this project has been the method described in \ref{subsec:passive-joints}, where a subset of the joint variables ($\boldsymbol{\psi}$) are picked for reference following and the generalized forces are calculated only for the active joints. It is not believed that this is the most optimal solution to the problem, because it requires that this variable subset is continuously determined and that the generalized coordinates and dynamics matrices are rearranged accordingly. There has so far not been developed any method for determining the subset of the joint variables that are the most significant for achieving a given task.
+
+Furthermore, the arbitrariness term $(\mathbf{I}-  \mathbf{J}_t^+ \mathbf{J}_t)\mathbf{k}$ in (\ref{eq:dhpfc_qddd}) for the calculation of the desired joint accelerations $\ddot{\mathbf{q}}$ has not been researched extensively and thus not been included in the experiments. It is also more significant for snake robots with a large number of links where the arbitrariness of the motion is higher. One idea is however combining the choice of $\mathbf{k}$ with the choice of the subset of the joint variables $\boldsymbol{\psi}$ mentioned above. If the term $(\mathbf{I}-  \mathbf{J}_t^+ \mathbf{J}_t)\mathbf{k}$ can influence which joint variables are assigned the most vital values for reaching a goal, then $\boldsymbol{\psi}$ could be altered less frequently. This is simply a hypotheses, and other ways of exploiting the influence of $\mathbf{k}$ should be researched further as well.
+
+\subsection{Closed kinematic chains}
+
+The analysis of the closed kinematic chains (CKCs) in \ref{subsec:task-restrictions} concludes that a higher number of joints leads to a higher level of controllability. Because the variables desired to control are related to the contact points, the arrangement of the obstacles along the snake robot have an impact on the controllability as well. That is, if for instance all obstacles are gathered at the back part of the snake robot, it will not be able to exploit all of its joints to control the contact point variables. In other words, it is desired to have a snake robot with a large number of joints positioned so that there are sufficiently many joints between every contact point to make control of the points close to independent. A higher number of links also allows for a higher number of solutions to every control problem and is thus more robust.
+
+In case it is not important to control all contact points accurately, one should implement an algorithm that can find the largest closed kinematic chain for every contact point desired to control. This way the utilization of the snake robot joints can be maximized and the controllability increased.
+
+\subsection{Control structure}
+
+When the complexity of a controller increases, it is typically dependent on a greater amount of feedback parameters from the system to execute all of its calculations. Thus, it is dependent on the accuracy of a greater amount of parameters. The dynamic hybrid position/force controller for the snake robot in the simulator has access to accurate data of both position, velocities and force. These parameters are used both for the dynamic HPFC and for the inner control loops for the desired force and position. Even though the data was considered to be of a good quality, a great deal of tuning had to be conducted to optimize the inner control loops and move towards an optimal controller. 
+
+For this project, the aim was to stay at low velocities and only small displacements in order to stay within the validity bounds of the mathematical model of the snake robot and its constraints. A more thorough tuning of control parameters should thus be conducted for a faster, yet stable, response of the system.
+
+The inner control loops, which consider the position and force errors, can be utilized to weigh the control of the different variables. That is, it is possible to control some variables more strictly than others if they are seen as more vital for achieving the propulsion goal. To figure out which variables are the most important, it is possible to look at the necessary conditions for propulsion defined by the propulsion space.
+
+%Krevde mye mer tuning enn WA sin metode for å få tilfredsstillende resultater.
+
 
 \section{Simulation limitations}
 
-Too few links ://
+\subsection{The snake robot model}
 
-Very bad force sensors.. --> could possibly have lowpass filtered the input signal to have made the control even more stable as well. Although, the control really is not as twitchy as the force signals.
+The most important aspect of the simulation experiments is that the number of links is quite low. The reason for this is explained in \ref{subsec:dis-diff}. In future experiments it is recommended to use a snake robot with a large number of links so that the controllability increases and artefacts or disturbances from control of adjacent contact points are minimal.
 
-Twitchy torque controller. (because of what i said above)
+Another disadvantage is that the movements have to stay within the bounds of the model description, meaning the contacts with the contact links have to be maintained at all times. However, the purpose of the experiments in this project is not proving propulsion but rather test the dynamic HPFC method on a snake robot. Still, a deficiency to the tests is that the dynamical model is less influential for very slow movements.
 
-Model is only for specific scenario and all contacts have to remain.
+\subsection{Force sensor signal}
 
-Måtte kjøre veldig sakte så kontakten hele tiden var opprettholdt og modellen gjaldt. Litt dumt for da kommer den dynamiske delen ikke så godt fram.
-Med en gang man får en overshoot er løpet kjørt, så PID'ene må tunes veldig nøyaktig.
+The force sensor signal from the physics simulator is way more unsteady than the other signals provided. A reason for this can be that calculating forces in collisions is very complex. The links in contact did not collide with the obstacles very frequently during simulations, however, it is believed that the unsteadiness of the signal is a result of the contact point on the contact link constantly changing. The displacements might not be big, but enough for the simulator to register a new contact point. It was observed that when the robot was lying completely still the force signals were much steadier.
 
-\section{The snake robot position and force space}
+Despite the unsteady force signals, the controller is able to drive the contact forces to oscillate around the desired value. Lowpass filtering the force sensor signals was further observed to have a positive impact on the control, as can be seen in the experiment in \ref{sec:pos-force-control-exp}.
 
-\section{Task limitations}
+An unfortunate trait of the physics simulator is that it has a tendency to push the snake robot ever so slightly away from the obstacles when it is lying still. The movement is not significant, but the problem is that it results in the contact force signal and information about the contact point being lost.
 
-Need many many links and well spaced obstacles.
+\subsection{Simulator user-friendliness}
 
-Minimal CKCs and Jacobians means that the desired contact variables have to be defined with respect to the previous contact point --> not as intuitive as defining everything with respect to the base frame. Could solve by defining wrt base frame and then use homogeneous transformation matrices. Still have to update the desired variables for every loop cycle!
+Using the ROS/Gazebo SnakeSIM simulator is not quite plug-n-play, and it is recommended to reserve enough time to understand the principles of the program structure and how it should be used. Both knowledge about the Ubuntu operating system and the use of the command line is required.
 
-Burde ha en algoritme som kan finne den størst mulige lukkede kinematiske sløyfa tilfelle ikke alle kontaktpunkter trenger å bli styrt.
+The previously made modules for this simulator are well developed in that it is intuitive which ones should be deployed. On the other hand, there is lacking documentation of the different modules and the simulator in general, which made familiarization with the program much more time consuming than it could have been.
 
 \section{Dynamic HPFC application and OAL}
+
+At least two (isolated) joints for controlling one variable successfully.
+
+\subsection{Conditions for propulsion}

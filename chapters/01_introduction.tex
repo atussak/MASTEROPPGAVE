@@ -4,53 +4,72 @@
 \chapter{Introduction}\label{Chapter:introduction}
 
 \section{Previous work}
-- NTNU and snake robots
-- Terrestrial snake robot locomotion (common approaches)
-- OAL
-- The need to control both position and force led to the familiarization with HPFC.
-- HPFC Raibert+Craig and West+Asada
-- Stavdahl and the term HOAL
-- Summarized by Klafstad
-- Concept tested by the author in previous project
-- Because the behaviour of a snake robot is "driven" by its dynamics, the research is now continued to explore the dynamic HPFC for snake robots in light of OAL
+
+The department of engineering cybernetics at the Norwegian University of Science and Technology (NTNU) has made significant contributions to the field of snake robot control, related to both aquatic snake-like propulsion and efficient snake robot locomotion on flat surfaces \cite{StavdahlNote}.
+
+Some common modes of snake robot locomotion on flat surfaces are lateral undulation, concertina locomotion and sidewinding. Terrestrial snake robot locomotion can also be performed by utilizing irregularities in the terrain, such as rocks, walls etc. Transeth et al. \cite{transeth2008snake} introduced the term \textit{Obstacle Aided Locomotion (OAL} for snake robots that push against these irregularities in order to propel themselves forward. One way of adapting to the obstacles in the environment and using them for propulsion is the directional compliance method \cite{wang2020directional}. This method relies on the force sensor feedback received at any point in time in order to calculate the desired shape of the robot. 
+
+\textit{Hybrid Position/Force Control (HPFC)} was first introduced by Raibert et al. in 1981 \cite{raibert1981hybrid}. West and Asada \cite{west1985method} further developed the idea in 1985 to control robot manipulators constrained at multiple points. This method is based on kinematic projections of the motion and force to comply with the allowable behaviour of the snake robot and achievement of the given task. Yoshikawa \cite{yoshikawa1987dynamic} advanced the method in 1987 by including the dynamics of the robot into the calculations. 
+
+For OAL locomotion it is desired to control the force against obstacles and shape of the robot independently. Thus, Stavdahl \cite{StavdahlNote} proposed a combination of OAL and HPFC, leading to the term \textit{Hybrid Obstacle Aided Locomotion (HOAL)}. Klafstad \cite{TorjusOppg} summarized the theory around this concept, and it was further researched and tested by the author \cite{AtussaProsjektoppgp}, both with the emphasis on the method of West and Asada \cite{west1985method}.
+
+Because the behaviour of the snake robot is driven by its dynamics, the research is now continued to explore the dynamic HPFC in light of OAL. 
+
 
 \section{Scope of the project}
 
 \subsection{Thesis assignment interpretation}
 
-- Introduce some existing locomotion strategies and discuss whether or not they could be combined with dynamic HPFC.
-- Mathematically adapt the method of Yoshikawa to the snake robot, paying special attention to the changes that have to be made as a result of the differences between snake robots and traditional robot manipulators.
-- Discuss how the dynamic HPFC method could be used to achieve OAL.
-- Discuss the limitations of the HOAL problem in the light of which tasks (in force and position space) can actually be realized.
-- Discuss what force/position spaces are sufficient for propulsion and which are necessary for propulsion in light of the task realizations(?).
-- Design a control structure to test the dynamic HPFC algorithm.
-- Find and evaluate a simulator for the testing
-- Test the performance of the dynamic HPFC method on snake robots. The tests should shed light on the benefits and limitations of the method.
+The assignment for this thesis is provided in the very beginning of the report. This section thoroughly describes the authors interpretation of the different tasks.
+
+It is understood that some background theory on existing terrestrial locomotion strategies should be provided. It should then be discussed  whether or not they can be combined with the dynamic HPFC method.
+Furthermore, the dynamic HPFC method of Yoshikawa \cite{yoshikawa1987dynamic} is to be mathematically adapted to snake robots. Special attention should here be payed to the modifications that have to be made as a result of the differences between snake robots and traditional robot manipulators. A discussion should be carried out of how the dynamic HPFC method method can be used to achieve OAL, and the limitations of the HOAL problem in light of which tasks can be realized based on the position and force spaces of the robot. Furthermore, some sufficient and necessary conditions for propulsion are to be suggested.
+
+Lastly, a control structure to test the dynamic HPFC algorithm should be designed. A suitable simulator needs to be found and evaluated for this purpose. The performance of the dynamic HPFC method on snake robots should be tested.
+
 
 \subsection{Simplifications}
 
-- Not very many links in the snake robot. -> led to a a lack of test variations
-- Model for a very specific scenario (always contact with three obstacles with the same three links, thus movement can only happen in the bounds of this)
-- All links are modeled as 2D lines although they both have a width and are 3D in the simulator.
-- Dynamics are generally linearized
-- No modeling of collisions although they unwantedly occur as a result of the super hyper sensitive force sensors in the simulator and the physiscs engine constantly trying to push the bodies apart.
+In order to keep the dimensions of the dynamic and kinematic calculations down, the snake robot model used for testing consists of six links and five joints. Because snake robots performing OAL are in contact with several obstacles, it is desired to control several contact points as well as the shape of the robot. This means that a higher number of joints and thus actuators are beneficial for the execution of the control. Unfortunately, this led to a lack of test variations.
+
+The computed snake robot model is designed for a very specific scenario in which three contacts between snake robot links and obstacles have to be maintained. Consequently, all movement of the snake robot can only be performed in the bounds of this assumption. 
+
+Another simplification made in the mathematical model is considering the snake robot and obstacles as 2D bodies, although they have 3D properties in the simulator. However, since all movement and control happened in the 2D plane and all contacts are still point contacts, it is not considered to have been a very big deficiency.
+
+The collisions between the snake robot and obstacles are not modeled because it is assumed that the contact is maintained at all times. However, small collisions do occur in the simulator as a result of the sensitive force sensor and changing contact points within the range of a single link.
 
 \subsection{Contributions}
 
-\hl{Consider making points and sub-points here}
-
 \begin{itemize}
-    \item A summary of the most significant snake robot locomotion strategies and a discussion of HPFC in light of these locomotion strategies
-    \item Thorough mathematical derivation of the dynamic hybrid position force control of snake robots
-    \item Analysis of the control structure benefits and limitations
-    \item Analysis of the snake robot obstacle aided locomotion scheme with regard to the environment and snake robot configuration
-    \item Discussion/explanation of the differences with respect to traditional robot manipulators
-    \item Description of the simulator structure and comparison to other comparable simulators
-    \item An evaluation of the validity of the Gazebo/ROS simulator
-    \item Implementation of the controller in the Gazebo/ROS simulator.
-    \item An evaluation of the control scheme through simulation experiments.
-    \item A comprehensive description of further requirements for the implementation of OAL and dynamic HPFC on snake robots 
+    \item Theoretical base
+    \begin{itemize}
+        \item A summary of the most significant snake robot locomotion strategies and a discussion of HPFC in light of these locomotion strategies
+        \item Description of the snake robot specific kinematics and dynamics, with a focus on constrained snake robots
+    \end{itemize}
+    
+    \item Dynamic HPFC for snake robots
+    \begin{itemize}
+        \item A thorough mathematical derivation of the dynamic HPFC for snake robots
+        \item Modifications for increased control performance
+        \item A discussion of ideal snake robot and obstacle configurations for general dynamic HPFC and for OAL
+        \item An analysis of the benefits and limitations with special regard to snake robots vs. robot manipulators
+        \item An analysis of the exploitation of the position and force spaces for propulsion
+        \item A description of further requirements for the implementation of OAL and dynamic HPFC on snake robots 
+    \end{itemize}
+    
+    \item Simulations
+    \begin{itemize}
+        \item A description of the structure of the chosen simulator and comparison to other comparable simulators
+        \item An evaluation of the validity of the simulators physics engine
+        \item Implementation of the dynamic HPFC in the simulator
+        \item An evaluation of the dynamic HPFC through simulation experiments
+    \end{itemize}
+
 \end{itemize}
 
 
 \section{Report structure}
+
+It is assumed that the reader is familiar with basic robotics and control theory. Please see \cite{lynch2017modern}, \cite{lynch2017modernCompTorque}, \cite{waldron2016kinematics}, \cite{liljeback2012snake} for a more thorough explanation of the topics.
+
+The report first introduces the snake robot model and related assumptions employed in the project in Chapter \ref{ch:model_specs}. A set of different terrestrial snake robot locomotion strategies are then presented in Chapter \ref{chapter:theory}. This chapter also covers the required mathematical background theory to understand the dynamical HPFC method. The dynamic HPFC method is then thoroughly explained in Chapter \ref{ch:hpfc}. All the related considerations and limitations are also provided here. Chapter \ref{chapter:simulator} explains the structure of the chosen simulator and how it is used for the experiments in Chapter \ref{ch:results}. The results from the experiments and general analysis of the dynamic HPFC method on snake robots are discussed in Chapter \ref{ch:discussion}. Lastly, Chapter \ref{ch:conclusion} concludes the work and proposes some ideas for future research and possible improvements based on the challenges encountered in this project.

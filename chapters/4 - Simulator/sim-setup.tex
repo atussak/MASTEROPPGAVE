@@ -1,6 +1,6 @@
 \section{General simulation setup}\label{sec:simsetup}
 
-In the past, the simulator has been used to mimic an existing snake robot prototype, namely the Mamba snake robot \cite{liljeback2014mamba}. This snake robot has 14 identical links and 13 joints connecting these links. The visualization of the model can be seen in Figure \ref{fig:gazebo_gui}. In order to make computations simpler and thus the real time factor of the simulation higher, the robot is scaled down to have 6 links and 5 joints for some of the experiments. As can be observed from the figure, the joints are not modeled as mechanical parts. They are thus not visible, but placed mid-air between two neighboring links.
+In the past, the simulator has been used to mimic an existing snake robot prototype, namely the Mamba snake robot \cite{liljeback2014mamba}. This snake robot has 14 identical links and 13 joints connecting these links. The visualization of the model can be seen in Figure \ref{fig:gazebo_gui}. In order to make computations simpler and thus the real time factor of the simulation higher, the robot is scaled down to have 6 links and 5 joints for most of the experiments. As can be observed from the figure, the joints are not modeled as mechanical parts. They are thus not visible, but placed mid-air between two neighboring links.
 Further model details can be found in Table \ref{tab:snake_model_props}. This table shows that the links of the snake robot model have three dimensional properties, meaning both width, length and height. All experiments are however still only conducted in the two dimensional ground plane.
 
 \begin{table}[]
@@ -20,7 +20,7 @@ Further model details can be found in Table \ref{tab:snake_model_props}. This ta
     \label{tab:snake_model_props}
 \end{table}
 
-When it comes to the configuration of the obstacles, it is based on the \textit{obstacle triplet model} \cite{sanfilippo2018snakesim}. The motivation behind this is explained in section \ref{sec:obst_triplet_model}. The three obstacles are modeled as identical immovable cylinders in the simulator. Still, any contact with the snake robot is a frictionless point contact. Further details about the obstacle model can be found in Table \ref{tab:obst_model_props}.
+When it comes to the configuration of the obstacles, it is based on the \textit{obstacle triplet model} \cite{sanfilippo2018snakesim}. The three obstacles are modeled as identical immovable cylinders in the simulator. Still, any contact with the snake robot is frictionless point contact. Further details about the obstacle model can be found in Table \ref{tab:obst_model_props}.
 
 \begin{table}[]
     \centering
@@ -54,14 +54,14 @@ Furthermore, a list of the most useful topics for high level control are listed 
     Information about the detected obstacle pushpoints. This includes contact normals and tangents, as well as position of contact point and information about which links are in contact with an obstacle.
     
     \item \texttt{"/snakebot/robot\char`_pose"}\\
-    Global position of all snake robot links/joints??
+    Global position of all snake robot links.
     
     \item \texttt{"/snakebot/joint\char`_states"}\\
     Angles of all joints relative to their preceding link. This topic also provides the corresponding velocity of the joints.
     
     \item \texttt{"/snakebot/joint\char`_01\char`_effort\char`_controller/command"}\\
-    Joint torque command to the specific joint actuators 
+    Joint torque command to the specific joint actuators.
     
     \item \texttt{"/ft\char`_sensor\char`_topic\char`_01"}\\
-    Wrench in specific joint measured by the force/torque sensor in Gazebo 
+    Wrench in specific joint measured by the force/torque sensor in Gazebo.
 \end{itemize}
