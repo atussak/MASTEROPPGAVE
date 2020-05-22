@@ -2,7 +2,7 @@
 
 Like mentioned above, velocity and force can be controlled in the directions in which they are not constrained. The end effector space of a robot can be divided into two orthogonal domains, a position domain and a force domain. These domains are complementary to the directions of the corresponding constraints at the end effector. It is logical to conclude that if there is contact with the environment, motion cannot be controlled freely. On the other hand, if there is no contact, there is no direction in which the robot can apply a force. Ergo, the force and motion control directions do not overlap and the domains are orthogonal. This means that position and force can be controlled independently and arbitrarily in these domains.
 
-The following relationships are known from \ref{seq:constr_kin} and \ref{subseq:constr_dyn}. 
+The following relationships are based on the Jacobian introduced in \ref{seq:constr_kin}. 
 
 \begin{equation}
 	\mathbf{v = J \dot{q}} \textrm{,} \quad  \  \boldsymbol{\tau} \mathbf{= J}^T \mathbf{f}
@@ -59,9 +59,9 @@ The presence of passive joints in the robot imposes another constraint on the al
 
 \subsubsection{Task analysis}
 
-An end effector task may consist of both a movement and force application onto a surface. The projectors $\prescript{}{j}{\mathbf{P}}_{ap}$ and $\prescript{}{j}{\mathbf{P}}_{af}$ make sure the force and movement are performed in the allowable force and movement directions. A specific task may however not be possible to perform within the restrictions of these spaces.
+An end effector task may consist of both a movement and force application onto a surface. The projectors $\prescript{}{j}{\mathbf{P}}_{af}$ and $\prescript{}{j}{\mathbf{P}}_{ap}$ make sure the force and movement are performed in the allowable force and movement directions respectively. A specific task may however not be possible to perform within the restrictions of these spaces.
 
-\textit{Essential position variables} are defined as the directions om movement of the end effector which must be controlled in order to perform the task correctly. At the same time, \textit{arbitrary position variables} are those directions of movement which do not have to be controlled precisely. The terms \textit{essential force variables} and \textit{arbitrary force variables} follow the same logic, just for the force directions. According to \cite{west1985method}, the total number of essential variables, position plus force, is equal to the minimum number of controllable actuators in the manipulator necessary for performing the task.
+\textit{Essential position variables} are defined as the movement directions of the end effector which must be controlled in order to perform the task correctly. At the same time, \textit{arbitrary position variables} are those directions of movement which do not have to be controlled precisely. The terms \textit{essential force variables} and \textit{arbitrary force variables} follow the same logic, just for the force directions. According to \cite{west1985method}, the total number of essential variables, position plus force, is equal to the minimum number of controllable actuators in the manipulator necessary for performing the task.
 
 The essential position and force direction can be described by the column vectors (\ref{eq:hpfc_ep}) and (\ref{eq:hpfc_ef}) respectively.
 
@@ -69,14 +69,14 @@ The essential position and force direction can be described by the column vector
     \mathbf{E}_p =
     \begin{bmatrix}
         \mathbf{e}_{p1} & ... & \mathbf{e}_{p\alpha}
-    \end{bmatrix}^T
+    \end{bmatrix}
 \end{equation}
 
 \begin{equation}\label{eq:hpfc_ef}
     \mathbf{E}_f =
     \begin{bmatrix}
         \mathbf{e}_{f1} & ... & \mathbf{e}_{f\beta}
-    \end{bmatrix}^T
+    \end{bmatrix}
 \end{equation}
 \\
 Each column vector describes one direction. Following, the number of essential position directions is $\alpha$ and the number of essential force directions is $\beta$. The orthogonal projections onto the essential position and force spaces are given by (\ref{eq:hpfc_wep}) and (\ref{eq:hpfc_wef}) respectively.

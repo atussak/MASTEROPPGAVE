@@ -6,7 +6,7 @@ The goal of the snake robot is to push against obstacles in a fashion that yield
 
 HPFC is not a control method per se, but rather a method for determining when and in which directions force or motion control should be applied. It is desired to control motion along the unconstrained motion directions and force along the constrained motion directions. Different approaches to this problem exist. One is the use of selection matrices, introduced by Raibert and Craig et al. \cite{raibert1981hybrid}. The disadvantage of this approach is that the directions in which force and motion should be controlled has to be recalculated for every step, and is no simple procedure. In another approach, introduced by West and Asada \cite{west1985method}, two projection matrices are used as filters in joint space to automatically select between position- and force controlled vectors. There is however a disadvantage to this method as well, which is that the dynamics of the robot are ignored. A thoroughly studied method called dynamic HPFC, developed by Yoshikawa \cite{yoshikawa1987dynamic}, is therefore presented and adapted to the snake robot.
 
-The theory on traditional HPFC up until the part \textit{Passive joints}, as well as this intro, is a modified part of the earlier project work of the author \cite{AtussaProsjektoppgp}. The rest of the chapter is focused on dynamic HPFC and the advantages and challenges that comes with adapting it to a snake robot model.
+The theory on traditional HPFC up until the part \textit{Passive joints}, as well as this intro, is a modified part of the earlier project work of the author \cite{AtussaProsjektoppgp}. The rest of the chapter is focused on dynamic HPFC and the advantages and challenges that comes with adapting it to a snake robot model. Some modifications attempting to make the control more robust are also presented here.
 
 \input{chapters/3 - Theory/traditional_hpfc}
 
@@ -48,13 +48,13 @@ The task and obstacle frames $\mathbf{r_t}$ and $\mathbf{r_c}$ are visualized in
 
 In order to take the dynamics into account, the constraints are directly included into the dynamic equations of motion of the robot. This is done by expressing the constraints as a set of hypersurfaces that the robot can not physically pass. It should be noted that the focus here is on manipulator end-effector constraints and not general constraints which should be used in the snake robot case. The constraint hypersurfaces are also expressed in the end-effector coordinates. Another important aspect of the paper is that it only addresses bilateral hypersurfaces (and not unilateral surfaces), meaning that the effector is prohibited from leaving the surface in any direction.
 
-It is assumed that a given constraint can be expressed by a set of $m$ hypersurfaces
+The $m$ hypersurfaces expressing a given constraint are given by
 
 \begin{equation}\label{eq:hpfc:hypersurface}
     p_i(\mathbf{r}_t) = 0, \quad i = 1, 2, ..., m,
 \end{equation}
 \\
-where $\mathbf{r}$ is the end effector position in a fixed reference frame. Differentiating (\ref{eq:hpfc:hypersurface}) with respect to time yields
+where $\mathbf{r}_t$ is the end effector position in a fixed reference frame. Differentiating (\ref{eq:hpfc:hypersurface}) with respect to time yields
 
 \begin{equation}\label{eq:hpfc:derhypsurf}
     \mathbf{E}_F \mathbf{\dot{r}}_t = 0,
@@ -267,7 +267,7 @@ $\mathbf{K}$, $\mathbf{b}_1$ and $\mathbf{b}_2$ are given by
     \end{split}
 \end{equation}
 \\
-Eventually, it is possible to calculate the joint control torque. It consists of a component based on the desired movement $\mathbf{\ddot{r}}_{t,d}$ in the contact point frame and a component based on the desired force $\mathbf{f}_{Fd}$ applied to the constraint surfaces. The direction of the desired force should correspond to which side of the snake robot the obstacle is. This can either be implemented into the higher level controller requesting these forces, or one could introduce a vector $\boldsymbol{\gamma}$ like in \ref{seq:constraints}. This vector consists of positive and negative ones corresponding to the different obstacle placements. When multiplied with $\mathbf{f}_{Fd}$ it will simply negate the forces that should be applied to obstacles on the right side of the snake robot.
+Eventually, it is possible to calculate the joint control torque. It consists of a component based on the desired movement $\mathbf{\ddot{r}}_{t,d}$ in the contact point frame and a component based on the desired force $\mathbf{f}_{Fd}$ applied to the constraint surfaces. The direction of the desired force should correspond to which side of the snake robot the obstacle is. This can either be implemented into the higher level controller requesting these forces, or one could introduce a vector $\boldsymbol{\gamma}$ like in \ref{seq:constraints}. This vector consists of positive and negative units corresponding to the different obstacle placements. When multiplied with $\mathbf{f}_{Fd}$ it will simply negate the forces that should be applied to obstacles on the right side of the snake robot.
 
 \begin{equation}\label{eq:dhpfc_tau_c}
     \boldsymbol{\tau}_c = \boldsymbol{\tau}_P + \boldsymbol{\tau}_F
