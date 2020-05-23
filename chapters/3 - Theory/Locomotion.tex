@@ -42,7 +42,8 @@ The information presented in this section is taken from \cite{ijspeert2008centra
 A central pattern generator for locomotion control is where neuroscience meets robotics. CPGs consist of neurons that produce an oscillating, rhythmic output without requiring sensory information. In nature, CPGs play an important role in periodic actions like breathing, walking and other modes of locomotion. While sensory feedback is not needed for generating the rhythms, it plays a very important role in shaping the rhythmic patterns. This is fundamental for keeping CPGs and body movements coordinated.
 
 The method produces stable rhythmic patterns and is able to rapidly return the system to its normal rhythmic behavior after transient perturbations. Furthermore, CPG models tend to reduce the dimensionality/complexity of the control problem in that they have only a few control parameters. These parameters allow modulation of the locomotion, for instance the speed and direction or even the type of gait. This allows for higher-level controllers to circumvent the generation of multidimensional motor commands and stick to higher level control signals.
-\hl{Er CPG en type lateral undulation?}
+
+CPGs can be applied to cyclic locomotion gaits like lateral undulation, sidewinding and concertina locomotion since they are based on rhythmic patterns.
 
 \subsection{Obstacle-aided locomotion (OAL)}\label{subsec:OAL}
 
@@ -78,8 +79,8 @@ The disadvantage of shape-based compliance is that not all terrain features are 
 
 The most substantial discovery of Wang et al. \cite{wang2020directional} is that the amplitude of the shape parameters act as an indication of the robot's forward progression. Thus, the amplitude difference from the nominal value is used to determine whether the robot should increase or decrease it's curvature at certain segments of its body. Wang et al. \cite{wang2020directional} denotes admitting external forces that result in increases in curvature as positive directional compliance and admitting forces that result in decreases in curvature as negative directional compliance. The known shape-based compliance is the nominal compliance of the controller. Furthermore, a filter function is used to adapt this nominal compliance and include the two other modes.
 
-In summary, directional compliance enables the robot to either push away from, or comply to, terrain features, based on the torque feedback measured over time \cite{wang2020directional}. This dynamical system strategy was proven successful even in a three dimensional environment. However, the main aim of utilizing this controller is to avoid the robot getting stuck among obstacles that could not yield propulsion, rather than following a desired path. This means that the method most probably will not choose the most optimal path to move forward, as is desired in obstacle-aided locomotion.
-\hl{Is this correct??}
+In summary, directional compliance enables the robot to either push away from, or comply to, terrain features, based on the torque feedback measured over time \cite{wang2020directional}. This dynamical system strategy was proven successful even in a three dimensional environment. However, the main aim of this controller is utilizing obstacles the snake robot "by chance" collides with in order to avoid getting stuck between obstacles, rather than following a desired path. This means that the method most probably will not choose the most optimal path to move forward, as is desired in OAL.
+
 
 \subsubsection{Mechanical compliance}
 
