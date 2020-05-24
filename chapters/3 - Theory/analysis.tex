@@ -59,11 +59,20 @@ To better explain this, an example snake robot is illustrated in figures \ref{fi
 
 The ideal way of designing snake robots that require a high level of controllability is to include a very high number of joints. This way, even the minimal CKCs will have a sufficiently high number of actuators to make control at every contact point practically independent of the other contact points. Manipulators with such a large number of actuators are referred to as \textit{hyperredundant manipulators}. According to \cite{chiaverini2008kinematically}, a manipulator is considered to be hyperredundant if its controllable configuration space degrees of freedom are comparable to, or exceed, its task space degrees of freedom. Furthermore, it is stated that such manupulators have an enhanced potential to use their extra joints for maneuvering within tight obstacle fields. The term hyperredundant can be adopted to snake robots as well, and it is now obvious that hyperredundancy is a requirement for an ideal OAL-driven snake robot.
 
+\subsubsection{Singularity avoidance}
+
+A common problem when using Jacobian matrices for the inverse kinematic computations is the presence of singularities. A robot configuration $\mathbf{q}$ is singular if the task Jacobian matrix $\mathbf{J}_t$ is rank-deficient here \cite{chiaverini2008kinematically}. This configuration is not ideal since it means that it is impossible to generate task space velocities in certain directions. By task space velocities it is here meant velocity of the contact points vector $\mathbf{r}_t$, which is referred to as the end effector velocity in traditional robot manipulator theory.
+
+An effect of a singularity is that the resulting joint space velocities can grow uncontrollably big. This effect is experienced not only at the singular configuration itself but also in its neighborhood \cite{chiaverini2008kinematically}. According to Chiaverini et al. \cite{chiaverini2008kinematically}, the distance to these singularities can be characterized through measurements based on the determinant of the Jacobian or the individual singular values of the matrix like the smallest singular value. If the snake robot consists of more joints than it needs for execution of the desired task, the additional degrees of freedom can be used to steer the snake robot away from singularities or avoid them at a planner level by analyzing these measurements. See \cite{chiaverini2008kinematically} for a more detailed description of the matter.
+It should be noted that whether or not the robot is redundant depends both on the number of joints \textit{and} the number of contact points desired to control, i.e. the task.
+
+Furthermore, the snake robot does not necessarily lose mobility in all task directions even though it is at a singular configuration. This is noteworthy since it might not be desirable for the snake robot to move in every possible direction anyway. In \ref{subsec:task-oriented} it is explained how the desirable or essential movement directions can be expressed and further utilized for control.
+
 
 \subsection{Task oriented control scheme}\label{subsec:task-oriented}
 
 
-In \ref{subseq:HPFC} it is explained that there are certain directions of force and movement that are essential for performing a task. It is further claimed that the number of essential directions can not be greater than the number of controllable actuators in the robot necessary for performing the task. \ref{subsec:task-restrictions} explained that the number of available controllable actuators is limited by the minimal CKC.
+\ref{subseq:HPFC} states that there are certain directions of force and movement that are essential for performing a task. It is further claimed that the number of essential directions can not be greater than the number of controllable actuators in the robot necessary for performing the task. \ref{subsec:task-restrictions} explained that the number of available controllable actuators is limited by the minimal CKC.
 
 For the snake robot, the force and movement directions of a task are described by $\mathbf{E}_F$ and $\mathbf{E}_P$.
 %In some cases, the number of directions described by these vectors might exceed the number of active joints even though not all directions \textit{have} to be controlled precisely in order to perform the given task. So in other words, t
