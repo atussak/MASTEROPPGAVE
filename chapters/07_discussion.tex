@@ -50,7 +50,7 @@ The inner control loops, which consider the position and force errors, can be ut
 
 Furthermore, PI control was chosen for the inner control loops since all motion was very slow either way. It is however suggested to implement PID of PD controllers in the continuation of the research of this project. In addition, the desired contact point accelerations were calculated directly from the desired position variables, rather than the velocities. It is not believed to have had any negative consequences in the scope of this project, but should also be improved in future implementations.
 
-Singularity avoidance has not been included in the control for this project since singularities have not turned out to be prominent in the vicinity of the experiments. It should however be implemented when the scope of the testing is increased.
+Singularity avoidance has not been included in the control for this project since singularities have not turned out to be prominent in the vicinity of the experiments. It should however be implemented when the scope of the testing is increased. If the assigned task does not pass through unavoidable singularities, it is in principle always possible to compute a joint trajectory along which the task Jacobian $\mathbf{J}_t$ is continuously full rank \cite{chiaverini2008kinematically}.
 
 %Krevde mye mer tuning enn WA sin metode for å få tilfredsstillende resultater.
 
@@ -87,4 +87,4 @@ Furthermore, it has been shown that the amount of links, and in particular the a
 
 In order to focus the control on variables that are in fact desired to be controlled by a given HOAL algorithm, it was suggested in \ref{subsec:task-oriented} that the position and force filters from the traditional HPFC method can be combined with the dynamic HPFC method. This was proven to be successful in the experiment in \ref{sec:ess-pos}. However, several conditions and requirements have to be fulfilled for the proposed method to be valid, and it is thus not believed that it is scalable to bigger experiments with higher velocities. As mentioned in \ref{subsec:dis-diff}, it should still be researched if these filters can be exploited by any part of the HOAL algorithm.
 
-\subsection{Conditions for propulsion}
+%\subsection{Conditions for propulsion}

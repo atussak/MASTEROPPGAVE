@@ -41,32 +41,38 @@ The collisions between the snake robot and obstacles are not modeled because it 
 
 \subsection{Contributions}
 
-\begin{itemize}
-    \item Theoretical base
-    \begin{itemize}
-        \item A summary of the most significant snake robot locomotion strategies and a discussion of HPFC in light of these locomotion strategies
-        \item Description of the snake robot specific kinematics and dynamics, with a focus on constrained snake robots
-    \end{itemize}
-    
-    \item Dynamic HPFC for snake robots
-    \begin{itemize}
-        \item A thorough mathematical derivation of the dynamic HPFC for snake robots
-        \item Modifications for increased control performance
-        \item A discussion of ideal snake robot and obstacle configurations for general dynamic HPFC and for OAL
-        \item An analysis of the benefits and limitations with special regard to snake robots vs. robot manipulators
-        \item An analysis of the exploitation of the position and force spaces for propulsion
-        \item A description of further requirements for the implementation of HOAL and dynamic HPFC on snake robots 
-    \end{itemize}
-    
-    \item Simulations
-    \begin{itemize}
-        \item A description of the structure of the chosen simulator and comparison to corresponding simulators
-        \item An evaluation of the validity of the simulators physics engine
-        \item Implementation of the adapted dynamic HPFC method in the simulator
-        \item An evaluation of the method through simulation experiments
-    \end{itemize}
+The most significant contributions from this project lie in the mathematical adaptation of the dynamic HPFC method to snake robots intended to perform HOAL. An analysis of further control requirements and associated improvements and modifications to the method are also provided. Furthermore, a discussion is carried out of the requirements to the snake robot itself and its configuration relative to the obstacles it is in contact with.
 
-\end{itemize}
+The developed snake robot model and dynamic HPFC method has been tested in a simulation environment after a simulator was thoroughly chosen. Furthermore, a review of this simulator and a comparison to other corresponding simulators is provided. A guiding description of the simulator structure and how it generally can be utilized is also prepared and to be found in the report. Lastly, the findings have been discussed in light of HOAL and improvements to the dynamic HPFC method and control structure are proposed.
+
+
+
+%\begin{itemize}
+ %   \item Theoretical base
+ %   \begin{itemize}
+ %       \item A summary of the most significant snake robot locomotion strategies and a discussion of HPFC in light of these locomotion strategies
+ %       \item Description of the snake robot specific kinematics and dynamics, with a focus on constrained snake robots
+ %   \end{itemize}
+ %   
+ %   \item Dynamic HPFC for snake robots
+ %   \begin{itemize}
+ %      \item A thorough mathematical derivation of the dynamic HPFC for snake robots
+ %       \item Modifications for increased control performance
+ %       \item A discussion of ideal snake robot and obstacle configurations for general dynamic HPFC and for OAL
+ %       \item An analysis of the benefits and limitations with special regard to snake robots vs. robot manipulators
+  %      \item An analysis of the exploitation of the position and force spaces for propulsion
+   %     \item A description of further requirements for the implementation of HOAL and dynamic HPFC on snake robots 
+    %\end{itemize}
+    %
+    %\item Simulations
+    %\begin{itemize}
+    %    \item A description of the structure of the chosen simulator and comparison to corresponding simulators
+    %    \item An evaluation of the validity of the simulators physics engine
+    %    \item Implementation of the adapted dynamic HPFC method in the simulator
+    %    \item An evaluation of the method through simulation experiments
+    %\end{itemize}
+%
+%\end{itemize}
 
 
 \section{Report structure}

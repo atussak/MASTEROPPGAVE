@@ -25,7 +25,7 @@ Assumptions 1-6 are taken from \cite{StavdahlNote}, whilst assumptions 7-9 are s
 \section{Further model description}
 
 \subsection{The snake robot}
-The snake robot itself is modeled as a simple planar robot manipulator with links and joints. The main difference between the snake robot and a classic robot manipulator is the property that the snake robot is not physically attached to any fixed point in the world. This frees one constraint. However, it is still relevant to express the position of the last link of the snake, also denoted as the tail. This is performed by introducing three virtual joints to the model; two translational and one rotational joint. These joints are not controllable and merely for describing the kinematics, dynamics and constraints. The model of the snake robot is visualized in Figure \ref{fig:2_kin}, where real robot links are blue and the virtual ones are green.
+The snake robot itself is modeled as a simple planar robot manipulator with links and joints. The main difference between the snake robot and a classic robot manipulator is the property that the snake robot is not physically attached to any fixed point in the world. This frees one constraint. However, it is still relevant to express the position of the first link of the snake, also denoted as the tail. This is performed by introducing three virtual joints to the model; two translational and one rotational joint. These joints are not controllable and merely for describing the kinematics, dynamics and constraints. The model of the snake robot is visualized in Figure \ref{fig:2_kin}, where physical robot links are blue and the virtual ones are green.
 
 \begin{figure}
     \centering
@@ -46,7 +46,7 @@ The environment is the (x,y)-plane in Figure \ref{fig:2_kin}, and consists of no
 
 \subsection{The obstacles}
 
-The obstacles are modeled as rigid points in the plane. However, as a consequence of the discrete nature of the simulator, there is a "safety barrier" around every obstacle defining the area in which contact is present. This contact is still modeled as a point contact. The barriers can be seen as the red circles in Figure \ref{fig:2_kin_obst}. The points the circles are surrounding are the actual obstacles.
+The obstacles are modeled as rigid points in the plane and any contact with them is considered a point contact. Figure \ref{fig:2_kin_obst} shows three obstacles in contact with a snake robot.
 
 \begin{figure}
     \centering
