@@ -24,7 +24,7 @@ The ROS-based program is set up to launch the Gazebo 3D physics simulator. Gazeb
 The added sensors are able to communicate properties like forces, torques, contact points, etc. These properties, as well as all physical variables, are reported back to ROS by Gazebo.
 At the same time, Gazebo subscribes to information from the ROS controller nodes sending joint motor torque commands to the snake robot. The physics engine is then able to use all this information to show a realistic resulting movement. It is also possible to move and influence the simulated objects directly through the graphical user interface (GUI) provided by Gazebo (see Figure \ref{fig:gazebo_gui}).
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=1\textwidth]{figures/simulator/gazebo_gen_screen.png}
     \caption{Gazebo graphical user interface}

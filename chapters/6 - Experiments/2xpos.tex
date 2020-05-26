@@ -2,16 +2,12 @@
 
 As seen in \ref{subsec:DHPFC}, the equations of motion are used to find the desired torques satisfying the desired joint accelerations. However, the equations of motion do not consider that some of the joints are passive and joint torques will this be assigned to all joints, both passive and active. This is of course an issue since the computed solution relies on the realization of these torques.
 
-This experiment aims at illustrating the difference in just ignoring the passive joint torque commands and in mapping all joint torques over to the active joints. Because the focus is on the position torques $\boldsymbol{\tau}_P$, the link angles by the second and third obstacles are controlled. They are first controlled by using the equations of motion as in (\ref{eq:dhpfc_taup}). Here the torques for the passive joints are simply neglected. The second simulation shows control where all torques are mapped to the active joints, as explained in \ref{subsec:passive-joints}. For this experiment it is simply chosen that the desired values of the active joints should be followed and that the passive joints could take resulting arbitrary values. This is probably not the optimal choice of variables to control, but no method for determining this has to this point been developed. The matter is discussed further in \ref{subsec:dis-passive-joints}.
-
-The minimal CKC formulation is used for both simulations, which implies that the desired angles are defined according to the previous contact point. Further simulation configurations are presented in Table \ref{tab:exp_2xp}. The control structure for the experiment is given in Figure \ref{fig:diag-2p}. The equation (\ref{eq:tau-act}) in the diagram is substituted with (\ref{eq:dhpfc_taup}) for the first simulation.
-
-\begin{table}[]
+\begin{table}[H]
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        & Value & Unit\\
-        \hline
+        & \textbf{Value} & \textbf{Unit}\\
+        \hline \hline
         Number of obstacles & $3$ & \\
         Number of links & $6$ & \\
         $\theta_{2,d}$ & $-0.2$ & $rad$ \\
@@ -20,9 +16,11 @@ The minimal CKC formulation is used for both simulations, which implies that the
         Second sim.:$[K_{p}, K_{i}]$ & $[1, 0.001]$ &\\
         \hline
     \end{tabular}
-    \caption{Simulation configuration for force control experiment with minimal CKCs}
+    \caption{Simulation configuration for double position control experiment}
     \label{tab:exp_2xp}
 \end{table}
+
+This experiment aims at illustrating the difference in just ignoring the passive joint torque commands and in mapping all joint torques over to the active joints. Because the focus is on the position torques $\boldsymbol{\tau}_P$, the link angles by the second and third obstacles are controlled. They are first controlled by using the equations of motion as in (\ref{eq:dhpfc_taup}). Here the torques for the passive joints are simply neglected. The second simulation shows control where all torques are mapped to the active joints, as explained in \ref{subsec:passive-joints}. For this experiment it is simply chosen that the desired values of the active joints should be followed and that the passive joints could take resulting arbitrary values. This is probably not the optimal choice of variables to control, but no method for determining this has to this point been developed. The matter is discussed further in \ref{subsec:dis-passive-joints}.
 
 \begin{figure}
     \centering
@@ -31,6 +29,10 @@ The minimal CKC formulation is used for both simulations, which implies that the
     \label{fig:diag-2p}
 \end{figure}
 
+The minimal CKC formulation is used for both simulations, which implies that the desired angles are defined according to the previous contact point. Further simulation configurations are presented in Table \ref{tab:exp_2xp}. The control structure for the experiment is given in Figure \ref{fig:diag-2p}. The equation (\ref{eq:tau-act}) in the diagram is substituted with (\ref{eq:dhpfc_taup}) for the first simulation.
+
+
+
 \subsection{Control torques computed for both passive and active joints}
 
 For this simulation, the control torques from (\ref{eq:dhpfc_taup}) belonging to the active variables were commanded to the snake robot. The rest of the motor torque commands were simply ignored. The resulting torques and contact link angles can be seen in Figure \ref{fig:2xp-1}. The contact link angle $\theta_{t,3}$ settles at a value close to its desired value. However, $\theta_{t,2}$ is very far from reaching its desired value and the control is overall considered unsuccessful.
@@ -38,7 +40,7 @@ For this simulation, the control torques from (\ref{eq:dhpfc_taup}) belonging to
 \begin{figure}[H]
     \centering
     \includegraphics[trim=2.1cm 6cm 2.1cm 5cm, clip=true, width=\textwidth]{figures/experiments/2xpos/2xpos-2plot-fail.pdf}
-    \caption{Position control experiment with torque calculation for all joints}
+    \caption{Results from position control experiment with torque calculation for all joints}
     \label{fig:2xp-1}
 \end{figure}
 
@@ -48,10 +50,10 @@ From Figure \ref{fig:2xp-1} it can also be observed that the joint torques reach
 
 This time all control torques are calculated to be commanded to the active joints, which means that no commands are ignored. The desired passive joint acceleration values are on the other hand ignored, so this is not an optimal approach either and required a lot of tuning to get right. The results are presented in Figure \ref{fig:2xp-2}. $\theta_{t,2}$ still deviates slightly from its desired value $\theta_{t,d,2}$, but the performance is still considered much better than in the previous simulation.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[trim=2.1cm 6cm 2.1cm 6cm, clip=true, width=\textwidth]{figures/experiments/2xpos/2xpos-2plot.pdf}
-    \caption{Position control experiment with torque calculation for for only active joints}
+    \caption{Results from position control experiment with torque calculation for for only active joints}
     \label{fig:2xp-2}
 \end{figure}
 

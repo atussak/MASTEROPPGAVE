@@ -4,14 +4,12 @@ This experiment covers reference following for the angle of a link in contact wi
 
 Link number 5, which is in contact with the foremost obstacle, is controlled to a constant angle $\theta_{t,d,3}$ measured with respect to the base frame. The controlled variable is referred to as $\theta_{t,3}$, and is the only essential variable the filter takes into account in this example. A simulation without the filter is also included to show the importance of defining which variables are essential for a given task when the total number of variables that \textit{could} be controlled are greater than the number of actuated joints.
 
-The setup for this experiment is presented in Table \ref{tab:exp_single_pos}. It should be noted that the force control is left out. This can also be seen in the control diagram of the experiment given in Figure \ref{fig:diag-p}. The position filter is included in the diagram, although it is only active for the first simulation of the experiment.
-
-\begin{table}[]
+\begin{table}[h!]
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        & Value & Unit\\
-        \hline
+        & \textbf{Value} & \textbf{Unit}\\
+        \hline \hline
         Number of obstacles & $3$ & \\
         Number of links & $6$ & \\
         Initial joint angles & $\mathbf{0}_{13 \times 1}$ & $[rad]$ \\
@@ -24,7 +22,9 @@ The setup for this experiment is presented in Table \ref{tab:exp_single_pos}. It
     \label{tab:exp_single_pos}
 \end{table}
 
-\begin{figure}
+The setup for this experiment is presented in Table \ref{tab:exp_single_pos}. It should be noted that the force control is left out. This can also be seen in the control diagram of the experiment given in Figure \ref{fig:diag-p}. The position filter is included in the diagram, although it is only active for the first simulation of the experiment.
+
+\begin{figure}[H]
     \centering
     \includegraphics[trim=1cm 0cm 3cm 0cm, clip=true, width=\textwidth]{figures/experiments/control-diagrams/p-control-diagram.pdf}
     \caption{Control diagram for essential position control}
@@ -40,7 +40,7 @@ The configuration of the snake robot at the end of the filtered and unfiltered s
     
     \includegraphics[trim=2cm 2cm 2cm 2cm, clip=true, width=\textwidth]{figures/experiments/single_pos/single-pos-3plot.pdf}
 
-    \caption{Filtered position control}
+    \caption{Results from filtered position control}
     \label{fig:singlepos}
 \end{figure}
 
@@ -49,7 +49,7 @@ The configuration of the snake robot at the end of the filtered and unfiltered s
     
     \includegraphics[trim=2cm 2cm 2cm 2cm, clip=true, width=\textwidth]{figures/experiments/single_pos/single-pos-3plot-fail.pdf}
 
-    \caption{Unfiltered position control}
+    \caption{Results from unfiltered position control}
     \label{fig:singlepos-nofilter}
 \end{figure}
 
@@ -66,8 +66,8 @@ The configuration of the snake robot at the end of the filtered and unfiltered s
     \caption{Snake robot after unfiltered position control}
     \label{fig:singlepos-gazebo-nofilter}
 \end{figure}
-
-The explanation for the presented results is that the unfiltered case tries to control all possible position variables in $\mathbf{r}$, meaning all contact link angles and the translational position along every contact point. This sums up to 6 variables. However, the robot only has 5 actuators. Furthermore, the last actuator can not be taken into account since it is located after the last contact point. This results in a total of 4 actuators that may be utilized for the control. 
+\clearpage
+The explanation of the presented results is that the unfiltered case tries to control all possible position variables in $\mathbf{r}$, meaning all contact link angles and the translational position along every contact point. This sums up to 6 variables. However, the robot only has 5 actuators. Furthermore, the last actuator can not be taken into account since it is located after the last contact point. This results in a total of 4 actuators that may be utilized for the control. 
 Needless to say, trying to control 6 variables is infeasible for this snake robot. Increasing the number of joints and links would give it a much better basis for achieving the task.
 
 %In this snake robot one can find a total of 6 closed kinematic chains. Three from the base of the robot to the three obstacles and three between the obstacles. That is, one from the first to the second obstacle, one from the first to the third and lastly one from the second to the third. The bottleneck here is the three consecutive closed kinematic chains from the base to obstacle one, from obstacle one to two and two to three. This is because these contain the lowest number of actuated joints. The number of actuated joints in these closed kinematic chains are one, one and two moving forward from the base. This means that two variables could in theory be controlled at the last contact point, but only one on each of the other contact points. 
