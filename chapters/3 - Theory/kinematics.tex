@@ -143,7 +143,7 @@ where $N = n + 2 + 2n_c$ is the new number of generalized coordinates.
 The newly introduced coordinates $k_{1}, ... , k_{n_c} \geq 0$ represent the distance to the contact point from the preceding joint to the link in contact. For instance, if link 2 is the first link in contact with an obstacle, then the coordinate $k_{1}$ is the distance between the joint connecting link 1 and 2 and the contact point measured along the second link, as illustrated in Figure \ref{fig:obst-coords}. Furthermore, $\phi_{c,1}, ... , \phi_{c,n_c}$ are the angles from the links in contact to the global x-axis. This variable is later used to describe the constraint that the obstacles are fixed in space. An example is illustrated in Figure \ref{fig:obst-coords} for the last link in contact with an obstacle.
 Seeing as there is no actuation force directly connected to the obstacle-related coordinates, they will be referred to as virtual joints or virtual coordinates.
 
-\begin{figure}\label{fig:obst-coords}
+\begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/theory/obst-coords.pdf}
     \caption{Snake robot in contact with obstacles}
