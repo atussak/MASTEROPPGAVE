@@ -2,9 +2,9 @@
 
 The problem that arises when computing $\boldsymbol{\tau}_P$ from (\ref{eq:dhpfc_taup}) in \ref{subsec:DHPFC}, is that the motor torques will be calculated for all joints, including the passive joints. Since the passive joints are unactuated, it is not feasible to pursue all parts of this control command. The objective is thus to change the dynamic calculations to only apply torques to the active joints. It should be noted that this challenge is more crucial for snake robots with few (active) joints. This is because a large number of active joints will dominate the control and a bigger part of the control torque can be realised.
 
-One idea is using the dynamic coupling characteristics between the passive and active joints, as proposed by Arai et al. \cite{arai1991position}. This method assumes that there is a certain amount of active joints that can take arbitrary values determined by the other active and passive joints desired to control. That means that all joint variables still cannot be controlled to their desired values and it has to be determined which joints this should apply to. The reason for this is that the system is underactuated. A similar approach is suggested by Transeth et al. \cite{transeth2007tracking}. However this method assumes that only the active joints make out the control reference. Because it is not yet clear whether or not it will be desired to control the value of the passive joints, the rest of this section is based on the work of Arai et al. \cite{arai1991position}.
+One idea is using the dynamic coupling characteristics between the passive and active joints, as proposed by Arai et al. \cite{arai1991position}. This method assumes that there is a certain amount of active joints that can take arbitrary values determined by the other active and passive joints desired to control. That means that all joint variables still cannot be controlled to their desired values and it has to be determined which joints this should apply to. The reason for this is that the system is underactuated. A similar approach is suggested by Transeth et al. \cite{transeth2007tracking}. However this method assumes that only the active joints make out the control reference. Because it is not yet clear whether or not it will be desired to control the value of the passive joints in the HOAL scheme, the rest of this section is based on the work of Arai et al. \cite{arai1991position}.
 
-The total number of joints is now denoted $n$, whereas $r$ of these joints are active. To start off, the elements of the familiar variables $\mathbf{q}$ and $\boldsymbol{\tau}$ should be rearranged as follows
+The total number of joints is now denoted $n$, whereas $r$ of these joints are active. To start off, the elements of the familiar variables $\mathbf{q}$ and $\boldsymbol{\tau}$ should be rearranged with dimensions as follows
 
 \begin{subequations}
 \begin{equation}
@@ -36,7 +36,7 @@ The total number of joints is now denoted $n$, whereas $r$ of these joints are a
 \\
 Here $\boldsymbol{\psi}$ are the $r$ joint variables, both passive and active, that will be controlled to their desired value. $\boldsymbol{\phi}$ contains the remaining $n-r$ active joint values. Furthermore, the corresponding generalized force vector $\boldsymbol{\tau}$ is divided into an active and a passive part. The part corresponding to the passive joints is zero because the generalized forces on the passive joints by definition are zero.
 
-The inertia and Coriolis matrices $\mathbf{M(q)}$ and $\mathbf{C(q,\dot{q})}$ can now be rearranged accordingly.
+The inertia and Coriolis matrices $\mathbf{M(q)}$ and $\mathbf{C(q,\dot{q})}$ can now be rearranged accordingly. The dimensions of the rows and columns are indicated in (\ref{eq:pas-M}) and (\ref{eq:pas-C}).
 
 \begin{subequations}
 \begin{equation}\label{eq:pas-M}
@@ -61,14 +61,14 @@ The inertia and Coriolis matrices $\mathbf{M(q)}$ and $\mathbf{C(q,\dot{q})}$ ca
 \end{equation}
 \end{subequations}
 \\
-Using (\ref{eq:pas-M}) and (\ref{eq:pas-C}), the equations of motion (\ref{eq:eom}) can be split into two separate equations.
+Using (\ref{eq:pas-M}) and (\ref{eq:pas-C}), the equations of motion (\ref{eq:eom}) can be split into the two separate equations
 
 \begin{subequations}
 \begin{equation}\label{eq:pas-eom-1}
     \mathbf{M}_{11} \ddot{\boldsymbol{\phi}} + \mathbf{M}_{12} \ddot{\boldsymbol{\psi}} + \mathbf{C}_1 = \boldsymbol{\tau}_{act}
 \end{equation}
 \begin{equation}\label{eq:pas-eom-2}
-    \mathbf{M}_{21} \ddot{\boldsymbol{\phi}} + \mathbf{M}_{22} \ddot{\boldsymbol{\psi}} + \mathbf{C}_2 = \mathbf{0}
+    \mathbf{M}_{21} \ddot{\boldsymbol{\phi}} + \mathbf{M}_{22} \ddot{\boldsymbol{\psi}} + \mathbf{C}_2 = \mathbf{0}.
 \end{equation}
 \end{subequations}
 \\

@@ -1,8 +1,8 @@
 \section{Snake robot constraint formulation}\label{seq:constraints}
 
-Figure \ref{fig:obst-coords} illustrates the used model of the snake robot and its environment. When looking at this model, it is evident that the snake robot will experience constraints if it tries to move its links in the directions of the obstacles. One way of expressing this constraint is limiting the velocity of the links in contact. The position of contact on link $i$ was in \ref{subseq:constr_inst} denoted as $(x_{c,i}, y_{c,i})$. Following, the corresponding velocity $\mathbf{v}_{c,i}$ can be written $(\dot{x}_{c,i}, \dot{y}_{c,i})$.
+Figure \ref{fig:obst-coords} illustrates the used model of the snake robot and its environment. When looking at this model, it is evident that the snake robot will experience constraints if it tries to move its links in the directions of the obstacles. One way of expressing this constraint is limiting the velocity of the links in contact. The position of contact on link $i$ was in \ref{subseq:constr_inst} denoted as $(x_{c,i}, y_{c,i})$. Thus, the corresponding velocity $\mathbf{v}_{c,i}$ can be written $(\dot{x}_{c,i}, \dot{y}_{c,i})$.
 
-It is not the general velocity of this point that is constrained, but rather the velocity normal to the link. This follows from the assumption of the contact being a point contact. The normal velocity can be found with the use of the angle $\theta_i$ of link $i$ with respect to the base frame. From basic trigonometric laws, the normal velocity is found to be
+The velocity of this point is not constrained in every direction, but in the direction normal to the link. This follows from the assumption of the contact being a point contact. The normal velocity can be found with the use of the angle $\theta_i$ of link $i$ with respect to the base frame. From basic trigonometric laws, the normal velocity is found to be
 
 \begin{equation}\label{eq:norm_vel}
     v_{nc,i} = -sin(\theta_i) \dot{x}_{c,i} + cos(\theta_i) \dot{y}_{c,i}.
@@ -28,7 +28,7 @@ Moreover, the side of the contact is insignificant if the velocity is limited in
     v_{nc,i} = -sin(\theta_i) \dot{x}_{c,i} + cos(\theta_i) \dot{y}_{c,i} = 0.
 \end{equation}
 \\
-In robot manipulator theory it is common to use both the global/base coordinate frame and a coordinate frame related to the end effector. The end effector coordinate system is irrelevant for the contact point velocities. It is however possible to define the velocities in coordinate systems related to the contact points. A coordinate system related to the contact point on link $i$ is $(x_{t,i}, y_{t,i})$, where the x-direction is the direction of the link in contact. This means that the rotation of this coordinate system relative to the base coordinate system is $\theta_i$. The subscript $t$ stands for \textit{task} and is introduced for its purpose in the dynamic hybrid position controller explained in \ref{subsec:DHPFC}.
+In robot manipulator theory it is common to use both the base coordinate frame and a coordinate frame related to the end effector. The end effector coordinate system is irrelevant for the contact point velocities. It is however possible to define the velocities in coordinate systems related to the contact points. A coordinate system related to the contact point on link $i$ is $(x_{t,i}, y_{t,i})$, where the x-direction is the direction of the link in contact. This means that the rotation of this coordinate system relative to the base coordinate system is $\theta_i$. The subscript $t$ stands for \textit{task} and is introduced for its purpose in the dynamic hybrid position controller explained in \ref{subsec:DHPFC}.
 
 Since the velocity normal to the link in the task coordinate frame is the velocity along the y-axis, the constraint on link $i$ can be rewritten to
 
@@ -36,4 +36,4 @@ Since the velocity normal to the link in the task coordinate frame is the veloci
     \dot{y}_{t,i} = 0,
 \end{equation}
 \\
-which is a great deal simpler than (\ref{eq:norm_vel4}).
+which is much simpler than (\ref{eq:norm_vel4}).

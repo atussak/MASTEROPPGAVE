@@ -55,7 +55,7 @@ If there are several contact points, projection matrices are calculated for each
 
 \subsubsection{Passive joints}
 
-The presence of passive joints in the robot imposes another constraint on the allowable forces. This is because the force in a passive joint is uncontrollable. \cite{west1985method} presents two methods of including this constraint. One of which is using a diagonal matrix $\mathbf{A}$ that denotes which joints are passive and which are active. A 1 on the diagonal indicates an active joint whereas a 0 indicates a passive joint. This matrix has to be manually initialized before controlling the robot. It can then be combined with the allowable force projection by taking the intersect of the space spanned by $\mathbf{A}$ and $\prescript{}{j}{\mathbf{P}}_{af}$.
+The presence of passive joints in the robot imposes additional constraints on the allowable forces. This is because the force in a passive joint is uncontrollable. \cite{west1985method} present two methods of including this constraint. One of which is using a diagonal matrix $\mathbf{A}$ that denotes which joints are passive and which are active. A 1 on the diagonal indicates an active joint whereas a 0 indicates a passive joint. This matrix has to be manually initialized before controlling the robot. It can then be combined with the allowable force projection by taking the intersect of the space spanned by $\mathbf{A}$ and $\prescript{}{j}{\mathbf{P}}_{af}$.
 
 \subsubsection{Task analysis}
 
@@ -96,7 +96,7 @@ The inverse in the two equations above is, probably by mistake, not included in 
 \end{equation}
 
 \begin{equation}\label{eq:hpfc_jeF}
-    \prescript{}{j}{\mathbf{P}}_{ef} = \mathbf{J}_c^+ \prescript{}{w}{\mathbf{P}}_{ef} (\mathbf{J}_c^T)^+
+    \prescript{}{j}{\mathbf{P}}_{ef} = \mathbf{J}_c^+ \prescript{}{w}{\mathbf{P}}_{ef} (\mathbf{J}_c^T)^+.
 \end{equation}
 \\
 The Jacobian $\mathbf{J}_t$ relates the task specific coordinates to the joint space. Section \ref{subsec:DHPFC} explains how this Jacobian can be found for the snake robot case.

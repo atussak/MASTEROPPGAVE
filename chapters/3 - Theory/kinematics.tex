@@ -1,11 +1,11 @@
 \section{Snake robot kinematics}\label{sec:kin}
 
-This section is a modified part of the previous work of the author \cite{AtussaProsjektoppgp}. The modifications are 
+This section is a modified part of the previous work of the author \cite{AtussaProsjektoppgp}. The modifications are:
 \begin{itemize}
     \item re-made figures
     \item variable notations
     \item fixed mistake in (\ref{eq:pos})
-    \item altered vector of generalized coordinates for the constained case in \ref{seq:constr_kin}
+    \item altered vector of generalized coordinates for the constained case in \ref{seq:constr_kin}.
 \end{itemize}
 
 The snake robot is modeled as a serial chain, which is a system of rigid bodies in which each member is connected to two others, except for the first and last members that are each connected to only one other member \cite{waldron2016kinematics}. As opposed to traditional robot manipulator models, the first joint in the snake robot model is not physically connected to a base.
@@ -120,7 +120,7 @@ The relationship between the Cartesian velocity $\mathbf{v}$ of the point $(x_i,
 \end{equation}
 \\
 The first equation is formally referred to as the forward instantaneous kinematics, whereas the second one is referred to as the inverse instantaneous kinematics.
-$\mathbf{J(q)^\dagger}$ is the pseudo inverse of the Jacobian, which has to be used as a result of the Jacobian being non-square.
+$\mathbf{J(q)^\dagger}$ is the Moore-Penrose \cite{moore1920reciprocal}, \cite{penrose1955generalized} pseudo inverse of the Jacobian, which has to be used as a result of the Jacobian being non-square.
 
 %------------------------------------------------------------------------------------------------
 

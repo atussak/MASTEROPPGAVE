@@ -1,12 +1,15 @@
 \chapter{Dynamic HPFC for snake robots}\label{ch:hpfc}
 
+This chapter explains the dynamical HPFC method of \cite{yoshikawa1987dynamic} adapted to the snake robot case and what is here referred to as the traditional HPFC method, namely the method of West and Asada \cite{west1985method}. Furthermore, the advantages and challenges that come with adapting the dynamical method to a snake robot model are presented and discussed. Some modifications attempting to make the control more robust are also suggested. Lastly, the method is put into the context of HOAL, and further requirements for HOAL are reviewed.
+
+
 \section{Hybrid position/force controllers}
 
 The goal of the snake robot is to push against obstacles in a fashion that yields forward propulsion along a path. Consequently, the robot will have to curve itself along the path whilst applying a force to the obstacles considered advantageous. The behavior of the robot has to comprise with the constraints arising from the contact, which further motivates the use of hybrid position/force control (HPFC).
 
-HPFC is not a control method per se, but rather a method for determining when and in which directions force or motion control should be applied. It is desired to control motion along the unconstrained motion directions and force along the constrained motion directions. Different approaches to this problem exist. One is the use of selection matrices, introduced by Raibert and Craig et al. \cite{raibert1981hybrid}. The disadvantage of this approach is that the directions in which force and motion should be controlled has to be recalculated for every step, and is no simple procedure. In another approach, introduced by West and Asada \cite{west1985method}, two projection matrices are used as filters in joint space to automatically select between position- and force controlled vectors. There is however a disadvantage to this method as well, which is that the dynamics of the robot are ignored. A thoroughly studied method called dynamic HPFC, developed by Yoshikawa \cite{yoshikawa1987dynamic}, is therefore presented and adapted to the snake robot.
+HPFC is not a control method per se, but rather a method for determining when and in which directions force or motion control should be applied. It is desired to control motion along the unconstrained motion directions and force along the constrained motion directions. Different approaches to this problem exist. One is the use of selection matrices, introduced by Raibert and Craig et al. \cite{raibert1981hybrid}. The disadvantage of this approach is that the directions in which force and motion should be controlled has to be recalculated for every step. In another approach, introduced by West and Asada \cite{west1985method}, two projection matrices are used as filters in joint space to automatically select between position and force controlled vectors. There is however a disadvantage to this method as well, which is that the dynamics of the robot are ignored. A thoroughly studied method called dynamic HPFC, developed by Yoshikawa \cite{yoshikawa1987dynamic}, is therefore presented and adapted to the snake robot.
 
-The theory on traditional HPFC up until the part \textit{Passive joints}, as well as this intro, is a modified part of the earlier project work of the author \cite{AtussaProsjektoppgp}. The rest of the chapter is focused on dynamic HPFC and the advantages and challenges that comes with adapting it to a snake robot model. Some modifications attempting to make the control more robust are also presented here.
+The theory on traditional HPFC up until the part \textit{Passive joints}, as well as this introduction, are a modified part of the earlier project work of the author \cite{AtussaProsjektoppgp}. The rest of the section is focused on the dynamic HPFC method adapted to the snake robot case.
 
 \input{chapters/3 - Theory/traditional_hpfc}
 
@@ -14,9 +17,9 @@ The theory on traditional HPFC up until the part \textit{Passive joints}, as wel
 
 The solution of West and Asada \cite{west1985method} does not take the manipulator dynamics into account. Nevertheless, in a real system, the dynamics play a significant role in the resulting behavior of the robot. For this reason, Yoshikawa \cite{yoshikawa1987dynamic} designed the dynamic hybrid control method which incorporates the constraints into the manipulator dynamics. More specifically, the solution of \cite{west1985method} filters the commanded joint torques and velocities to conform to the constraints and the essential variable space. This is explained in more detail in \ref{subseq:HPFC}. The essence of the solution of \cite{yoshikawa1987dynamic} however, is that the robot dynamics and constraint equations are combined before the commanded torques and angles are calculated. 
 
-This section aims at describing the improved method, and the content is based the paper of \cite{yoshikawa1987dynamic}. The symbolic conventions used are for simplicity the same as in the paper. The next section will explain further how the theory and these symbols apply to the snake robot case and the snake robot specific theory presented earlier in this chapter (\ref{sec:kin}-\ref{seq:constraints}).
+This section aims at describing the improved method, and the content is based on the paper of \cite{yoshikawa1987dynamic}. The symbolic conventions used are for simplicity the same as in the paper. The next section will explain further how the theory and these symbols apply to the snake robot case and the snake robot specific theory presented earlier in this chapter (\ref{sec:kin}-\ref{seq:constraints}).
 
-It is worth noting that the solution of Yoshikawa is designed for a robot manipulator with a static base where the only constraint present is targeted at the manipulator end effector. For this reason, special effort has been put into finding a suitable formulation of the snake robot constraints. Additionally, the difference between the coordinate spaces introduced in the paper are easy to confuse and special attention has been directed at thoroughly defining these spaces for the snake robot so that the following calculations can be both as clear and logical as possible.
+It is worth noting that the solution of Yoshikawa is designed for a robot manipulator with a static base where the only constraint present is targeted at the manipulator end effector. For this reason, special effort has been put into finding a suitable formulation of the snake robot constraints. Additionally, the difference between the coordinate spaces introduced in the paper are easy to confuse and special attention has been directed at thoroughly defining these spaces for the snake robot so that the following calculations can be as clear and logical as possible.
 
 \subsubsection{Description of variables}
 
@@ -36,7 +39,7 @@ The most general variables correspond to the ones presented in \ref{sec:kin}.
 
 The task and obstacle (constraint) frames $\mathbf{r_t}$ and $\mathbf{r_c}$ are visualized in Figure \ref{fig:rt-rc}. The values for both $r_{t,i} = [x_{t,i}, y_{t,i}, \theta_{t,i}]$ and $r_{c,i} = [x_{c,i}, y_{c,i}, \theta_{c,i}]$ are defined with respect to the base frame. It should be noted that the task frame, as opposed to the constraint frame, is allowed to rotate with respect to the base frame.
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{figures/theory/rt-rc.pdf}
     \caption{Model of snake robot and obstacles illustrating the task and contact frames}
@@ -46,7 +49,7 @@ The task and obstacle (constraint) frames $\mathbf{r_t}$ and $\mathbf{r_c}$ are 
 
 \subsubsection{Description of constraints}
 
-In order to take the dynamics into account, the constraints are directly included into the dynamic equations of motion of the robot. This is done by expressing the constraints as a set of hypersurfaces that the robot can not physically pass. It should be noted that the focus here is on manipulator end-effector constraints and not general constraints which should be used in the snake robot case. The constraint hypersurfaces are also expressed in the end-effector coordinates. Another important aspect of the paper is that it only addresses bilateral hypersurfaces (and not unilateral surfaces), meaning that the effector is prohibited from leaving the surface in any direction.
+In order to take the dynamics into account, the constraints are directly included into the dynamic equations of motion of the robot. This is done by expressing the constraints as a set of hypersurfaces that the robot can not physically pass. It should be noted that the focus here is on manipulator end-effector constraints and not general constraints, which should be used in the snake robot case. The constraint hypersurfaces are also expressed in the end-effector coordinates. Another important aspect of the paper is that it only addresses bilateral hypersurfaces (and not unilateral surfaces), meaning that the effector is prohibited from leaving the surface in any direction.
 
 The $m$ hypersurfaces expressing a given constraint are given by
 
@@ -81,8 +84,8 @@ then $\mathbf{\dot{r}}_{t,i} = [\dot{x}_{t,i}, \dot{y}_{t,i}, \dot{\theta}_{t,i}
     \end{bmatrix} \in \mathcal{R}^3.
 \end{equation}
 \\
-The subscript $i$ will now be used as the constraint number, where $n_c$ is the number of constraints/contact points.
-The angle of the link at the contact point $\theta_{t,i}$ with respect to the base frame is the same as the angle $\theta$ of the link in contact with respect to the base frame (see Figure \ref{fig:rt-rc}). It can by inspection be seen that $\mathbf{E}_{F,i}$ fulfills the criteria of being of unit size.
+The subscript $i$ will now be used as the constraint number, where $n_c$ is the number of constraints. This is the same as the number of contact points.
+The angle $\theta_{t,i}$ of the link at the contact point is the angle $\theta$ of the link with respect to the base frame (see Figure \ref{fig:rt-rc}). It can by inspection be seen that $\mathbf{E}_{F,i}$ fulfills the criteria of being of unit size.
 
 %These formulations do not supply an explicit expression of the corresponding constraint hypersurface. It is however not a necessity for the further computations. On the other hand it could be valuable to have the expressions for the hypersurfaces for analysis purposes.
 
@@ -114,7 +117,7 @@ Differentiating (\ref{eq:hpfc:derhypsurf}) further gives
     \mathbf{E}_F \mathbf{\ddot{r}}_t + \mathbf{a}_{r F} = 0, \quad \mathbf{a}_{r F} = \mathbf{\dot{E}}_F\mathbf{\dot{r}}
 \end{equation}
 \\
-For the snake robot case $\mathbf{a}_{r F} \in \mathcal{R}^{n_c}$.
+The variable $\mathbf{a}_{r F}$ defined in (\ref{eq:dhpfc_arf}) is a column vector of dimension $n_c$ in the snake robot case.
 
 Furthermore, $\mathbf{E}_P$ is chosen so that all the vectors in the relation
 
