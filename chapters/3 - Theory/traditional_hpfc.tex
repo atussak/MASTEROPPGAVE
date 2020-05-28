@@ -63,7 +63,7 @@ An end effector task may consist of both a movement and force application onto a
 
 \textit{Essential position variables} are defined as the movement directions of the end effector which must be controlled in order to perform the task correctly. At the same time, \textit{arbitrary position variables} are those directions of movement which do not have to be controlled precisely. The terms \textit{essential force variables} and \textit{arbitrary force variables} follow the same logic, just for the force directions. According to \cite{west1985method}, the total number of essential variables, position plus force, is equal to the minimum number of controllable actuators in the manipulator necessary for performing the task.
 
-The essential position and force direction can be described by the column vectors (\ref{eq:hpfc_ep}) and (\ref{eq:hpfc_ef}) respectively.
+The essential position and force direction can be described by the matrices (\ref{eq:hpfc_ep}) and (\ref{eq:hpfc_ef}) respectively.
 
 \begin{equation}\label{eq:hpfc_ep}
     \mathbf{E}_p =
@@ -79,7 +79,7 @@ The essential position and force direction can be described by the column vector
     \end{bmatrix}
 \end{equation}
 \\
-Each column vector describes one direction. Following, the number of essential position directions is $\alpha$ and the number of essential force directions is $\beta$. The orthogonal projections onto the essential position and force spaces are given by (\ref{eq:hpfc_wep}) and (\ref{eq:hpfc_wef}) respectively.
+Each column vector $\mathbf{e}_{fi}$, $\mathbf{e}_{pi}$ describes one direction. Following, the number of essential position directions is $\alpha$ and the number of essential force directions is $\beta$. The orthogonal projections onto the essential position and force spaces are given by (\ref{eq:hpfc_wep}) and (\ref{eq:hpfc_wef}) respectively.
 
 \begin{equation}\label{eq:hpfc_wep}
     \prescript{}{w}{\mathbf{P}}_{ep} = \mathbf{E}_p(\mathbf{E}_p^T \mathbf{E}_p)^{-1} \mathbf{E}_p^T
