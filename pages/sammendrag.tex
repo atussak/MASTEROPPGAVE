@@ -8,9 +8,11 @@
 
 Slangeroboter er seriekoblede roboter som evner å traversere en mengde forskjellige terreng. \textbf{Obstacle Aided Locomotion (OAL)} eller hindringsbasert fremdrift er en metode for traversering av terreng preget av mye steiner eller liknende hindringer som slangeroboten kan utnytte for å dytte seg selv fram langs en forhåndsdefinert bane. For å kunne styre de resulterende kontaktkreftene fra hindringer og slangerobotens form samtidig er \textbf{Hybrid Position/Force Control (HPFC)} eller hybrid posisjons- og kraftstyring studert. Kombinasjonen av OAL og HPFC er omtalt som \textbf{Hybrid Obstacle Aided Locomotion (HOAL)}.
 
-Denne rapporten fokuserer i hovedsak på den dynamiske HPFC-metoden der robotdynamikken er integrert i kontrollen. Metoden er studert grundig og nøye tilpasset slangerobottilfellet. Videre er noen forbedringer til kontrollmetoden foreslått og testet. Det ble bemerket at hybrid styring av kraft og posisjon for en slangerobot med flere kontaktpunkter er høyst avhengig av slangerobotens komposisjon, det vil si antall aktuerte ledd i roboten relativt til antall kontaktpunkter.
-
+Denne rapporten fokuserer i hovedsak på den dynamiske HPFC-metoden der robotdynamikken er integrert i kontrollen. Metoden er studert grundig og nøye tilpasset slangerobottilfellet. Videre er noen forbedringer til kontrollmetoden foreslått og testet med ekstra vekt på passive ledd i slangeroboten.
 Simulatoren SnakeSIM, som bygger på rammeverket Robotic Operating System (ROS), er tatt i bruk for utførelsen av alle eksperimenter. En forklaring og evaluering av simulatoren er gitt i rapporten.
+
+Det ble bemerket at hybrid styring av kraft og posisjon for en slangerobot med flere kontaktpunkter er oppnåelig, men høyst avhengig av antallet slangerobotledd og kontaktpunkter. Eksperimentene antyder at minst to aktuerte ledd mellom hvert kontaktpunkt er nødvendig for tilfredsstillende kontroll. Fordi testingen var begrenset til en slangerobot med kun seks lenker og veldig enkle kontrollmål, så er det antatt at dette minstekravet kan være høyere for mer komplekse scenarioer.
+
 
 
 \makeatletter
