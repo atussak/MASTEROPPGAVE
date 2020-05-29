@@ -1,6 +1,6 @@
 \section{Position control with active joint torque focus}\label{sec:pas-pos}
 
-As seen in \ref{subsec:DHPFC}, the equations of motion are used to find the desired torques satisfying the desired joint accelerations. However, the equations of motion do not consider that some of the joints are passive and joint torques will be assigned to all joints, both passive and active. This is of course an issue since the computed solution relies on the realization of these torques.
+As seen in \ref{subsec:DHPFC}, the equations of motion are used to find the desired torques satisfying the desired joint accelerations. However, the equations of motion do not consider that some of the joints are passive and thus joint torques will be assigned to all joints, both passive and active. This is of course an issue since the computed solution relies on the realization of these torques.
 
 \begin{table}[H]
     \centering
@@ -20,7 +20,7 @@ As seen in \ref{subsec:DHPFC}, the equations of motion are used to find the desi
     \label{tab:exp_2xp}
 \end{table}
 
-This experiment aims at illustrating the difference in just ignoring the passive joint torque commands and in mapping all joint torques over to the active joints. Because the focus is on the position torques $\boldsymbol{\tau}_P$, the link angles by the second and third obstacles are controlled. They are first controlled by using the equations of motion as in (\ref{eq:dhpfc_taup}). Here the torques for the passive joints are simply neglected. The second simulation shows control where all torques are mapped to the active joints, as explained in \ref{subsec:passive-joints}. For this experiment it is simply chosen that the desired values of the active joints should be followed and that the passive joints could take resulting arbitrary values. This is probably not the optimal choice of variables to control, but no method for determining this has to this point been developed. The matter is discussed further in \ref{subsec:dis-passive-joints}.
+This experiment aims at illustrating the difference in just ignoring the passive joint torque commands and in mapping all joint torques over to the active joints. Because the focus is on the position torques $\boldsymbol{\tau}_P$, the link angles by the second and third obstacles are controlled. They are first controlled by using the equations of motion as in (\ref{eq:dhpfc_taup}). Here the torques for the passive joints are simply neglected. The second simulation shows control where all torques are mapped to the active joints, as explained in \ref{subsec:passive-joints}. For this experiment it is simply chosen that the desired values of the active joints should be followed and that the passive joints could take resulting arbitrary values. This is probably not the optimal choice of variables to control, but a method for explicitly determining this has not yet been developed. The matter is discussed further in \ref{subsec:dis-passive-joints}.
 
 \begin{figure}
     \centering
@@ -44,17 +44,17 @@ For this simulation, the control torques from (\ref{eq:dhpfc_taup}) belonging to
     \label{fig:2xp-1}
 \end{figure}
 
-From Figure \ref{fig:2xp-1} it can also be observed that the joint torques reach a saturation limit, which is probably the reason for why very little change is noticed in the angles. The saturation is in place to keep the snake robot from making large sudden movements that would put it outside of the scope of the model. A higher saturation limit is also tested without further success. Another reason for the static behavior of the angles is the configuration of the snake robot and obstacles, presented in \ref{fig:init-gazebo}. When all applied joint torques are negative the snake robot will try to curve up towards the two right side obstacles. By doing so it is mainly just pushing against the obstacles, much like the experiment in \ref{tab:exp_valid1}. This will logically lead to a jam rather than any movement.
+From Figure \ref{fig:2xp-1} it can also be observed that the joint torques reach a saturation limit, which is probably the reason for why very little change is noticed in the joint angles. The saturation is in place to keep the snake robot from making large sudden movements that would move it outside of the scope of the model. A higher saturation limit is also tested without further success. Another reason for the static behavior of the angles is the configuration of the snake robot and obstacles, presented in \ref{fig:init-gazebo}. When all applied joint torques are negative the snake robot will try to curve up towards the two right side obstacles. By doing so it is mainly just pushing against the obstacles, much like the experiment in \ref{tab:exp_valid1}. This will logically lead to a jam rather than any movement.
 
 \subsection{Control torques computed for only active joints}
 
-This time all control torques are calculated to be commanded to the active joints, which means that no commands are ignored. The desired passive joint acceleration values are on the other hand ignored, so this is not an optimal approach either and required a lot of tuning to get right. The results are presented in Figure \ref{fig:2xp-2}. $\theta_{t,2}$ still deviates slightly from its desired value $\theta_{t,d,2}$, but the performance is still considered much better than in the previous simulation.
+This time all control torques are calculated to be commanded to the active joints, which means that no commands are ignored. The desired passive joint acceleration values are on the other hand ignored. Therefore, this is not an optimal approach either and required a lot of tuning to get it right. The results are presented in Figure \ref{fig:2xp-2}. $\theta_{t,2}$ still deviates slightly from its desired value $\theta_{t,d,2}$, but the performance is considered much better than in the previous simulation.
 
 \begin{figure}
     \centering
     \includegraphics[trim=2.1cm 6cm 2.1cm 6cm, clip=true, width=\textwidth]{figures/experiments/2xpos/2xpos-2plot.pdf}
-    \caption{Results from position control experiment with torque calculation for for only active joints}
+    \caption{Results from position control experiment with torque calculation for only active joints}
     \label{fig:2xp-2}
 \end{figure}
 
-It should be noted that the snake robot is moving quite slowly in both of the simulations. This means that $\mathbf{C(q,\dot{q})}$, the part of the dynamics dependent on the joint velocities, is playing a very inessential role here. To research this method more thoroughly, further experiments should be carried out with a larger number of snake robot joints, more rapid movements and last but not least, a more intelligent and reasoned choice of which joints should be precisely controlled.
+It should be noted that the snake robot is moving quite slowly in both of the simulations. This means that $\mathbf{C(q,\dot{q})}$, the part of the dynamics dependent on the joint velocities, is playing a very inessential role here. To investigate this method more thoroughly, further experiments should be carried out with a larger number of snake robot joints, more rapid movements and last but not least, a more intelligent and reasoned choice of joints that should be precisely controlled.
