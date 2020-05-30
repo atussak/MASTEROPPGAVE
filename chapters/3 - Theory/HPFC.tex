@@ -72,16 +72,16 @@ Specifically, if one chooses
     \mathbf{r}_{t,i} =
     \begin{bmatrix}
         x_{t,i} & y_{t,i} & \theta_{t,i}
-    \end{bmatrix}^T \in \mathcal{R}^3,
+    \end{bmatrix}^T \in \mathbb{R}^3,
 \end{equation}
 \\
-then $\mathbf{\dot{r}}_{t,i} = [\dot{x}_{t,i}, \dot{y}_{t,i}, \dot{\theta}_{t,i}]^T \in \mathcal{R}^3$ and the matrix $\mathbf{E}_{F,i}$ can by comparison be found as
+then $\mathbf{\dot{r}}_{t,i} = [\dot{x}_{t,i}, \dot{y}_{t,i}, \dot{\theta}_{t,i}]^T \in \mathbb{R}^3$ and the matrix $\mathbf{E}_{F,i}$ can by comparison be found as
 
 \begin{equation}
     \mathbf{E}_{F,i} =
     \begin{bmatrix}
         0 & 1 & 0
-    \end{bmatrix} \in \mathcal{R}^3.
+    \end{bmatrix} \in \mathbb{R}^3.
 \end{equation}
 \\
 The subscript $i$ will now be used as the constraint number, where $n_c$ is the number of constraints. This is the same as the number of contact points.
@@ -95,7 +95,7 @@ The coordinate space $\mathbf{r}_t$ should be able to aid in expressing all the 
     \mathbf{r}_t = 
     \begin{bmatrix}
         \mathbf{r}_{t,1}^T & \mathbf{r}_{t,2}^T & \dots &\mathbf{r}_{t,n_c}^T
-    \end{bmatrix}^T \in \mathcal{R}^{3 n_c}.
+    \end{bmatrix}^T \in \mathbb{R}^{3 n_c}.
 \end{equation}
 \\
 The same goes for $\dot{\mathbf{r}}_t$. Furthermore, the matrix $\mathbf{E}_{F}$ describing the unit normal vectors to all the hypersurfaces can now be written as
@@ -107,17 +107,17 @@ The same goes for $\dot{\mathbf{r}}_t$. Furthermore, the matrix $\mathbf{E}_{F}$
         \mathbf{0}_{1\times3} & \ddots & & \vdots \\
         \vdots & & \ddots & \mathbf{0}_{1\times3} \\
         \mathbf{0}_{1\times3} & \dots & \mathbf{0}_{1\times3} & \mathbf{E}_{F,n_c} \\
-    \end{bmatrix} \in \mathcal{R}^{n_c \times 3 n_c}
+    \end{bmatrix} \in \mathbb{R}^{n_c \times 3 n_c}
 \end{equation}
 \\
 
 Differentiating (\ref{eq:hpfc:derhypsurf}) further gives
 
 \begin{equation}\label{eq:dhpfc_arf}
-    \mathbf{E}_F \mathbf{\ddot{r}}_t + \mathbf{a}_{r F} = 0, \quad \mathbf{a}_{r F} = \mathbf{\dot{E}}_F\mathbf{\dot{r}}
+    \mathbf{E}_F \mathbf{\ddot{r}}_t + \mathbf{a}_{r F} = 0, \quad \mathbf{a}_{r F} = \mathbf{\dot{E}}_F\mathbf{\dot{r}}_t,
 \end{equation}
 \\
-The variable $\mathbf{a}_{r F}$ defined in (\ref{eq:dhpfc_arf}) is a column vector of dimension $n_c$ in the snake robot case.
+where the first term is believed to be the acceleration in the direction of the hypersurface, i.e. the force direction, and $\mathbf{a}_{r F} \in \mathbb{R}^{n_c}$ is believed to be an acceleration resulting from the relative movement of the task frame.
 
 Furthermore, $\mathbf{E}_P$ is chosen so that all the vectors in the relation
 
@@ -155,7 +155,7 @@ For the snake robot, a simple choice of $\mathbf{E}_{P,i}$ with unit vectors com
     \begin{bmatrix}
         1 & 0 & 0 \\
         0 & 0 & 1
-    \end{bmatrix} \in \mathcal{R}^{2\times 3}.
+    \end{bmatrix} \in \mathbb{R}^{2\times 3}.
 \end{equation}
 \\
 This is a very logical choice, seeing as the snake robot link in contact is allowed to rotate about the obstacle and move along the obstacle.
@@ -168,10 +168,10 @@ Again, $\mathbf{E}_{P,i}$ corresponds to the $i$'th constraint. Combining all $\
         \mathbf{0}_{2\times3} & \ddots & & \vdots \\
         \vdots & & \ddots & \mathbf{0}_{2\times3} \\
         \mathbf{0}_{2\times3} & \dots & \mathbf{0}_{2\times3} & \mathbf{E}_{P,n_c} \\
-    \end{bmatrix} \in \mathcal{R}^{2 n_c \times 3 n_c}
+    \end{bmatrix} \in \mathbb{R}^{2 n_c \times 3 n_c}
 \end{equation}
 \\
-and $\mathbf{E} \in \mathcal{R}^{3 n_c \times 3 n_c}$.
+and $\mathbf{E} \in \mathbb{R}^{3 n_c \times 3 n_c}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -201,10 +201,10 @@ For the snake robot case, the matrix $\mathbf{J}_t$ is the Jacobians of all the 
     \mathbf{J}_t = 
     \begin{bmatrix}
         \mathbf{J}_{t,1} \\ \mathbf{J}_{t,2} \\ \vdots \\ \mathbf{J}_{t,n_c}
-    \end{bmatrix} \in \mathcal{R}^{3 n_c \times N}
+    \end{bmatrix} \in \mathbb{R}^{3 n_c \times N}
 \end{equation}
 \\
-The Jacobian is also explained in the mentioned section. The Jacobian $\mathbf{J}_{t,i} \in \mathcal{R}^{3\times N}$ for a single contact point with respect to the contact point task variable vector $\mathbf{r}_{t,i}$ is found as 
+The Jacobian is also explained in the mentioned section. The Jacobian $\mathbf{J}_{t,i} \in \mathbb{R}^{3\times N}$ for a single contact point with respect to the contact point task variable vector $\mathbf{r}_{t,i}$ is found as 
 
 \begin{equation}
     \mathbf{J}_{t,i} =
@@ -217,7 +217,7 @@ The Jacobian is also explained in the mentioned section. The Jacobian $\mathbf{J
     }.
 \end{equation}
 \\
-Furthermore, $\mathbf{a}_q \in \mathcal{R}^{n_c}$.
+Furthermore, $\mathbf{a}_q \in \mathbb{R}^{n_c}$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

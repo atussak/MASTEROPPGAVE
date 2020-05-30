@@ -1,6 +1,6 @@
 \section{Hybrid obstacle aided locomotion (HOAL)}\label{sec:dhpfc-oal}
 
-The motivation behind using dynamic HPFC for the OAL is that this locomotion method requires both interaction with the environment, meaning force application, and purposeful movement of the snake robot body. Instead of constantly switching between force and position control of the snake robot, the dynamic HPFC can manage to control both of these attributes simultaneously in different directions. Furthermore, the dynamic method is studied in this project because it is believed that the dynamics play an important role in the behavior of the snake robot and contribute to a dynamic rather than stiff control. This is even more significant in outdoor environments with friction, as opposed to a sterile, frictionless simulation environment. The downside is that modeling the friction and other traits of the environment becomes harder as the surroundings get more complex and diverse.
+The motivation behind using dynamic HPFC for the OAL is that this locomotion method requires both interaction with the environment, meaning force application, and purposeful movement of the snake robot body. Instead of constantly switching between force and position control of the snake robot, the dynamic HPFC can manage to control both of these attributes simultaneously in different directions. Furthermore, the dynamic method is studied in this thesis because it is believed that the dynamics play an important role in the behavior of the snake robot and contribute to a dynamic rather than stiff control. This is even more significant in outdoor environments with friction, as opposed to a sterile, frictionless simulation environment. The downside is that modeling the friction and other traits of the environment becomes harder as the surroundings get more complex and diverse.
 
 Being able to predict the dynamical response of the snake robot enables the feed forward control and thus a smoother control trajectory. 
 The dynamics of going from no contact to contact have not been modeled in this project, and is believed to be a very complex task. It is yet to be assessed whether or not the collision-modeling can profit the overall control of the snake robot at all.
@@ -78,4 +78,8 @@ Figure \ref{fig:path-following} shows one case in which the curves of the desire
     \label{fig:path-following}
 \end{figure}
 
-It is clear that a distinct set of conditions for the desired path should be determined before the path planner is implemented. One hypothesis suggested by Stavdahl \cite{StavdahlNote} is that if the path consists of straight lines and circle segments, the radius of the circle segments have to be at least the same length as the snake robot link.
+It is clear that a distinct set of conditions for the desired path should be determined before the path planner is implemented. One hypothesis suggested by Stavdahl \cite{StavdahlNote} is that if the path consists of straight lines and circle segments, the radius of the circle segments have to be at least the same length as the snake robot link. The resulting curvature can be defined through the osculating circle, which is the circle that best approximates the curve at a point \cite{kline1998calculus}. The radius of this circle is denoted $r$, and the upper limit for the curvature is given by
+
+\begin{equation}
+    \kappa_{max} \leq \frac{1}{r_{min}} = \frac{1}{L}.
+\end{equation}
